@@ -10,11 +10,11 @@ $(document).ready(() => {
   const links = [
     {
       name: 'Portfolio | ',
-      link: '',
-      },
+      link: 'portfolio.html',
+     },
     {
         name: 'Facebook | ',
-        link: '',
+        link: 'https://m.facebook.com/jack.slaski?eav=Afb-IElcyYzlsrye6ZdmIWzUbipb2AP3D0s7uZp7ssUO4xA5gTdN8h1ArMhkJiIJBnk&paipv=0',
     },
     {
         name: 'LinkedIn | ',
@@ -33,7 +33,7 @@ $(document).ready(() => {
   for (let i in links) {
     let link = links[i];
 
-    $('#marquee').append(`<a href="https://discord.gg/VESmyzkyfa"target="_BLANK">${link.name}</a>`);
+    $('#marquee').append(`<a href="${link.link}"target="_BLANK">${link.name}</a>`);
 
     link = $('#marquee').children('a').last();
 
@@ -46,7 +46,7 @@ $(document).ready(() => {
     app.shouldIgnoreVideo = true;
   }
 
-    app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slaz', 'Jack Slazz']);
+  app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slaz', 'Jack Slazz']);
   app.iconChanger(['https://cdn.discordapp.com/attachments/588061048083316736/918182090779000904/077.-Perspective-Letter-S-Concept-Logo-removebg-preview.png']);
 });
 
