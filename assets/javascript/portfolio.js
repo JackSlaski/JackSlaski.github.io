@@ -13,20 +13,20 @@ $(document).ready(() => {
       link: 'portfolio.html',
      },
     {
-        name: 'Facebook | ',
-        link: 'https://m.facebook.com/jack.slaski?eav=Afb-IElcyYzlsrye6ZdmIWzUbipb2AP3D0s7uZp7ssUO4xA5gTdN8h1ArMhkJiIJBnk&paipv=0',
-    },
-    {
         name: 'LinkedIn | ',
-        link: '',
+        link: 'https://www.linkedin.com/in/jack-slaski-91a02a239/',
     },
-    {
-        name: 'Instagram | ',
-        link: '',
-      },
     {
         name: 'GitHub | ',
-        link: '',
+        link: 'https://github.com/JackSlazz',
+    },
+    {
+        name: 'Facebook | ',
+        link: 'https://m.facebook.com/jack.slaski?eav=Afb-IElcyYzlsrye6ZdmIWzUbipb2AP3D0s7uZp7ssUO4xA5gTdN8h1ArMhkJiIJBnk&paipv=0',
+      },
+    {
+        name: 'Instagram | ',
+        link: 'https://www.instagram.com/jackslazz/?next=%2F',
     },
   ];
 
