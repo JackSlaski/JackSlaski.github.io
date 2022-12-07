@@ -2525,7 +2525,7 @@ input, select, textarea {
 			display: block;
 			background: #ffffff;
 			border-radius: 100%;
-			color: #312450;
+			color: #b30000;
 			text-align: center;
 			line-height: 2.5em;
 			margin: 0 0 1.3em 0;
@@ -2536,27 +2536,27 @@ input, select, textarea {
 			}
 
 				.wrapper.style1 .icon.major:before {
-					color: #5e42a6;
+					color: #c70000;
 				}
 
 				.wrapper.style1-alt .icon.major:before {
-					color: #493382;
+					color: #c70000;
 				}
 
 				.wrapper.style2 .icon.major:before {
-					color: #5052b5;
+					color: #c70000;
 				}
 
 				.wrapper.style2-alt .icon.major:before {
-					color: #3e4094;
+					color: #c70000;
 				}
 
 				.wrapper.style3 .icon.major:before {
-					color: #b74e91;
+					color: #c70000;
 				}
 
 				.wrapper.style3-alt .icon.major:before {
-					color: #953d75;
+					color: #c70000;
 				}
 
 /* Image */
@@ -3022,7 +3022,7 @@ input, select, textarea {
 				-webkit-transition: opacity 1s ease;
 				-ms-transition: opacity 1s ease;
 				transition: opacity 1s ease;
-				background: rgba(49, 36, 80, 0.9);
+				background: rgba(0, 0, 0, 0.5);
 				content: '';
 				display: block;
 				height: 100%;
