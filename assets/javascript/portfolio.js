@@ -18,7 +18,7 @@ $(document).ready(() => {
     },
     {
         name: 'GitHub | ',
-        link: 'https://github.com/JackSlazz',
+        link: 'https://github.com/JackSlaski',
     },
     {
         name: 'Facebook | ',
@@ -46,7 +46,7 @@ $(document).ready(() => {
     app.shouldIgnoreVideo = true;
   }
 
-  app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slaz', 'Jack Slazz']);
+    app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slas', 'Jack Slask', 'Jack Slaski']);
   app.iconChanger(['https://cdn.discordapp.com/attachments/588061048083316736/918182090779000904/077.-Perspective-Letter-S-Concept-Logo-removebg-preview.png']);
 });
 
