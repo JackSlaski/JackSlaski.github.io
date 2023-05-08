@@ -11,7 +11,7 @@ $(document).ready(() => {
     {
       name: 'Portfolio | ',
       link: 'portfolio.html',
-     },
+    },
     {
         name: 'LinkedIn | ',
         link: 'https://www.linkedin.com/in/jack-slaski-91a02a239/',
@@ -23,10 +23,10 @@ $(document).ready(() => {
     {
         name: 'Facebook | ',
         link: 'https://m.facebook.com/jack.slaski?eav=Afb-IElcyYzlsrye6ZdmIWzUbipb2AP3D0s7uZp7ssUO4xA5gTdN8h1ArMhkJiIJBnk&paipv=0',
-      },
+    },
     {
-        name: 'Instagram | ',
-        link: 'https://www.instagram.com/jackslazz/?next=%2F',
+        name: 'Youtube | ',
+        link: 'https://www.youtube.com/channel/UCPanq5puGEIhU0pNuuB7hqw',
     },
   ];
 
