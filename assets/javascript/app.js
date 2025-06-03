@@ -8,7 +8,7 @@ class _app {
   backgroundToggler = false;
   shouldIgnoreVideo = false;
   effects = ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello'];
-  brandDescription = ['CLICK HERE'];
+  brandDescription = ['Blueprint  |  C++  |  UI Implementation'];
 
   titleChanger = (text, delay) => {
     if (!text) return;
@@ -17,7 +17,7 @@ class _app {
 
     let counter = 0;
 
-    setInterval(() => {
+    setInterval(() => {  
       if (counter < text.length) document.title = text[counter++];
       else document.title = text[(counter = 0)];
     }, delay);
