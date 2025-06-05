@@ -3751,10 +3751,77 @@ input, select, textarea {
 	}
 
 
-/* === Override for full-width inner content === */
-#two .inner {
-	max-width: 100% !important;
-	width: 100% !important;
-	padding: 1em 3em !important;
-	box-sizing: border-box;
+/* === Portfolio Card Grid === */
+.portfolio-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
+	justify-content: space-between;
 }
+
+.portfolio-card {
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	flex: 1 1 calc(33.333% - 2rem);
+	box-sizing: border-box;
+	text-align: center;
+	min-height: 420px;
+	position: relative;
+}
+
+	/* Image handling */
+	.portfolio-card img {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		border-radius: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	/* Learn More Button Styling */
+	.portfolio-card a.button {
+		margin-top: auto;
+		padding: 0.75em 2.5em;
+		border-radius: 2em;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		text-transform: uppercase;
+		font-weight: bold;
+		font-size: 0.75em;
+		letter-spacing: 0.2em;
+		transition: all 0.25s ease;
+		min-height: 3em;
+		width: fit-content;
+	}
+
+		/* Hover Effect */
+		.portfolio-card a.button:hover {
+			border-color: red;
+			background-color: rgba(255, 255, 255, 0.1);
+			color: white;
+		}
+
+/* Responsive Behavior */
+@media screen and (max-width: 980px) {
+	.portfolio-card {
+		flex: 1 1 calc(50% - 2rem);
+	}
+}
+
+@media screen and (max-width: 640px) {
+	.portfolio-card {
+		flex: 1 1 100%;
+	}
+}
+
+
+
