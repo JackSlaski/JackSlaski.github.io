@@ -188,3 +188,42 @@
 			});
 
 })(jQuery);
+
+// Carousel Logic
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const indicatorContainer = document.getElementById('carouselIndicators');
+
+function showSlide(n) {
+	slides.forEach(slide => slide.style.display = 'none');
+	currentSlide = (n + slides.length) % slides.length;
+	slides[currentSlide].style.display = 'block';
+
+	const indicators = document.querySelectorAll('.carousel-indicators span');
+	indicators.forEach(dot => dot.classList.remove('active'));
+	if (indicators[currentSlide]) indicators[currentSlide].classList.add('active');
+
+}
+
+function changeSlide(n) {
+	showSlide(currentSlide + n);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+	if (slides.length > 0) {
+		showSlide(currentSlide);
+
+		// Optional: Add keyboard support
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowRight') changeSlide(1);
+			if (e.key === 'ArrowLeft') changeSlide(-1);
+		});
+	}
+});
+
+// Create one dot per slide
+slides.forEach((_, i) => {
+	const dot = document.createElement('span');
+	dot.addEventListener('click', () => showSlide(i));
+	indicatorContainer.appendChild(dot);
+});

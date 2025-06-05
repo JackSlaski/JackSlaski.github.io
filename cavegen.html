@@ -1,0 +1,150 @@
+	<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+	<title>Cave Generation Tool - Jack Slaski</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<link rel="icon" href="images/me.png" type="image/png" />
+</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a href="index.html" class="title">Jack Slaski</a>
+				<nav id="nav">
+					<ul class="links">
+						<li><a href="portfolio.html">Home</a></li>
+						<li><a href="gmod.html"> Garry's Mod</a></li>
+						<li><a href="schooltime.html">Education</a></li>
+						<li class="dropdown">
+							<a href="#">Projects ▼</a>
+							<ul class="dropdown-menu">
+								<li><a href="flgame.html">Feudal Living</a></li>
+								<li><a href="lggame.html">Leviathan's Gauntlet</a></li>
+								<li><a href="dykbgame.html">Do You Know Ball?</a></li>
+								<li><a href="wmgame.html">Wild Magic</a></li>
+								<li><a href="uishow.html">UI Showcase</a></li>
+								<li><a href="uidiss.html">Dissertation</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+				<section id="main" class="wrapper">
+					<div class="inner">
+						<div class="project-header">
+							<div class="header-left">
+								<h1 class="major">Cave Generation Tool</h1>
+							</div>
+						</div>
+
+						<div class="carousel-container">
+							<button class="carousel-arrow left" onclick="changeSlide(-1)">❮</button>
+
+							<div class="carousel-slide-wrapper">
+								<div class="carousel-slide"><img src="images/portfolio/cavegen.png" alt="Slide 1" /></div>
+
+								<div class="carousel-slide">
+									<iframe class="carousel-embed"
+											src="https://www.youtube.com/embed/E4AvDfDQaQE"
+											frameborder="0"
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+											allowfullscreen>
+									</iframe>
+								</div>
+							</div>
+
+							<button class="carousel-arrow right" onclick="changeSlide(1)">❯</button>
+						</div>
+
+						<div class="carousel-indicators" id="carouselIndicators"></div>
+
+						<!-- Info -->
+						<div class="project-info">
+							<h2>Information</h2>
+							<ul>
+								<li><strong>Team Size:</strong> Solo Project</li>
+								<li><strong>Role:</strong> Full Tool Development</li>
+								<li><strong>Time Frame:</strong> 8 Weeks</li>
+								<li><strong>Engine:</strong> UE5 (C++)</li>
+								<li><strong>Grade Achieved:</strong> 79%</li>
+							</ul>
+						</div>
+
+						<div class="project-description">
+							<h2>Cave Generation Tool</h2>
+							<p>
+								The purpose of this tool is to solve the problem of creating a cave like structure and
+								environment in Unreal Engine 5. This tool will automate the process of creation of a cave
+								structures by using procedural generation whilst also allowing for other features such as a
+								structure seed, random corridor and room generation, whilst also having a detailed layout of
+								custom settings to allow users to customise the output of this tool to their exact liking.
+							</p>
+							<p>
+								This tool was made using UE5 C++ (for efficiency) and uses a custom cellular automata system, inspired by 'Conway's Game Of Life', to fill outa 2D cave grid. This grid has a vast array of customisable features in order to ensure that it is a complete tool giving the user as much freedom as possible to make a cave generation of their choice.
+							</p>
+						</div>
+
+						<div class="project-info">
+							<h2>Features</h2>
+							<ul>
+								<li>Grid Seed: Specifies the seed value for generating the grid. If set to 0, a random seed will be generated.</li>
+								<li>Seed Lock: Determines whether the seed is locked or not. If true, the generator will use the provided seed value, if false a random seed will be generated.</li>
+								<li>Grid Scale Z: Sets the scale for the grid along the Z-axis, determining the height of the generated grid.</li>
+								<li>Cell Spacing X: Sets the spacing between cells along the X-axis.</li>
+								<li>Cell Spacing Y: Sets the spacing between cells along the Y-axis.</li>
+								<li>Fill Probability: Determines the initial fill probability of each cell being filled (alive). </li>
+								<li>Number of Iterations: Specifies the number of times the cellular automata rules are applied to modify the grid.</li>
+								<li>Empty Neighbour Threshold: If a cell has fewer than this number of neighbours that are alive, it becomes empty.</li>
+								<li>Fill Neighbour Threshold: If an empty cell has this number or more neighbours that are alive, it becomes alive.</li>
+								<li>Number of Corridors: Specifies the total number of corridors that will be generated.</li>
+								<li>Corridor Length Min: Sets the minimum length of the generated corridors.</li>
+								<li>Corridor Length Max: Sets the maximum length of the generated corridors.</li>
+								<li>Corridor Thickness: Determines the thickness of the corridors. For diagonal corridors, the thickness will be increased by 1.</li>
+								<li>Allow Straight Corridors: Allows the generation of straight corridors in the grid.</li>
+								<li>Allow Diagonal Corridors: Allows the generation of diagonal corridors in the grid.</li>
+								<li>Allow Room Spawning: Determines whether rooms should be generated or not.</li>
+								<li>Number of Rooms: Specifies the number of rooms to be generated.</li>
+								<li>Room Size Minimum: Defines the minimum size of each generated room.</li>
+								<li>Room Size Maximum: Defines the maximum size of each generated room.</li>
+								<li>Allow Room Loot: Determines whether loot should be spawned inside the rooms.</li>
+								<li>Loot Height: Specifies the height at which loot should be spawned inside the rooms.</li>
+								<li>Room Loot: Defines the type of object to be spawned inside the rooms.</li>
+								<li>Grid Mesh: Specifies the static mesh that is used for each grid cell.</li>
+								<li>Grid Material: Sets the material to be applied to each cell in the grid.</li>
+							</ul>
+						</div>
+
+						<div class="project-info">
+							<h2>Technical Design Document</h2>
+						</div>
+						<div class="document-embed">
+							<iframe src="documents/cavegentdd.pdf" frameborder="0"></iframe>
+						</div>
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
