@@ -10,7 +10,7 @@ $(document).ready(() => {
   if (mobileAndTabletCheck()) {
     $('#background').replaceWith('<div id="background" style="background-image: url(assets/images/mobile-background.jpg);"></div>');
 
-    app.shouldIgnoreVideo = false;
+    app.shouldIgnoreVideo = true;
   }
 
     app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slas', 'Jack Slask', 'Jack Slaski']);
@@ -20,20 +20,6 @@ if ($.cookie('videoTime')) {
   app.videoElement.currentTime = $.cookie('videoTime');
   app.audioElement.currentTime = $.cookie('videoTime');
 }
-
-document.body.onkeyup = (event) => {
-  if (event.keyCode == 32 && app.skippedIntro) {
-    if (app.backgroundToggler) {
-      app.videoElement.play();
-      app.audioElement.play();
-    } else {
-      app.videoElement.pause();
-      app.audioElement.pause();
-    }
-
-    return (app.backgroundToggler = !app.backgroundToggler);
-  }
-};
 
 $.fn.extend({
   animateCss: function (animationName) {
