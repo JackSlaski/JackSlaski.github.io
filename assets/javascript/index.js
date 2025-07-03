@@ -77,4 +77,3 @@ const doIntroAnim = () => {
 const clearCursor = () => {
   return $('span').siblings('.typed-cursor').css('opacity', '0');
 };
-
