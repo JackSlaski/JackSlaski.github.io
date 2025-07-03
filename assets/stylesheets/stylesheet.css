@@ -231,9 +231,9 @@ padding: 10px;
 
 .portfolio-button.match-icon-button {
     background-color: rgba(255, 255, 255, 0.15);
-    padding: 10px 24px;
+    padding: 10px 34px;
     border-radius: 0%;
-    font-size: 2.0em;
+    font-size: 1.5em;
     font-family: consolas, monospace;
     color: white;
     text-align: center;
@@ -242,7 +242,7 @@ padding: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
+    height: 38px;
 }
 
 .portfolio-button.match-icon-button:hover {
