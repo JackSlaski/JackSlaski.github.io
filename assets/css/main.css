@@ -4167,7 +4167,7 @@ textarea {
 }
 
 .portfolio-card p {
-	margin: 0 0 1.25em 0;
+	margin: 0 0 0.75em 0;
 	line-height: 1.55;
 }
 
@@ -4338,5 +4338,41 @@ textarea {
 	#one.spotlights > section > .content > .inner {
 		width: 100%;
 		max-width: 100%;
+	}
+}
+
+/* === Portfolio Section Dividers === */
+
+.portfolio-category {
+	flex: 0 0 100%;
+	margin: 2em 0 0.5em 0;
+}
+
+.portfolio-category:first-child {
+	margin-top: 0;
+}
+
+.portfolio-category h3 {
+	font-size: clamp(1.5em, 1.1em + 0.8vw, 2.4em);
+	line-height: 1.2;
+	margin: 0;
+	color: #ffffff;
+}
+
+.portfolio-category-line {
+	width: 100%;
+	height: 2px;
+	background: rgba(255, 255, 255, 0.75);
+	margin-top: 0.6em;
+}
+
+/* Keeps spacing tidy on mobile */
+@media screen and (max-width: 736px) {
+	.portfolio-category {
+		margin: 1.5em 0 0.25em 0;
+	}
+
+	.portfolio-category h3 {
+		font-size: 1.75em;
 	}
 }

@@ -1,0 +1,156 @@
+	<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+	<title>Gerbert Games - Jack Slaski</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<link rel="icon" href="images/me.png" type="image/png" />
+</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a href="index.html" class="title">Jack Slaski</a>
+				<nav id="nav">
+					<ul class="links">
+						<li><a href="portfolio.html">Home</a></li>
+						<li><a href="gmod.html"> Garry's Mod</a></li>
+						<li><a href="schooltime.html">Education</a></li>
+						<li class="dropdown">
+							<a href="#">Projects ▼</a>
+							<ul class="dropdown-menu">
+								<li><a href="survivorslike.html">Survivors Like</a></li>
+								<li><a href="formandflask.html">Flask and Formula</a></li>
+								<li><a href="flgame.html">Feudal Living</a></li>
+								<li><a href="lggame.html">Leviathan's Gauntlet</a></li>
+								<li><a href="dykbgame.html">Do You Know Ball?</a></li>
+								<li><a href="cavegen.html">Cave Generator</a></li>
+								<li><a href="wmgame.html">Wild Magic</a></li>
+								<li><a href="uishow.html">UI Showcase</a></li>
+								<li><a href="uidiss.html">Dissertation</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+				<section id="main" class="wrapper">
+					<div class="inner">
+						<div class="project-header">
+							<div class="header-left">
+								<h1 class="major">Gerbert Games</h1>
+							</div>
+							<div class="header-right">
+								<div class="external-links">
+									<a href="https://jack-slaski.itch.io/gerbert-games" target="_blank">
+										<img src="images/itchio.png" alt="itch.io" />
+									</a>
+								</div>
+							</div>
+						</div>
+					
+
+						<div class="carousel-container">
+							<button class="carousel-arrow left" onclick="changeSlide(-1)">❮</button>
+
+							<div class="carousel-slide-wrapper">
+								<div class="carousel-slide"><img src="images/portfolio/GerbGamesGame.png" alt="Slide 1" /></div>
+								<div class="carousel-slide">
+									<iframe class="carousel-embed"
+											src="https://www.youtube.com/embed/ij0CWnI3iIQ"
+											frameborder="0"
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+											allowfullscreen>
+									</iframe>
+								</div>
+							</div>
+
+							<button class="carousel-arrow right" onclick="changeSlide(1)">❯</button>
+						</div>
+
+						<div class="carousel-indicators" id="carouselIndicators"></div>
+
+						<!-- Info -->
+						<div class="project-info">
+							<h2>Information</h2>
+							<ul>
+								<li><strong>Team Size:</strong> 7 Members</li>
+								<li><strong>Role:</strong> Producer and Tech Lead</li>
+								<li><strong>Time Frame:</strong> 8 Weeks</li>
+								<li><strong>Engine:</strong> UE5</li>
+								<li><strong>Grade Achieved:</strong> 74% (85% Individual)</li>
+								<li><strong>Players:</strong> 2-4</li>
+							</ul>
+						</div>
+
+						<div class="project-description">
+							<h2>Description</h2>
+							<p>Gerbert Games is a local multiplayer party game built around fast, chaotic matches between 2-4 players.</p>
+							<p>Players control small alien contestants called Gerberts, competing on floating tile arenas above a black hole. Each match uses simple rules, but the chaos comes from player interaction, tile destruction, real-life game events, and the ability to dash, grab, and sabotage other players.</p>
+							<p>The game is designed to create fun, both on-screen and in the room, making it ideal for couch co-op play with friends.</p>
+						</div>
+
+						<div class="project-description">
+							<h2>Personal Reflection</h2>
+							<p>During the development of Gerbert Games, I took on the role of producer while also contributing heavily to the technical implementation of the project. I helped establish the initial project direction, organised the team, created the GitHub repository, supported task planning, and maintained communication through meetings, announcements, and direct support with team members.</p>
+							<p>On the technical side, I implemented a large portion of the main gameplay systems, including the tile grid, game mode logic, death and respawn systems, HUD, end screen, dash and grab mechanics, and parts of the main menu. I also handled the game’s audio implementation, including procedural audio and MetaSounds, which was a new area for me. Learning this during the project allowed me to broaden my technical skill set and contribute more effectively to the final experience.</p>
+							<p>One of the strongest parts of the project was the quality and modularity of the systems I created. I focused on building clean, reusable Blueprint systems that followed clear naming conventions and could be expanded safely later. This helped keep the project organised and made future development easier.</p>
+							<p>As producer, I feel I helped maintain a positive and productive team environment. I worked closely with group members, helped resolve issues, tracked progress through meeting minutes, and supported communication across the project. However, there were areas I could have improved, particularly in early workload planning and making sure every team member had clear tasks as the project changed. Once I became more consistent with meeting notes and task organisation, this improved significantly.</p>
+							<p>Overall, this project helped me develop both as a technical designer and as a team leader. It pushed me to learn new systems, take responsibility for large parts of the game, and balance creative leadership with practical production management.</p>
+						</div>
+
+						<div class="project-info">
+							<h2>Features</h2>
+							<ul>
+								<li>2-4 Player Local Multiplayer Controller Support.</li>
+								<li>Customisable Gerbert Characters With Selectable Heads, Colours, And Player Shape Markers.</li>
+								<li>Playable Main Menu With Spaceship Cursors, Character Customisation, Game Mode Voting, Cursor Collisions, Explosions, And Respawning.</li>
+								<li>Four Tile-Based Game Modes, Health Tiles, Time Tiles, Colour Tiles, And Gauntlet.</li>
+								<li>15x15 Procedural Tile Arena System Used Across All Game Modes.</li>
+								<li>Health Tile System Where Tiles Lose Durability, Change Colour, And Fall When Depleted.</li>
+								<li>Time Tile System Where Stepped-On Tiles Visually Countdown Before Disappearing.</li>
+								<li>Colour Tile System Where Players Claim Tiles By Running Over Them.</li>
+								<li>Gauntlet Scoring System That Tracks Placements Across Multiple Rounds.</li>
+								<li>Player Dash Mechanic For Knocking Opponents Backwards.</li>
+								<li>Player Grab Mechanic For Briefly Picking Up And Repositioning Opponents.</li>
+								<li>Random Game Event System That Gives Players Timed Real-Life Challenges During Matches.</li>
+								<li>Tutorial UI Screens Explaining Each Game Mode Before The Round Starts.</li>
+								<li>Character Customisation UI With Controller-Friendly Navigation.</li>
+								<li>Voting UI For Selecting Game Modes Before Each Match.</li>
+								<li>Procedural Sound System For Repeated Gameplay Interaction Feedback.</li>
+							</ul>
+						</div>
+
+						<div class="project-info">
+							<h2>Pitch Document</h2>
+						</div>
+						<div class="document-embed">
+							<iframe src="documents/gerbgames.pdf" frameborder="0"></iframe>
+						</div>
+
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
