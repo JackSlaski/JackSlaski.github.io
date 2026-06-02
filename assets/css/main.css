@@ -3704,11 +3704,13 @@ input, select, textarea {
 			}
 
 			@media screen and (max-width: 736px) {
-
-				#intro p {
-					font-size: 1em;
+				#intro h1 {
+					font-size: 2.5em;
 				}
-
+			
+				#intro p {
+					font-size: 1.1em;
+				}
 			}
 
 		@media screen and (max-width: 1280px) {
@@ -3735,11 +3737,20 @@ input, select, textarea {
 
 
 /* === Portfolio Card Grid === */
+#two > .inner {
+	width: 100%;
+	max-width: none;
+}
+
 .portfolio-grid {
+	--portfolio-gap: 2rem;
+
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2rem;
-	justify-content: space-between;
+	gap: var(--portfolio-gap);
+	justify-content: flex-start;
+	align-items: stretch;
+	width: 100%;
 }
 
 .portfolio-card {
@@ -3750,7 +3761,7 @@ input, select, textarea {
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
-	flex: 1 1 calc(33.333% - 2rem);
+	flex: 0 0 calc((100% - (var(--portfolio-gap) * 2)) / 3);
 	box-sizing: border-box;
 	text-align: center;
 	position: relative;
@@ -3769,10 +3780,15 @@ input, select, textarea {
 	/* Image handling */
 	.portfolio-card img {
 		width: 100%;
-		height: 225px;
+		aspect-ratio: 16 / 9;
+		height: auto;
 		object-fit: cover;
 		border-radius: 0.5rem;
 		margin-bottom: 1rem;
+	}
+
+	.portfolio-card.no-image {
+		flex: 0 0 100%;
 	}
 
 	/* Learn More Button Styling */
@@ -3805,13 +3821,17 @@ input, select, textarea {
 /* Responsive Behavior */
 @media screen and (max-width: 980px) {
 	.portfolio-card {
-		flex: 1 1 calc(50% - 2rem);
+		flex: 0 0 calc((100% - var(--portfolio-gap)) / 2);
+	}
+
+	.portfolio-card.no-image {
+		flex: 0 0 100%;
 	}
 }
 
 @media screen and (max-width: 640px) {
 	.portfolio-card {
-		flex: 1 1 100%;
+		flex: 0 0 100%;
 	}
 }
 
@@ -4050,11 +4070,232 @@ nav .dropdown-menu li {
 		border-radius: 8px;
 	}
 
+/* === Fluid Text Scaling === */
+body,
+input,
+select,
+textarea {
+	font-size: clamp(12pt, calc(10pt + 0.35vw), 16.5pt);
+}
 
+/* Keep mobile text sensible */
+@media screen and (max-width: 736px) {
+	body,
+	input,
+	select,
+	textarea {
+		font-size: clamp(11pt, calc(10pt + 0.4vw), 12pt);
+	}
+}
 
+/* Portfolio text scaling */
+#two h2 {
+	font-size: clamp(1.75em, 1.4em + 0.8vw, 2.4em);
+}
 
+.portfolio-card h3 {
+	font-size: clamp(1.1em, 0.9em + 0.45vw, 1.45em);
+}
 
+.portfolio-card p {
+	font-size: clamp(1em, 0.85em + 0.3vw, 1.25em);
+	line-height: 1.65;
+}
 
+.portfolio-card a.button {
+	font-size: clamp(0.65em, 0.55em + 0.25vw, 0.9em);
+}
 
+/* === Current Project Section Centering === */
+#current-project > .inner {
+	width: min(100%, 1200px);
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
 
+/* Keep the carousel centred and proportional */
+#current-project .carousel-container {
+	width: min(100%, 1100px);
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
 
+/* Make carousel height scale with width */
+#current-project .carousel-slide {
+	height: auto;
+	aspect-ratio: 16 / 9;
+}
+
+/* Current project text scaling */
+#current-project header h3 {
+	font-size: clamp(1.1em, 0.9em + 0.4vw, 1.5em);
+}
+
+.current-project-title {
+	font-size: clamp(1.75em, 1.3em + 1vw, 2.75em);
+}
+
+.current-project-description {
+	max-width: 1100px;
+	margin: 1.5em auto 0 auto;
+	font-size: clamp(1em, 0.85em + 0.35vw, 1.25em);
+	line-height: 1.75;
+	text-align: center;
+}
+
+.current-project-description h3 {
+	font-size: clamp(1.15em, 0.95em + 0.45vw, 1.55em);
+	margin-top: 1.5em;
+}
+
+/* === Final Portfolio Scaling Fixes === */
+
+/* Stop portfolio cards forcing large empty space */
+.portfolio-grid {
+	align-items: flex-start;
+}
+
+.portfolio-card {
+	align-self: flex-start;
+}
+
+.portfolio-card h3 {
+	margin-bottom: 0.35em;
+}
+
+.portfolio-card p {
+	margin: 0 0 1.25em 0;
+	line-height: 1.55;
+}
+
+.portfolio-card a.button {
+	margin-top: 0;
+}
+
+/* Keep the dissertation card full width but naturally sized */
+.portfolio-card.no-image {
+	flex: 0 0 100%;
+	align-self: flex-start;
+}
+
+/* === Sidebar Proportion Fix === */
+
+:root {
+	--sidebar-width: clamp(250px, 14vw, 340px);
+}
+
+@media screen and (min-width: 1281px) {
+	#sidebar {
+		width: var(--sidebar-width);
+		padding: clamp(2em, 2vw, 2.8em);
+	}
+
+	#sidebar + #wrapper,
+	#sidebar + #wrapper + #footer {
+		margin-left: var(--sidebar-width);
+	}
+
+	#sidebar nav a {
+		font-size: clamp(0.72rem, 0.52rem + 0.25vw, 0.95rem);
+		letter-spacing: 0.18em;
+		line-height: 1.55;
+		padding: 1.15em 0;
+	}
+
+	#sidebar nav > ul > li {
+		margin: 1.25em 0 0 0;
+	}
+
+	#sidebar nav a:before,
+	#sidebar nav a:after {
+		height: 0.16em;
+	}
+}
+
+/* === Current Project Video Scaling Fix === */
+
+#current-project > .inner {
+	width: min(100%, 1700px);
+	max-width: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#current-project .carousel-container {
+	width: min(100%, 1500px);
+	max-width: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#current-project .carousel-slide-wrapper {
+	width: 100%;
+}
+
+#current-project .carousel-slide {
+	width: 100%;
+	height: auto !important;
+	aspect-ratio: 16 / 9;
+}
+
+#current-project .carousel-slide iframe,
+#current-project .carousel-embed {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* === Welcome + About Me Text Scaling === */
+
+/* Welcome section */
+#intro > .inner {
+	width: min(100%, 1500px);
+	max-width: none;
+}
+
+#intro h1 {
+	font-size: clamp(3em, 2em + 2.2vw, 5.5em);
+	line-height: 1.15;
+	margin-bottom: 0.25em;
+}
+
+#intro p {
+	font-size: clamp(1.25em, 0.95em + 0.8vw, 2em);
+	line-height: 1.5;
+}
+
+/* About Me section */
+#one.spotlights > section {
+	min-height: clamp(24em, 28vw, 38em);
+}
+
+#one.spotlights > section > .image {
+	width: clamp(25em, 28vw, 42em);
+}
+
+#one.spotlights > section > .content {
+	padding: clamp(4em, 5vw, 7em);
+}
+
+#one.spotlights > section > .content > .inner {
+	width: min(100%, 1200px);
+	max-width: none;
+}
+
+#one h2 {
+	font-size: clamp(1.75em, 1.2em + 1vw, 3em);
+	line-height: 1.25;
+}
+
+#one p {
+	font-size: clamp(1em, 0.8em + 0.45vw, 1.45em);
+	line-height: 1.65;
+	margin-bottom: 1.5em;
+}
+
+#one .button {
+	font-size: clamp(0.65em, 0.5em + 0.25vw, 0.9em);
+}
