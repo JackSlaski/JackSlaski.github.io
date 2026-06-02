@@ -4225,7 +4225,7 @@ textarea {
 }
 
 #current-project .carousel-container {
-	width: min(100%, 1500px);
+	width: min(100%, 1400px);
 	max-width: none;
 	margin-left: auto;
 	margin-right: auto;
@@ -4269,19 +4269,20 @@ textarea {
 
 /* About Me section */
 #one.spotlights > section {
-	min-height: clamp(24em, 28vw, 38em);
+	min-height: clamp(22em, 25vw, 34em);
 }
 
 #one.spotlights > section > .image {
-	width: clamp(25em, 28vw, 42em);
+	width: clamp(20em, 24vw, 34em);
+	flex: 0 0 clamp(20em, 24vw, 34em);
 }
 
 #one.spotlights > section > .content {
-	padding: clamp(4em, 5vw, 7em);
+	padding: clamp(3.5em, 4vw, 6em);
 }
 
 #one.spotlights > section > .content > .inner {
-	width: min(100%, 1200px);
+	width: min(100%, 1000px);
 	max-width: none;
 }
 
