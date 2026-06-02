@@ -8,16 +8,17 @@ $(document).ready(() => {
   doIntroAnim()
 
   if (mobileAndTabletCheck()) {
-    $('#background').replaceWith('<div id="background" style="background-image: url(assets/images/mobile-background.jpg);"></div>');
-
     app.shouldIgnoreVideo = true;
   }
 
-    app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slas', 'Jack Slask', 'Jack Slaski']);
+    app.titleChanger(['J', 'Ja', 'Jac', 'Jack', 'Jack S', 'Jack Sl', 'Jack Sla', 'Jack Slas', 'Jack Slask', 'Jack Slaski', 'Jack Slaski', 'Jack Slaski', 'Jack Slaski', 'Jack Slaski', 'Jack Slask', 'Jack Slas', 'Jack Sla', 'Jack Sl', 'Jack S', 'Jack', 'Jac', 'Ja']);
 });
 
-if ($.cookie('videoTime')) {
+if ($.cookie('videoTime') && app.videoElement) {
   app.videoElement.currentTime = $.cookie('videoTime');
+}
+
+if ($.cookie('videoTime') && app.audioElement) {
   app.audioElement.currentTime = $.cookie('videoTime');
 }
 
@@ -70,7 +71,7 @@ const doIntroAnim = () => {
     }
 
     const audio = new Audio('assets/audio/song.mp3');
-    audio.volume = 0.05;
+    audio.volume = 1;
     audio.play().catch(() => { });
 };
 
