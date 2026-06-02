@@ -4300,3 +4300,43 @@ textarea {
 #one .button {
 	font-size: clamp(0.65em, 0.5em + 0.25vw, 0.9em);
 }
+
+/* === Mobile About Me Image Fix === */
+
+@media screen and (max-width: 736px) {
+	#one.spotlights > section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-height: auto;
+	}
+
+	#one.spotlights > section > .image {
+		width: min(100%, 34em);
+		max-width: 100%;
+		height: auto;
+		min-height: unset;
+		margin-left: auto;
+		margin-right: auto;
+		background-size: cover;
+		background-position: center center;
+	}
+
+	#one.spotlights > section > .image img {
+		width: 100%;
+		height: auto;
+		display: block;
+		object-fit: cover;
+	}
+
+	#one.spotlights > section > .content {
+		width: 100%;
+		padding: 3em 2em 1em 2em;
+		text-align: left;
+	}
+
+	#one.spotlights > section > .content > .inner {
+		width: 100%;
+		max-width: 100%;
+	}
+}
