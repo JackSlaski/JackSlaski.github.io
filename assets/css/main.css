@@ -1498,43 +1498,118 @@ input, select, textarea {
 
 /* Intro */
 
-	#intro {
-		background-attachment: fixed;
-		background-image: url("images/intro.svg");
-		background-position: top right;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
+	/* === Portfolio Intro Video Background === */
+
+#intro {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+	background-color: #161515;
+	background-image: none;
+}
+
+/* Video layer */
+
+#intro .intro-video-background iframe {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	/*
+		Keeps a 16:9 YouTube video covering the section
+		without stretching it.
+	*/
+	width: 177.78vh;
+	min-width: 100%;
+	height: 56.25vw;
+	min-height: 100%;
+
+	pointer-events: none;
+
+	filter: blur(0px);
+	transform:
+		translate(-50%, -50%)
+		scale(1.08);
+}
+
+#intro .intro-video-background video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+
+	/*
+		Blur the actual video.
+		The scale prevents blurred edges appearing
+		around the outside of the section.
+	*/
+	filter: blur(5px);
+	transform: scale(1.06);
+}
+
+/* Dark layer in front of the video */
+
+#intro .intro-video-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+
+	background:
+		linear-gradient(
+			to right,
+			rgba(12, 12, 12, 0.9) 0%,
+			rgba(12, 12, 12, 0.6) 55%,
+			rgba(12, 12, 12, 0.7) 100%
+		);
+
+	/*
+		This adds a little additional blur through
+		the overlay on supported browsers.
+	*/
+	-webkit-backdrop-filter: blur(2px);
+	backdrop-filter: blur(2px);
+}
+
+/* Keep the text above the video and overlay */
+
+#intro > .inner {
+	position: relative;
+	z-index: 2;
+}
+
+/* CV button beneath the job title */
+
+#intro .intro-actions {
+	margin-top: -1.8em;
+	margin-bottom: 0;
+}
+
+/* Slightly reduce the video effect on smaller screens */
+
+@media screen and (max-width: 736px) {
+	#intro .intro-video-background iframe {
+		filter: blur(5px);
+		transform:
+			translate(-50%, -50%)
+			scale(1.1);
+	}
+}
+
+/* Motion accessibility fallback */
+
+@media (prefers-reduced-motion: reduce) {
+	#intro .intro-video-background {
+		display: none;
 	}
 
-		#intro p {
-			font-size: 1.25em;
-		}
-
-			@media screen and (max-width: 980px) {
-
-				#intro p br {
-					display: none;
-				}
-
-			}
-
-			@media screen and (max-width: 736px) {
-				#intro h1 {
-					font-size: 2.5em;
-				}
-			
-				#intro p {
-					font-size: 1.1em;
-				}
-			}
-
-		@media screen and (max-width: 1280px) {
-
-			#intro {
-				background-attachment: scroll;
-			}
-
-		}
+	#intro {
+		background-image: url("images/intro.svg");
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+}
 
 .videoWrapper {
 	position: relative;
@@ -2818,10 +2893,6 @@ textarea {
 						color: rgba(255, 255, 255, 0.55);
 					}
 
-					#header > nav > ul > li a.active {
-						color: #ffffff;
-					}
-
 	@media screen and (max-width: 736px) {
 
 		#header {
@@ -2858,3 +2929,28 @@ textarea {
 					}
 
 	}
+
+/* === Shared Header CV Link === */
+
+#header .cv-header-link {
+	padding: 0.45em 0.8em;
+
+	transition:
+		color 0.2s ease,
+		background-color 0.2s ease,
+		border-color 0.2s ease;
+}
+
+#header .cv-header-link:hover {
+	color: rgba(255, 255, 255, 0.55);
+}
+
+/* Simplify it when header space becomes limited */
+
+@media screen and (max-width: 736px) {
+	#header .cv-header-link {
+		padding: 0 0.5em;
+		background: transparent;
+		border: 0 !important;
+	}
+}

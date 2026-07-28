@@ -161,11 +161,71 @@ function buildProjectDropdown() {
 	}
 }
 
+function addCvToSharedHeader() {
+	const navList = document.querySelector(
+		'#header nav .links'
+	);
+
+	/*
+		Stop if this page has no standard header,
+		or the CV link has already been added.
+	*/
+	if (
+		!navList ||
+		navList.querySelector('.cv-header-item')
+	) {
+		return;
+	}
+
+	const listItem = document.createElement('li');
+	const link = document.createElement('a');
+
+	listItem.classList.add('cv-header-item');
+
+	link.href = 'documents/cvjackslaski.pdf';
+	link.textContent = 'CV';
+	link.classList.add('cv-header-link');
+
+	link.setAttribute(
+		'download',
+		'Jack-Slaski-CV.pdf'
+	);
+
+	link.setAttribute(
+		'aria-label',
+		'Download Jack Slaski CV'
+	);
+
+	listItem.appendChild(link);
+
+	/*
+		Places CV immediately before the Projects dropdown.
+	*/
+	const projectsDropdown = navList.querySelector(
+		'.dropdown'
+	);
+
+	if (projectsDropdown) {
+		navList.insertBefore(
+			listItem,
+			projectsDropdown
+		);
+	} else {
+		navList.appendChild(listItem);
+	}
+}
+
+function initialiseSharedNavigation() {
+	buildProjectDropdown();
+	addCvToSharedHeader();
+}
+
 if (document.readyState === 'loading') {
 	document.addEventListener(
 		'DOMContentLoaded',
-		buildProjectDropdown
+		initialiseSharedNavigation
 	);
 } else {
-	buildProjectDropdown();
+	initialiseSharedNavigation();
 }
+
