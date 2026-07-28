@@ -21,7 +21,7 @@
 					<nav>
 						<ul>
 							<li><a href="#intro">WELCOME</a></li>
-							<li><a href="#current-project">Project in Progress</a></li>
+							<li><a href="#active-projects">ACTIVE PROJECTS</a></li>
 							<li><a href="#two">PORTFOLIO</a></li>
 							<li><a href="#one">ABOUT ME</a></li>
 							<li><a href="#get-in-touch">Get in touch</a></li>
@@ -37,79 +37,92 @@
 				<section id="intro" class="wrapper style1 fullscreen fade-up">
 					<div class="inner">
 						<h1>Jack Slaski</h1>
-						<p>Aspiring Video Game Developer</p>
+						<p>Game Designer / Technical Game Designer</p>
 					</div>
 				</section>
 
-				<!-- Currently Working On Section -->
-				<section id="current-project" class="wrapper style2 special">
+				<!-- Active Projects -->
+				<section id="active-projects" class="wrapper style2 fade-up">
 					<div class="inner">
-						<header class="major">
-							<h3>Project in Progress</h3>
-						</header>
 
-						<!-- Project Title -->
-						<h2 class="current-project-title">DarkRP In Unreal</h2>
-
-						<!-- Carousel -->
-						<div class="carousel-container">
-							<button class="carousel-arrow left" onclick="changeSlide(-1)">❮</button>
-
-							<div class="carousel-slide-wrapper">
-								<div class="carousel-slide">
-									<iframe class="carousel-embed"
-											src="https://www.youtube.com/embed/6BQ_H_9tOOY"
-											frameborder="0"
-											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-											allowfullscreen>
-									</iframe>
-								</div>
-								<div class="carousel-slide">
-									<iframe class="carousel-embed"
-											src="https://www.youtube.com/embed/fUTa-YgsABU"
-											frameborder="0"
-											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-											allowfullscreen>
-									</iframe>
-								</div>
-								<div class="carousel-slide">
-									<iframe class="carousel-embed"
-											src="https://www.youtube.com/embed/jMm22s53HWQ"
-											frameborder="0"
-											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-											allowfullscreen>
-									</iframe>
-								</div>
-							</div>
-
-							<button class="carousel-arrow right" onclick="changeSlide(1)">❯</button>
+						<div class="active-projects-heading">
+							<p class="active-projects-label">CURRENTLY IN DEVELOPMENT</p>
+							<h1>ACTIVE PROJECTS</h1>
+							<p>
+								Projects that are currently being developed, expanded, and refined.
+							</p>
+							<div class="active-projects-line"></div>
 						</div>
 
-						<div class="carousel-indicators" id="carouselIndicators"></div>
+						<div class="active-project-grid">
 
-						<!-- Description -->
+							<!-- Recoil Works -->
+							<article class="portfolio-card active-project-card">
 
-						<div class="current-project-description">
-							<h3>Project Information</h3>
-							<strong>Engine:</strong> UE5 <br>
-							<strong>State:</strong> Early Prototype <br>
-							<strong>Goals:</strong> Modularity, PCG, Engagement<br>
-							<h3>Core Concept</h3>
-							DarkRP in Unreal is a systems-driven prototype inspired by the Garry’s Mod DarkRP framework, reimagined within Unreal Engine 5. The project focuses on building a modular roleplay foundation featuring player jobs, interactive entities, inventory and economy systems, and administrative tools. My current development phase centres on backend gameplay logic, including entity interaction, analytics tracking, UI design, and a detailed weapons system.<br>
-							<h3>Key Features (In Progress)</h3>
-							Modular job and inventory systems<br>
-							A detailed weapon system with random stat generation, upgrading, and gem slots<br>
-							Custom analytics tracking (player statistics and progression)<br>
-							Interactive entities with in-world feedback<br>
-							Functional admin interface for player and system monitoring<br>
-							Designed for scalability and multiplayer integration<br>
-							<h3>Focus Area</h3>
-							Technical system design, modularity, and usability within a multiplayer environment.
-							<br></br>
+								<div class="active-project-image">
+									<img
+										src="images/portfolio/RWGame.png"
+										alt="Recoil Works"
+									>
+
+									<span class="active-project-badge">
+										In Development
+									</span>
+								</div>
+
+								<h3>Recoil Works</h3>
+
+								<p class="active-project-meta">
+									UE5 • Master's Project • Solo Development
+								</p>
+
+								<p>
+									A modular weapon-crafting FPS prototype built around
+									interchangeable components, extensive weapon customisation,
+									and unusual projectile behaviours.
+								</p>
+
+								<a href="recoilworks.html" class="button">
+									View Project
+								</a>
+
+							</article>
+
+							<!-- Arms & Assets -->
+							<article class="portfolio-card active-project-card">
+
+								<div class="active-project-image">
+									<img
+										src="images/portfolio/AAGame.png"
+										alt="Arms and Assets"
+									>
+
+									<span class="active-project-badge">
+										In Development
+									</span>
+								</div>
+
+								<h3>Arms &amp; Assets</h3>
+
+								<p class="active-project-meta">
+									UE5 • Personal Project • Solo Development
+								</p>
+
+								<p>
+									A systems-driven multiplayer prototype focused on combat,
+									inventory, player economy, trading, item progression, and
+									modular gameplay systems.
+								</p>
+
+								<a href="armsandassets.html" class="button">
+									View Project
+								</a>
+
+							</article>
+
 						</div>
 					</div>
 				</section>
-
 
 				<!-- Portfolio -->
 				<section id="two" class="wrapper style3 fade-up">
@@ -140,7 +153,7 @@
 								<div class="portfolio-card">
 									<img src="images/portfolio/FaFGame.png" alt="Formula and Flask">
 									<h3>Formula and Flask</h3>
-									<p>A First-Person Potion Factory Prototype Made In Unreal Engine 5.</p>
+									<p>A First-Person Potion Factory Prototype Made In UE5.</p>
 									<a href="formandflask.html" class="button">Learn More</a>
 								</div>
 
@@ -158,14 +171,14 @@
 								<div class="portfolio-card">
 									<img src="images/portfolio/FLGame.png" alt="Feudal Living">
 									<h3>Feudal Living</h3>
-									<p>A Medieval Themed Sims-Like Game Made In UE5.</p>
+									<p>A Medieval Themed Sims-Like Game Made In UE5. (2nd Place Winner GradEx Awards)</p>
 									<a href="flgame.html" class="button">Learn More</a>
 								</div>
 
 								<div class="portfolio-card">
 									<img src="images/portfolio/LGGame.png" alt="Leviathan's Gauntlet">
 									<h3>Leviathan's Gauntlet</h3>
-									<p>A 2025 Staffordshire University Collab Pirate Themed Survivors-Like Game.</p>
+									<p>A 2025 University of Staffordshire Collaborative Pirate Themed Survivors-Like Game.</p>
 									<a href="lggame.html" class="button">Learn More</a>
 								</div>
 

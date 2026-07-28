@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+	<title>Recoil Works - Jack Slaski</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<link rel="icon" href="images/me.png" type="image/png" />
+</head>
+	<body class="is-preload active-project-page">
+
+		<!-- Header -->
+			<header id="header">
+				<a href="index.html" class="title">Jack Slaski</a>
+				<nav id="nav">
+					<ul class="links">
+						<li><a href="portfolio.html">Home</a></li>
+						<li><a href="gmod.html"> Garry's Mod</a></li>
+						<li><a href="schooltime.html">Education</a></li>
+						<li class="dropdown">
+							<a href="portfolio.html#two">Projects ▼</a>
+							<ul
+								class="dropdown-menu"
+								id="project-dropdown-menu"
+							></ul>
+						</li>
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+				<section id="main" class="wrapper active-project-main">
+					<div class="inner active-project-inner">
+
+						<!-- Active Project Hero -->
+						<div class="active-project-hero">
+
+							<div class="active-project-hero-copy">
+								<p class="active-project-kicker">
+									UE5 • Master's Project • Solo Development
+								</p>
+
+								<h1>Recoil Works</h1>
+
+								<p class="active-project-lead">
+									A modular FPS weapon-crafting prototype where players construct
+									weapons from chassis and interchangeable components, then test
+									how those choices alter stats, ammunition, firing behaviour,
+									projectile effects, and intended gameplay use.
+								</p>
+							</div>
+
+							<div class="active-project-page-status">
+								<span class="active-status-dot"></span>
+								Active Development
+							</div>
+
+						</div>
+
+						<!-- Hero Divider -->
+						<div class="active-project-hero-line"></div>
+
+						<!-- Carousel -->
+						<div class="carousel-container">
+							<button
+								class="carousel-arrow left"
+								onclick="changeSlide(-1)"
+							>
+								❮
+							</button>
+
+							<div class="carousel-slide"><img src="images/portfolio/RWGame.png" alt="Slide 1" /></div>
+
+							<div class="carousel-slide">
+								<iframe
+									class="carousel-embed"
+									src="https://www.youtube.com/embed/i-jRvDOe8k8"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+								>
+								</iframe>
+							</div>
+
+							<div class="carousel-slide">
+								<iframe
+									class="carousel-embed"
+									src="https://www.youtube.com/embed/xVHr1Et2IBs"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+								>
+								</iframe>
+							</div>
+
+							<button
+								class="carousel-arrow right"
+								onclick="changeSlide(1)"
+							>
+								❯
+							</button>
+						</div>
+
+						<div
+							class="carousel-indicators"
+							id="carouselIndicators"
+						></div>
+
+						<!-- Project Overview -->
+						<div class="active-project-overview-grid">
+
+							<section class="project-info active-project-panel">
+								<h2>Project Information</h2>
+
+								<ul>
+									<li>
+										<strong>Project Type:</strong>
+										Master's Project
+									</li>
+
+									<li>
+										<strong>Development:</strong>
+										Solo
+									</li>
+
+									<li>
+										<strong>Engine:</strong>
+										Unreal Engine 5
+									</li>
+
+									<li>
+										<strong>Implementation:</strong>
+										Blueprint Visual Scripting
+									</li>
+
+									<li>
+										<strong>Status:</strong>
+										Active Development
+									</li>
+
+									<li>
+										<strong>Primary Focus:</strong>
+										Gameplay Systems and Technical Design
+									</li>
+
+									<li>
+										<strong>Reference:</strong>
+										Loadout (2014)
+									</li>
+								</ul>
+							</section>
+
+							<section class="project-description active-project-panel">
+								<h2>Project Overview</h2>
+
+								<p>
+									Recoil Works is a modular weapon-construction prototype inspired
+									by the creative weapon-building system in Loadout. Rather than
+									placing attachments onto a fixed gun, players begin with a weapon
+									chassis and construct its identity through interchangeable parts.
+								</p>
+
+								<p>
+									Each component can alter statistics, firing behaviour, ammunition
+									handling, payload effects, projectile movement, and the situations
+									in which the completed weapon is most effective. This allows highly
+									unusual combinations while preserving a readable underlying system.
+								</p>
+
+								<p>
+									The project is being developed as a polished systems prototype and
+									vertical slice, with the emphasis placed on modular architecture,
+									clear player feedback, rapid testing, and iterative balancing.
+								</p>
+							</section>
+
+						</div>
+
+						<!-- Current Development -->
+						<section class="project-description active-project-panel active-project-panel-wide">
+							<h2>Current Development</h2>
+
+							<p>
+								Current work focuses on completing and refining the weapon chassis,
+								component behaviours, stat calculation pipeline, weapon preview
+								interfaces, inventory interactions, and testing workflow. Particular
+								attention is being given to unusual projectile behaviours and the
+								edge cases created when multiple parts modify the same weapon.
+							</p>
+
+							<p>
+								Balancing is being developed through repeated playtesting, debugging,
+								player feedback, surveys, and formula adjustments. The aim is to
+								allow experimental combinations without making every unusual weapon
+								automatically stronger than a more conventional build.
+							</p>
+						</section>
+
+						<!-- Systems -->
+						<section class="project-info active-project-panel active-project-panel-wide">
+							<h2>Systems In Development</h2>
+
+							<div class="active-feature-grid">
+
+								<div class="active-feature-item">
+									<h3>Weapon Chassis</h3>
+									<p>
+										Rifle, Launcher, Pulse, and Beam chassis provide distinct
+										firing models, ammunition rules, and available component slots.
+									</p>
+								</div>
+
+								<div class="active-feature-item">
+									<h3>Modular Components</h3>
+									<p>
+										Stocks, barrels, triggers, magazines, payloads, propulsion,
+										shells, detonators, dispersal parts, and dynamics reshape
+										the completed weapon.
+									</p>
+								</div>
+
+								<div class="active-feature-item">
+									<h3>Projectile Behaviours</h3>
+									<p>
+										Launcher projectiles can use behaviours such as lobbed,
+										scuttle, corkscrew, bouncing, sticky, timed, proximity,
+										and manually detonated shots.
+									</p>
+								</div>
+
+								<div class="active-feature-item">
+									<h3>Stats and Balancing</h3>
+									<p>
+										Damage, recoil, accuracy, stability, range, rate of fire,
+										reload time, clip size, and part-specific modifiers are
+										combined through a controlled calculation pipeline.
+									</p>
+								</div>
+
+								<div class="active-feature-item">
+									<h3>Weapon Builder UI</h3>
+									<p>
+										Players can inspect parts, compare temporary weapon results,
+										manage inventory items, duplicate builds, and preview how
+										component changes affect the final weapon.
+									</p>
+								</div>
+
+								<div class="active-feature-item">
+									<h3>Testing and Iteration</h3>
+									<p>
+										The core loop supports constructing a weapon, testing it in
+										a controlled environment, evaluating its performance, and
+										refining the build through further component changes.
+									</p>
+								</div>
+
+							</div>
+						</section>
+
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/project-menu.js"></script>
+	</body>
+</html>
