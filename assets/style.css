@@ -479,3 +479,89 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* consecutive sections share one gap */
 .section + .section { padding-top: 0; }
+
+/* =========================================================
+   Secrets: footer counter, unlock toast, trophy list
+   ========================================================= */
+.footer__secrets {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted);
+  transition: color 200ms;
+}
+.footer__secrets::before { content: ""; width: 9px; height: 9px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
+.footer__secrets:hover { color: var(--text); }
+
+.trophy {
+  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 80;
+  display: flex; align-items: center; gap: 1rem;
+  width: min(24rem, calc(100vw - 2.5rem)); padding: 1rem 1.25rem;
+  background: rgba(16, 20, 28, 0.97); border: 1px solid rgba(255, 90, 54, 0.5); border-left: 4px solid var(--accent);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  opacity: 0; visibility: hidden; transform: translateY(16px);
+  transition: opacity 300ms var(--ease), transform 300ms var(--ease), visibility 0s linear 300ms;
+}
+.trophy.is-on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.trophy__icon {
+  flex: none; width: 2.75rem; height: 2.75rem; display: grid; place-items: center;
+  background: var(--accent);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.trophy__icon::before { content: ""; width: 14px; height: 14px; border: 2.5px solid #fff; transform: rotate(45deg); }
+.trophy__label { display: block; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.trophy strong { display: block; font-family: var(--display); font-weight: 700; font-size: 1.35rem; line-height: 1.1; text-transform: uppercase; }
+.trophy__text { display: block; margin-top: 0.15rem; font-size: 0.9rem; line-height: 1.4; color: #c9d0db; }
+
+.trophies {
+  width: min(36rem, calc(100vw - 2rem)); max-height: calc(100svh - 2rem);
+  padding: clamp(1.25rem, 3vw, 2rem); border: 1px solid var(--line); color: var(--text); background: var(--panel);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.trophies::backdrop { background: rgba(5, 7, 11, 0.75); backdrop-filter: blur(3px); }
+.trophies[open] { animation: trophies-in 280ms var(--ease); }
+@keyframes trophies-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
+.trophies__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.trophies__head .title { font-size: 2.75rem; margin-top: 0.4rem; }
+.trophies__close { width: 2.75rem; height: 2.75rem; color: var(--muted); font-size: 1.1rem; }
+.trophies__close:hover { color: var(--text); }
+.trophies__bar { height: 4px; margin-top: 1.25rem; background: rgba(255, 255, 255, 0.08); }
+.trophies__bar span { display: block; height: 100%; background: var(--accent); transition: width 500ms var(--ease); }
+.trophies__list { display: grid; gap: 0.6rem; margin-top: 1.25rem; }
+.trophies__list li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: 0.9rem 1rem; background: var(--bg); border: 1px solid var(--line); }
+.trophies__list li.is-done { border-color: rgba(255, 90, 54, 0.4); }
+.trophies__icon { width: 2.25rem; height: 2.25rem; display: grid; place-items: center; background: var(--panel-2); }
+.trophies__icon::before { content: "?"; font-family: var(--mono); color: var(--muted); }
+.is-done .trophies__icon { background: var(--accent); }
+.is-done .trophies__icon::before { content: ""; width: 11px; height: 11px; border: 2px solid #fff; transform: rotate(45deg); }
+.trophies__name { font-family: var(--display); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; line-height: 1.1; }
+.trophies__list li:not(.is-done) .trophies__name { color: var(--muted); }
+.trophies__text { font-size: 0.92rem; color: #b9c1cd; margin-top: 0.15rem; }
+.trophies__meta { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: right; }
+.is-done .trophies__meta { color: var(--accent); }
+.trophies__foot { margin-top: 1.25rem; font-size: 0.85rem; color: var(--muted); }
+.trophies__foot button { color: var(--muted); text-decoration: underline; text-underline-offset: 0.2em; }
+.trophies__foot button:hover { color: var(--text); }
+
+/* =========================================================
+   404: out of bounds
+   ========================================================= */
+.oob { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; text-align: center; padding: 7rem var(--pad) 4rem; }
+.oob::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 70%);
+  transform: perspective(600px) rotateX(55deg) translateY(25%) scale(2);
+  transform-origin: 50% 100%;
+}
+.oob__player { width: 22px; height: 22px; margin: 0 auto 2.5rem; background: var(--accent); transform: rotate(45deg); animation: fall 2.4s cubic-bezier(0.55, 0, 1, 0.45) infinite; }
+@keyframes fall {
+  0% { transform: translateY(-40px) rotate(45deg); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translateY(160px) rotate(405deg) scale(0.2); opacity: 0; }
+}
+.oob__title { font-size: clamp(4rem, 2rem + 9vw, 10rem); }
+.oob__title span { color: var(--accent); }
+.oob__text { max-width: 30rem; margin: 1.25rem auto 0; color: #c9d0db; font-size: 1.15rem; }
+.oob__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2.25rem; }
+.oob__timer { margin-top: 1.5rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .oob__player { animation: none; } }
