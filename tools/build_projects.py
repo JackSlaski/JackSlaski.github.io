@@ -181,6 +181,12 @@ def render(slug, p, nxt):
     panel = f'<aside class="panel reveal" style="--d:1"><span class="label">Built with</span><ul class="tags">{tools}</ul></aside>' if tools else ""
     body = f'				<div class="overview{"" if panel else " overview--solo"}">{paras(how["ps"])}{panel}</div>'
     out.append(section(n, "How", "How I built it", body, "how"))
+    # play: a mini game rebuilt from the project, right on its page
+    if p.get("play"):
+        n += 1
+        pl = p["play"]
+        body = f'				<div class="play"><div class="play__text reveal">' + "".join(f"<p>{E(x)}</p>" for x in pl["ps"]) + f'</div><div class="arcade reveal" style="--d:1" data-game="{pl["game"]}"><p>This mini game needs JavaScript turned on.</p></div></div>'
+        out.append(section(n, "Play", pl["title"], body, "play"))
     # media
     if p.get("media"):
         n += 1
@@ -233,7 +239,10 @@ def render(slug, p, nxt):
 			</div>
 		</section>
 """)
-    out.append(FOOT)
+    foot = FOOT
+    if p.get("play"):
+        foot = foot.replace('<script src="assets/secrets.js" defer></script>', f'<script src="assets/secrets.js" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js" defer></script>')
+    out.append(foot)
     return "".join(out)
 
 

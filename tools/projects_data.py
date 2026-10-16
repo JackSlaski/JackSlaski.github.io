@@ -43,6 +43,10 @@ PROJECTS = {
     ])],
 ),
 "gerbertgames": dict(
+    play=dict(game="colour-tiles", title="Play Colour Tiles", ps=[
+        "Colour Tiles is one of the four modes in Gerbert Games: run over tiles to claim them, and whoever owns the most when time runs out wins.",
+        "This is a cut-down version I rebuilt for the web. You get 20 seconds against a bot, and the dash from the real game for cutting into its territory.",
+    ]),
     title="Gerbert Games",
     desc="A local multiplayer party game for two to four players, made in UE5 by a team of seven.",
     kicker="MSc project · Team of 7 · 8 weeks",
