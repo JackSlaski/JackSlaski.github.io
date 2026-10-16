@@ -54,11 +54,35 @@
 			<dl class="wrap facts__grid"><div class="fact reveal"><dt>Role</dt><dd>Designer &amp; developer</dd></div><div class="fact reveal"><dt>Team</dt><dd>Solo</dd></div><div class="fact reveal"><dt>Engine</dt><dd>UE5 Blueprints</dd></div><div class="fact reveal"><dt>Inspired by</dt><dd>Loadout (2014)</dd></div><div class="fact reveal grade"><dt>Grade</dt><dd>85%</dd><div class="grade__bar"><span style="--v:85%"></span></div></div></dl>
 		</section>
 
+		<section class="section" id="why">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">01 // Why</p>
+						<h2 class="title section__title reveal" style="--d:1">Why I made it</h2>
+					</div>
+				</div>
+				<div class="overview overview--solo"><div class="prose reveal"><p>Recoil Works started from Loadout, where you build a gun out of parts instead of bolting attachments onto a fixed one.</p><p>For my MSc master project I wanted to design that kind of system myself: give players real freedom to build strange weapons, while keeping the numbers readable and balanced so a weird build is fun without automatically beating a sensible one.</p></div></div>
+			</div>
+		</section>
+
+		<section class="section" id="how">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">02 // How</p>
+						<h2 class="title section__title reveal" style="--d:1">How I built it</h2>
+					</div>
+				</div>
+				<div class="overview"><div class="prose reveal"><p>Everything runs on data. Parts live in data tables and structs, so adding a new barrel or payload means adding a row, not writing new code.</p><p>Every part&#x27;s modifiers go through one stat calculation pipeline. That let me balance combinations rather than individual guns, and made edge cases, like several parts changing the same stat, easy to find.</p><p>I built a test range into the core loop so I could build, fire, and tweak in seconds, then balanced through playtests, surveys, debugging, and formula changes.</p></div><aside class="panel reveal" style="--d:1"><span class="label">Built with</span><ul class="tags"><li class="chip">UE5</li><li class="chip">Blueprints</li><li class="chip">Data tables</li><li class="chip">Structs</li><li class="chip">UMG</li><li class="chip">Playtesting</li></ul></aside></div>
+			</div>
+		</section>
+
 		<section class="section" id="media">
 			<div class="wrap">
 				<div class="section__head">
 					<div>
-						<p class="label reveal">01 // Media</p>
+						<p class="label reveal">03 // Media</p>
 						<h2 class="title section__title reveal" style="--d:1">Gallery</h2>
 					</div>
 				</div>
@@ -74,19 +98,7 @@
 			<div class="wrap">
 				<div class="section__head">
 					<div>
-						<p class="label reveal">02 // Overview</p>
-						<h2 class="title section__title reveal" style="--d:1">The idea</h2>
-					</div>
-				</div>
-				<div class="overview"><div class="prose reveal"><p>Rather than bolting attachments onto a fixed gun, you start with a weapon chassis and build its identity through interchangeable parts.</p><p>Recoil Works is inspired by the weapon building in Loadout. Each part can change stats, firing behaviour, ammunition handling, payload effects, projectile movement, and the situations the finished weapon is best at. That allows some very unusual combinations, so the system underneath has to stay readable.</p><p>I built it as a polished systems prototype and vertical slice for my MSc master project. The focus was a modular architecture, clear player feedback, fast testing, and steady balancing.</p></div><aside class="panel reveal" style="--d:1"><span class="label">How it came together</span><p>I built the weapon chassis, part behaviours, the stat calculation pipeline, the weapon preview screens, inventory interactions, and the testing workflow.</p><p>A lot of the work went into unusual projectile behaviours and the edge cases you get when several parts change the same weapon. Balancing came from playtests, debugging, surveys, and adjusting formulas, so strange builds stay fun without automatically beating a sensible one.</p></aside></div>
-			</div>
-		</section>
-
-		<section class="section">
-			<div class="wrap">
-				<div class="section__head">
-					<div>
-						<p class="label reveal">03 // Systems</p>
+						<p class="label reveal">04 // Systems</p>
 						<h2 class="title section__title reveal" style="--d:1">What I built</h2>
 					</div>
 				</div>

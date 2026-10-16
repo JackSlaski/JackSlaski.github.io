@@ -54,11 +54,35 @@
 			<dl class="wrap facts__grid"><div class="fact reveal"><dt>Role</dt><dd>Tools developer</dd></div><div class="fact reveal"><dt>Time</dt><dd>8 weeks</dd></div><div class="fact reveal"><dt>Engine</dt><dd>UE5 C++</dd></div><div class="fact reveal grade"><dt>Grade</dt><dd>79%</dd><div class="grade__bar"><span style="--v:79%"></span></div></div></dl>
 		</section>
 
+		<section class="section" id="why">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">01 // Why</p>
+						<h2 class="title section__title reveal" style="--d:1">Why I made it</h2>
+					</div>
+				</div>
+				<div class="overview overview--solo"><div class="prose reveal"><p>Building cave layouts by hand in Unreal is slow.</p><p>I wanted a tool that generates one in seconds, with enough settings that a designer stays in full control of the result.</p></div></div>
+			</div>
+		</section>
+
+		<section class="section" id="how">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">02 // How</p>
+						<h2 class="title section__title reveal" style="--d:1">How I built it</h2>
+					</div>
+				</div>
+				<div class="overview"><div class="prose reveal"><p>It&#x27;s written in C++ for speed. A cellular automata system, inspired by Conway&#x27;s Game of Life, fills a 2D grid at random, then neighbour rules smooth it into caves over several passes.</p><p>Seeds make results repeatable, and corridors and rooms, with optional loot, are carved on top.</p><p>Every value is exposed in the Details panel, so designers can tune the output without touching code.</p></div><aside class="panel reveal" style="--d:1"><span class="label">Built with</span><ul class="tags"><li class="chip">UE5</li><li class="chip">C++</li><li class="chip">Cellular automata</li><li class="chip">Editor settings</li></ul></aside></div>
+			</div>
+		</section>
+
 		<section class="section" id="media">
 			<div class="wrap">
 				<div class="section__head">
 					<div>
-						<p class="label reveal">01 // Media</p>
+						<p class="label reveal">03 // Media</p>
 						<h2 class="title section__title reveal" style="--d:1">Gallery</h2>
 					</div>
 				</div>
@@ -74,19 +98,7 @@
 			<div class="wrap">
 				<div class="section__head">
 					<div>
-						<p class="label reveal">02 // Overview</p>
-						<h2 class="title section__title reveal" style="--d:1">The tool</h2>
-					</div>
-				</div>
-				<div class="overview overview--solo"><div class="prose reveal"><p>The tool automates building cave structures in Unreal Engine 5 with procedural generation.</p><p>It&#x27;s written in C++ for speed and uses a custom cellular automata system, inspired by Conway&#x27;s Game of Life, to fill out a 2D cave grid. On top of that it supports seeds, random corridors and rooms, and a detailed set of settings so designers can tune the output exactly.</p></div></div>
-			</div>
-		</section>
-
-		<section class="section">
-			<div class="wrap">
-				<div class="section__head">
-					<div>
-						<p class="label reveal">03 // Settings</p>
+						<p class="label reveal">04 // Settings</p>
 						<h2 class="title section__title reveal" style="--d:1">Everything you can tweak</h2>
 					</div>
 				</div>
@@ -98,7 +110,7 @@
 			<div class="wrap">
 				<div class="section__head">
 					<div>
-						<p class="label reveal">04 // Documents</p>
+						<p class="label reveal">05 // Documents</p>
 						<h2 class="title section__title reveal" style="--d:1">Read the docs</h2>
 					</div>
 				</div>
