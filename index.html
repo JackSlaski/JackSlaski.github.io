@@ -1,69 +1,256 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
-    <title>Jack Slaski</title>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Games Programmer" />
-    <meta name="keywords" content="jack-Slaski, programmer, programming, garrys mod, gmod, c++, c#, unity, unreal, UI" />
-    <meta name="author" content="Jack Slaski" />
-    <meta property="og:type" content="site" />
-    <meta property="og:title" content="Jack Slaski" />
-    <meta property="og:description" content="Games Programmer" />
-    <meta itemprop="name" content="Jack Slaski" />
-    <meta itemprop="description" content="Games Programmer" />
-    <meta itemprop="image" content="images/me.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-    <link rel="stylesheet" type="text/css" href="assets/stylesheets/stylesheet.css" />
-    <link rel="icon" href="images/me.png" type="image/png" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Jack Slaski, gameplay and systems designer</title>
+	<meta name="description" content="Jack Slaski designs and builds gameplay systems in Unreal Engine 5. MSc Computer Games Design, Distinction." />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Jack Slaski, gameplay and systems designer" />
+	<meta property="og:description" content="Gameplay systems in Unreal Engine 5: weapon crafting, inventories, and party games." />
+	<meta property="og:image" content="https://jackslaski.com/images/site/arms-range.jpg" />
+	<meta property="og:url" content="https://jackslaski.com/" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23062b8a'/%3E%3Ctext x='16' y='23' font-family='Arial' font-size='18' font-weight='bold' text-anchor='middle' fill='%23e6dbc7'%3EJS%3C/text%3E%3C/svg%3E" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="assets/site.css" />
+	<script>document.documentElement.classList.add('js')</script>
 </head>
-
 <body>
-    <script type="text/javascript" src="assets/javascript/app.js"></script>
+	<a class="skip" href="#work">Skip to work</a>
 
-    <div class="container" style="display: none;">
-        <div class="profile-image">
-            <a href="portfolio.html"><img width="200" src="images/me.png" height="200" /></a>
-        </div>
-        <div class="profile-text">
-            <h1 class="actions">
-                <a href="portfolio.html" class="button">Jack Slaski</a>
-            </h1>
-            <p><a href="portfolio.html"><span id="brand"></span></a></p>
-        </div>
-        <nav class="profile-links">
-            <div class="icon-button-row portfolio-row">
-                <a href="portfolio.html" class="portfolio-button icon-button match-icon-button">
-                    <span>PORTFOLIO</span>
-                </a>
-            </div>
-            <ul class="icon-images">
-                <li><a href="https://github.com/JackSlaski" target="_blank"><img src="images/social/github.png" alt="GitHub" /></a></li>
-                <li><a href="https://www.linkedin.com/in/jack-slaski-91a02a239/" target="_blank"><img src="images/social/linkedin.png" alt="LinkedIn" /></a></li>
-                <li><a href="documents/cvjackslaski.pdf"><img src="images/social/cv.png" alt="CV" /></a></li>
-                <li><a href="mailto:jackslaski04@gmail.com"><img src="images/social/email.png" alt="Email" /></a></li>
-                <li><a href="https://jack-slaski.itch.io" target="_blank"><img src="images/social/itchlogo.png" alt="ItchIO" /></a></li>
-            </ul>
-        </nav>
-    </div>
+	<main id="top">
+		<div class="pin">
+			<div class="pin__name">
+				<h1 class="display">
+					<span class="pin__word pin__word--first" data-rise style="--i:0" data-secret="name">Jack</span>
+					<span class="pin__word pin__word--second" data-rise style="--i:1">Slaski</span>
+				</h1>
+			</div>
 
-    <div class="background" style="display: none;">
-        <div id="pattern"></div>
-        <audio id="audio" loop="">
-            <source src="assets/others/" type="audio/mp4" />
-            <script>
-                const audio = document.getElementById('audio');
-                app.audioElement = audio;
-                app.audioElement.volume = 0;
-            </script>
-        </audio>
-        <div id="background"></div>
-    </div>
+			<section class="screen hero" aria-label="Introduction">
+				<div class="hero__photo">
+					<img src="images/site/arms-range.jpg" width="1600" height="848" alt="First-person view down a firing range in Arms &amp; Assets, holding an assault rifle" fetchpriority="high" />
+				</div>
+				<div class="hero__copy">
+					<p class="lead" data-rise style="--i:2">I design and build gameplay systems in Unreal Engine&nbsp;5. MSc Computer Games Design, with&nbsp;Distinction.</p>
+					<div class="hero__actions" data-rise style="--i:3">
+						<a class="button" href="#work">See my work</a>
+						<a class="link" href="documents/cvjackslaski.pdf" data-cv>Download CV</a>
+					</div>
+				</div>
+				<nav class="hero__links small" aria-label="Sections">
+					<a class="link link--quiet" href="#projects">Work</a>
+					<a class="link link--quiet" href="#about">About</a>
+					<a class="link link--quiet" href="#contact">Contact</a>
+				</nav>
+			</section>
 
-    <script type="text/javascript" src="assets/javascript/lib/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/lib/jquery.marquee.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/lib/jquery.cookie.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/lib/typed.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/portfolio.js"></script>
+			<section class="screen current" id="work" aria-labelledby="rw-title">
+				<div class="current__media shutter" data-reveal>
+					<img src="images/site/recoil-works.jpg" width="1280" height="677" loading="lazy" alt="The Recoil Works weapon builder, showing a grid of saved weapons" />
+				</div>
+				<div class="current__text">
+					<h2 id="rw-title" data-reveal>Recoil Works</h2>
+					<p class="small muted" data-reveal style="--i:1">My MSc project, built solo and still in development.</p>
+					<p data-reveal style="--i:2">A weapon crafting FPS. You build a gun from a chassis and swappable parts, then test how each part changes the way it fires.</p>
+					<a class="link" href="recoilworks.html" data-reveal style="--i:3">View project</a>
+				</div>
+			</section>
+
+			<section class="screen current" aria-labelledby="aa-title">
+				<div class="current__media shutter" data-reveal>
+					<img src="images/site/arms-inventory.jpg" width="1459" height="1000" loading="lazy" alt="An Arms &amp; Assets inventory tooltip listing an assault rifle's damage, recoil, accuracy, fire rate and clip size" />
+				</div>
+				<div class="current__text">
+					<h2 id="aa-title" data-reveal>Arms &amp; Assets</h2>
+					<p class="small muted" data-reveal style="--i:1">A personal project, built solo since 2025.</p>
+					<p data-reveal style="--i:2">A multiplayer systems sandbox inspired by Garry’s Mod roleplay servers, with procedural weapon stats, a grid inventory, gem slots, and player trading.</p>
+					<a class="link" href="armsandassets.html" data-reveal style="--i:3">View project</a>
+				</div>
+			</section>
+		</div>
+
+		<section class="work" aria-label="Selected projects">
+			<article class="plate">
+				<img src="images/site/gerbert-games.jpg" width="1278" height="720" loading="lazy" alt="Gerbert Games title art: an alien in a flying saucer above a tile arena in space" style="object-position: 50% 40%" />
+				<div class="plate__row">
+					<span class="plate__meta">MSc</span>
+					<h2 class="plate__title"><a href="gerbertgames.html">Gerbert Games</a></h2>
+					<span class="plate__meta">Producer and tech lead, team of 7</span>
+				</div>
+			</article>
+			<article class="plate">
+				<img src="images/site/leviathans-gauntlet.jpg" width="1920" height="1013" loading="lazy" alt="A pirate ship sailing between waves of enemy boats near a tropical island in Leviathan’s Gauntlet" />
+				<div class="plate__row">
+					<span class="plate__meta">BSc</span>
+					<h2 class="plate__title"><a href="lggame.html">Leviathan’s Gauntlet</a></h2>
+					<span class="plate__meta">Tech lead, team of 29</span>
+				</div>
+			</article>
+			<article class="plate">
+				<img src="images/site/feudal-living.jpg" width="1920" height="1017" loading="lazy" alt="A top-down view of a medieval cottage with furniture in Feudal Living" />
+				<div class="plate__row">
+					<span class="plate__meta">BSc</span>
+					<h2 class="plate__title"><a href="flgame.html">Feudal Living</a></h2>
+					<span class="plate__meta">Solo, 2nd place at GradEx</span>
+				</div>
+			</article>
+			<article class="plate">
+				<img src="images/site/wild-magic.jpg" width="1920" height="1080" loading="lazy" alt="Wild Magic key art: a wizard by a campfire in a forest clearing" style="object-position: 70% 50%" />
+				<div class="plate__row">
+					<span class="plate__meta">BSc</span>
+					<h2 class="plate__title"><a href="wmgame.html">Wild Magic</a></h2>
+					<span class="plate__meta">UI and VFX, team of 18</span>
+				</div>
+			</article>
+		</section>
+
+		<section class="index" id="projects" aria-labelledby="index-title">
+			<h2 class="sr-only" id="index-title">Every project</h2>
+
+			<div class="index__part">
+				<h3 class="index__head">MSc Computer Games Design, 2025–2026</h3>
+				<ul class="index__rows">
+					<li><a class="index__row" href="recoilworks.html" data-reveal><span>Recoil Works</span><span>Designer and developer</span><span>Solo</span><span class="nums">In progress</span></a></li>
+					<li><a class="index__row" href="gerbertgames.html" data-reveal style="--i:1"><span>Gerbert Games</span><span>Producer and tech lead</span><span>Team of 7</span><span class="nums">85%</span></a></li>
+					<li><a class="index__row" href="formandflask.html" data-reveal style="--i:2"><span>Formula and Flask</span><span>Prototype developer</span><span>Solo</span><span class="nums">80%</span></a></li>
+					<li><a class="index__row" href="lootbox.html" data-reveal style="--i:3"><span>Loot box ethics</span><span>Research report</span><span>Solo</span><span class="nums">81%</span></a></li>
+					<li><a class="index__row" href="survivorslike.html" data-reveal style="--i:4"><span>Survivors Like</span><span>Prototype developer</span><span>Solo</span><span class="nums">71%</span></a></li>
+				</ul>
+			</div>
+
+			<div class="index__part">
+				<h3 class="index__head">BSc Computer Games Development, 2022–2025</h3>
+				<ul class="index__rows">
+					<li><a class="index__row" href="lggame.html" data-reveal><span>Leviathan’s Gauntlet</span><span>Tech lead</span><span>Team of 29</span><span class="nums">87.5%</span></a></li>
+					<li><a class="index__row" href="wmgame.html" data-reveal style="--i:1"><span>Wild Magic</span><span>UI and VFX</span><span>Team of 18</span><span class="nums">87.5%</span></a></li>
+					<li><a class="index__row" href="dykbgame.html" data-reveal style="--i:2"><span>Do You Know Ball?</span><span>Mobile developer</span><span>Solo</span><span class="nums">86%</span></a></li>
+					<li><a class="index__row" href="flgame.html" data-reveal style="--i:3"><span>Feudal Living</span><span>2nd place at GradEx</span><span>Solo</span><span class="nums">82%</span></a></li>
+					<li><a class="index__row" href="cavegen.html" data-reveal style="--i:4"><span>Cave Generation Tool</span><span>Tools developer, C++</span><span>Solo</span><span class="nums">79%</span></a></li>
+					<li><a class="index__row" href="uidiss.html" data-reveal style="--i:5"><span>Dissertation</span><span>Minimal UI research</span><span>Solo</span><span class="nums">72%</span></a></li>
+					<li><a class="index__row" href="uishow.html" data-reveal style="--i:6"><span>UI Showcase</span><span>UI designer</span><span>Solo</span><span class="nums">64%</span></a></li>
+				</ul>
+			</div>
+
+			<div class="index__part">
+				<h3 class="index__head">Personal</h3>
+				<ul class="index__rows">
+					<li><a class="index__row" href="armsandassets.html" data-reveal><span>Arms &amp; Assets</span><span>Systems designer</span><span>Solo</span><span class="nums">In progress</span></a></li>
+					<li><a class="index__row" href="gmod.html" data-reveal style="--i:1"><span>Garry’s Mod servers</span><span>Founder and lead developer</span><span>Team of 50</span><span class="nums">2020–2023</span></a></li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="story" id="about" aria-labelledby="story-title">
+			<h2 class="story__title display" id="story-title">Since 2020</h2>
+			<div class="story__items">
+
+			<figure class="story__item">
+				<div class="story__media shutter" data-reveal>
+					<button class="printer" type="button" data-secret="printer" aria-label="Money printer from my Garry’s Mod server">
+						<img src="images/site/money-printer.jpg" width="524" height="450" loading="lazy" alt="" />
+					</button>
+				</div>
+				<figcaption>
+					<p class="story__name" data-reveal>Garry’s Mod servers</p>
+					<p class="story__role" data-reveal style="--i:1">2020–2023, founder and lead developer</p>
+					<p data-reveal style="--i:2">I founded three DarkRP servers and co-owned two more, leading a team of 50. Writing Lua for them is how I learned to program.</p>
+				</figcaption>
+			</figure>
+
+			<figure class="story__item">
+				<div class="story__media shutter" data-reveal>
+					<img src="images/site/cave-generator.jpg" width="1280" height="600" loading="lazy" alt="A procedurally generated cave map from my C++ cellular automata tool" />
+				</div>
+				<figcaption>
+					<p class="story__name" data-reveal>BSc Computer Games Development</p>
+					<p class="story__role" data-reveal style="--i:1">2022–2025, First Class Honours</p>
+					<p data-reveal style="--i:2">I led teams of up to 29 people and wrote my dissertation on minimal UI for immersive gameplay.</p>
+				</figcaption>
+			</figure>
+
+			<figure class="story__item">
+				<div class="story__media shutter" data-reveal>
+					<img src="images/site/feudal-living-interior.jpg" width="1600" height="823" loading="lazy" alt="Warm candlelit timber interior of a medieval house in Feudal Living" />
+				</div>
+				<figcaption>
+					<p class="story__name" data-reveal>GradEx Awards</p>
+					<p class="story__role" data-reveal style="--i:1">2nd place</p>
+					<p data-reveal style="--i:2">Feudal Living, a medieval life sim I built solo in eight weeks, placed second at Staffordshire’s graduate show.</p>
+				</figcaption>
+			</figure>
+
+			<figure class="story__item">
+				<div class="story__media shutter" data-reveal>
+					<img src="images/site/formula-and-flask.jpg" width="1280" height="680" loading="lazy" alt="The potion factory floor in Formula and Flask, with machines and a build menu" />
+				</div>
+				<figcaption>
+					<p class="story__name" data-reveal>MSc Computer Games Design</p>
+					<p class="story__role" data-reveal style="--i:1">2025–2026, Distinction</p>
+					<p data-reveal style="--i:2">A year of fast prototypes and game feel, from a potion factory to Recoil Works, my modular weapon builder.</p>
+				</figcaption>
+			</figure>
+			</div>
+		</section>
+
+		<section class="contact" id="contact" aria-labelledby="contact-title">
+			<h2 class="sr-only" id="contact-title">Contact</h2>
+			<p class="contact__ask lead" data-reveal>Hiring for gameplay or systems design? Email&nbsp;me.</p>
+			<a class="contact__email display" href="mailto:jackslaski04@gmail.com" data-reveal style="--i:1">jackslaski04@<br class="only-phone" />gmail.com</a>
+			<div class="contact__foot small">
+				<p>Wakefield, West Yorkshire<br /><a class="link" href="documents/cvjackslaski.pdf" data-cv>Download my CV</a></p>
+				<nav aria-label="Elsewhere">
+					<ul>
+						<li><a class="link" href="https://www.linkedin.com/in/jack-slaski-91a02a239/" rel="noopener">LinkedIn</a></li>
+						<li><a class="link" href="https://github.com/JackSlaski" rel="noopener">GitHub</a></li>
+						<li><a class="link" href="https://jack-slaski.itch.io" rel="noopener">itch.io</a></li>
+					</ul>
+				</nav>
+			</div>
+		</section>
+	</main>
+
+	<footer class="foot">
+		<p class="foot__name" aria-hidden="true">Jack Slaski</p>
+		<div class="foot__row">
+			<ul class="foot__places lead">
+				<li><a class="link" href="mailto:jackslaski04@gmail.com">Email</a></li>
+				<li><a class="link" href="documents/cvjackslaski.pdf" data-cv>CV</a></li>
+				<li><a class="link" href="https://www.linkedin.com/in/jack-slaski-91a02a239/" rel="noopener">LinkedIn</a></li>
+			</ul>
+			<div class="foot__links small">
+				<div>
+					<p>Work</p>
+					<ul>
+						<li><a class="link" href="recoilworks.html">Recoil Works</a></li>
+						<li><a class="link" href="armsandassets.html">Arms &amp; Assets</a></li>
+						<li><a class="link" href="#projects">Every project</a></li>
+					</ul>
+				</div>
+				<div>
+					<p>Elsewhere</p>
+					<ul>
+						<li><a class="link" href="https://github.com/JackSlaski" rel="noopener">GitHub</a></li>
+						<li><a class="link" href="https://jack-slaski.itch.io" rel="noopener">itch.io</a></li>
+					</ul>
+				</div>
+				<div>
+					<p>Secrets</p>
+					<ul>
+						<li><button class="link" type="button" data-open-achievements><span data-secret-count>0</span> of 6 found</button></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="foot__legal small" data-speedrun-goal>
+			<p>© 2026 Jack Slaski</p>
+			<a class="link" href="#top">Back to top</a>
+		</div>
+	</footer>
+
+	<script src="assets/site.js" defer></script>
 </body>
 </html>
