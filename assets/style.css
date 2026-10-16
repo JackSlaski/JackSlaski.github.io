@@ -88,6 +88,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .chip--live { color: var(--text); border-color: rgba(255, 90, 54, 0.45); background: var(--accent-soft); }
 .chip--live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(255, 90, 54, 0.6); animation: pulse 2s infinite; }
 .chip--award { color: #ffd166; border-color: rgba(255, 209, 102, 0.4); background: rgba(255, 209, 102, 0.08); }
+.chip--done { color: #8ee6a4; border-color: rgba(142, 230, 164, 0.35); background: rgba(142, 230, 164, 0.08); }
+.chip--done::before { content: "✓"; font-size: 0.8rem; line-height: 1; }
+.chip--hold { color: var(--muted); }
+.chip--hold::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.stat__pct { display: block; font-style: normal; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; color: var(--accent); margin-top: 0.2rem; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(255, 90, 54, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 90, 54, 0); } }
 
 /* ---------- nav ---------- */

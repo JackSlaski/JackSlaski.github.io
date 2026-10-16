@@ -4,10 +4,10 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Recoil Works | Jack Slaski</title>
-	<meta name="description" content="A modular weapon crafting FPS built solo in Unreal Engine 5 for my MSc." />
+	<meta name="description" content="A modular weapon crafting FPS built solo in Unreal Engine 5 as my MSc master project." />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="Recoil Works | Jack Slaski" />
-	<meta property="og:description" content="A modular weapon crafting FPS built solo in Unreal Engine 5 for my MSc." />
+	<meta property="og:description" content="A modular weapon crafting FPS built solo in Unreal Engine 5 as my MSc master project." />
 	<meta property="og:image" content="https://jackslaski.com/images/site/recoil-works.jpg" />
 	<meta property="og:url" content="https://jackslaski.com/recoilworks.html" />
 	<meta name="twitter:card" content="summary_large_image" />
@@ -42,16 +42,16 @@
 			<div class="hero__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 			<div class="wrap phero__content">
 				<a class="back reveal" href="index.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> All projects</a>
-				<p class="label reveal" style="--d:1">MSc project · Solo · UE5 Blueprints</p>
+				<p class="label reveal" style="--d:1">MSc master project · Solo · UE5 Blueprints</p>
 				<h1 class="title phero__title reveal" id="page-title" style="--d:1">Recoil Works</h1>
 				<p class="phero__lede reveal" style="--d:2">A weapon crafting FPS. You build a gun from a chassis and swappable parts, then test how each part changes the way it fires.</p>
-				<div class="phero__chips reveal" style="--d:2"><span class="chip chip--live">In development</span></div>
+				<div class="phero__chips reveal" style="--d:2"><span class="chip chip--done">Completed</span></div>
 				<div class="phero__actions reveal" style="--d:3"><a class="btn" href="#media">Watch the video <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
 			</div>
 		</section>
 
 		<section class="facts" aria-label="Project facts">
-			<dl class="wrap facts__grid"><div class="fact reveal"><dt>Role</dt><dd>Designer &amp; developer</dd></div><div class="fact reveal"><dt>Team</dt><dd>Solo</dd></div><div class="fact reveal"><dt>Engine</dt><dd>UE5 Blueprints</dd></div><div class="fact reveal"><dt>Inspired by</dt><dd>Loadout (2014)</dd></div><div class="fact reveal"><dt>Status</dt><dd>In development</dd></div></dl>
+			<dl class="wrap facts__grid"><div class="fact reveal"><dt>Role</dt><dd>Designer &amp; developer</dd></div><div class="fact reveal"><dt>Team</dt><dd>Solo</dd></div><div class="fact reveal"><dt>Engine</dt><dd>UE5 Blueprints</dd></div><div class="fact reveal"><dt>Inspired by</dt><dd>Loadout (2014)</dd></div><div class="fact reveal grade"><dt>Grade</dt><dd>85%</dd><div class="grade__bar"><span style="--v:85%"></span></div></div></dl>
 		</section>
 
 		<section class="section" id="media">
@@ -78,7 +78,7 @@
 						<h2 class="title section__title reveal" style="--d:1">The idea</h2>
 					</div>
 				</div>
-				<div class="overview"><div class="prose reveal"><p>Rather than bolting attachments onto a fixed gun, you start with a weapon chassis and build its identity through interchangeable parts.</p><p>Recoil Works is inspired by the weapon building in Loadout. Each part can change stats, firing behaviour, ammunition handling, payload effects, projectile movement, and the situations the finished weapon is best at. That allows some very unusual combinations, so the system underneath has to stay readable.</p><p>I&#x27;m building it as a polished systems prototype and vertical slice. The focus is a modular architecture, clear player feedback, fast testing, and steady balancing.</p></div><aside class="panel panel--live reveal" style="--d:1"><span class="label">Current development</span><p>I&#x27;m finishing the weapon chassis, part behaviours, the stat calculation pipeline, the weapon preview screens, inventory interactions, and the testing workflow.</p><p>A lot of the work is in unusual projectile behaviours and the edge cases you get when several parts change the same weapon. Balancing comes from playtests, debugging, surveys, and adjusting formulas, so strange builds stay fun without automatically beating a sensible one.</p></aside></div>
+				<div class="overview"><div class="prose reveal"><p>Rather than bolting attachments onto a fixed gun, you start with a weapon chassis and build its identity through interchangeable parts.</p><p>Recoil Works is inspired by the weapon building in Loadout. Each part can change stats, firing behaviour, ammunition handling, payload effects, projectile movement, and the situations the finished weapon is best at. That allows some very unusual combinations, so the system underneath has to stay readable.</p><p>I built it as a polished systems prototype and vertical slice for my MSc master project. The focus was a modular architecture, clear player feedback, fast testing, and steady balancing.</p></div><aside class="panel reveal" style="--d:1"><span class="label">How it came together</span><p>I built the weapon chassis, part behaviours, the stat calculation pipeline, the weapon preview screens, inventory interactions, and the testing workflow.</p><p>A lot of the work went into unusual projectile behaviours and the edge cases you get when several parts change the same weapon. Balancing came from playtests, debugging, surveys, and adjusting formulas, so strange builds stay fun without automatically beating a sensible one.</p></aside></div>
 			</div>
 		</section>
 
@@ -87,7 +87,7 @@
 				<div class="section__head">
 					<div>
 						<p class="label reveal">03 // Systems</p>
-						<h2 class="title section__title reveal" style="--d:1">What I&#x27;m building</h2>
+						<h2 class="title section__title reveal" style="--d:1">What I built</h2>
 					</div>
 				</div>
 				<div class="systems"><div class="system reveal" style="--d:0"><p class="system__num">01</p><h3>Weapon chassis</h3><p>Rifle, launcher, pulse, and beam chassis, each with its own firing model, ammunition rules, and part slots.</p></div><div class="system reveal" style="--d:1"><p class="system__num">02</p><h3>Modular parts</h3><p>Stocks, barrels, triggers, magazines, payloads, propulsion, shells, detonators, dispersal, and dynamics all reshape the finished weapon.</p></div><div class="system reveal" style="--d:2"><p class="system__num">03</p><h3>Projectile behaviours</h3><p>Launcher shells can be lobbed, scuttle, corkscrew, bounce, stick, or wait for a timer, a target, or a manual detonation.</p></div><div class="system reveal" style="--d:0"><p class="system__num">04</p><h3>Stats and balancing</h3><p>Damage, recoil, accuracy, stability, range, fire rate, reload time, and clip size run through one calculation pipeline built on data tables, so new parts slot in without new code.</p></div><div class="system reveal" style="--d:1"><p class="system__num">05</p><h3>Builder UI</h3><p>Inspect parts, compare a temporary build against the current one, manage inventory, duplicate builds, and preview every change.</p></div><div class="system reveal" style="--d:2"><p class="system__num">06</p><h3>Testing loop</h3><p>Build a weapon, take it into a test range, judge how it performs, then go back and change parts.</p></div></div>
