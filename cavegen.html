@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Cave Generation Tool | Jack Slaski</title>
+	<meta name="description" content="A procedural cave generator for Unreal Engine 5, written in C++ with cellular automata." />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Cave Generation Tool | Jack Slaski" />
+	<meta property="og:description" content="A procedural cave generator for Unreal Engine 5, written in C++ with cellular automata." />
+	<meta property="og:image" content="https://jackslaski.com/images/site/g/cavegen.jpg" />
+	<meta property="og:url" content="https://jackslaski.com/cavegen.html" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="theme-color" content="#0a0c11" />
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 0h26v26l-6 6H0V6z' fill='%23ff5a36'/%3E%3Ctext x='16' y='22' font-family='Arial Narrow,Arial' font-size='15' font-weight='bold' text-anchor='middle' fill='%23fff'%3EJS%3C/text%3E%3C/svg%3E" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="assets/style.css" />
+	<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+
+	<header class="nav" id="nav">
+		<div class="wrap nav__inner">
+			<a class="brand" href="index.html" aria-label="Jack Slaski, home"><span class="brand__mark">JS</span><span>Jack Slaski</span></a>
+			<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
+			<nav class="nav__links" id="nav-links" aria-label="Main">
+				<a href="index.html#work">Work</a>
+				<a href="index.html#projects">Projects</a>
+				<a href="index.html#about">About</a>
+				<a href="#contact">Contact</a>
+				<a class="btn" href="documents/cvjackslaski.pdf">Download CV</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<section class="phero" id="top" aria-labelledby="page-title">
+			<img class="phero__bg" src="images/site/g/cavegen.jpg" alt="" fetchpriority="high" />
+			<div class="hero__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+			<div class="wrap phero__content">
+				<a class="back reveal" href="index.html#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> All projects</a>
+				<p class="label reveal" style="--d:1">BSc project · Solo · UE5 C++</p>
+				<h1 class="title phero__title reveal" id="page-title" style="--d:1">Cave Generation Tool</h1>
+				<p class="phero__lede reveal" style="--d:2">A procedural cave generator for Unreal Engine 5, written in C++ with a custom cellular automata system.</p>
+				
+				<div class="phero__actions reveal" style="--d:3"><a class="btn" href="#media">Watch the video <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn--ghost" href="#docs">Read the documents</a></div>
+			</div>
+		</section>
+
+		<section class="facts" aria-label="Project facts">
+			<dl class="wrap facts__grid"><div class="fact reveal"><dt>Role</dt><dd>Tools developer</dd></div><div class="fact reveal"><dt>Time</dt><dd>8 weeks</dd></div><div class="fact reveal"><dt>Engine</dt><dd>UE5 C++</dd></div><div class="fact reveal grade"><dt>Grade</dt><dd>79%</dd><div class="grade__bar"><span style="--v:79%"></span></div></div></dl>
+		</section>
+
+		<section class="section" id="media">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">01 // Media</p>
+						<h2 class="title section__title reveal" style="--d:1">Gallery</h2>
+					</div>
+				</div>
+				<div class="viewer reveal" data-viewer>
+					<div class="viewer__stage"><img src="https://i.ytimg.com/vi/E4AvDfDQaQE/maxresdefault.jpg" alt="Tool demo" /></div>
+					<div class="viewer__bar"><span class="viewer__caption">Tool demo</span><span>2 items</span></div>
+					<div class="viewer__thumbs"><a class="viewer__thumb is-video" href="https://www.youtube.com/watch?v=E4AvDfDQaQE" data-yt="E4AvDfDQaQE" data-full="https://i.ytimg.com/vi/E4AvDfDQaQE/maxresdefault.jpg" data-label="Tool demo" aria-label="Show video: Tool demo"><img src="https://i.ytimg.com/vi/E4AvDfDQaQE/hqdefault.jpg" alt="" loading="lazy" /></a><a class="viewer__thumb" href="images/site/g/cavegen.jpg" data-full="images/site/g/cavegen.jpg" data-label="A generated cave" aria-label="Show image: A generated cave"><img src="images/site/g/cavegen-t.jpg" alt="" loading="lazy" /></a></div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">02 // Overview</p>
+						<h2 class="title section__title reveal" style="--d:1">The tool</h2>
+					</div>
+				</div>
+				<div class="overview overview--solo"><div class="prose reveal"><p>The tool automates building cave structures in Unreal Engine 5 with procedural generation.</p><p>It&#x27;s written in C++ for speed and uses a custom cellular automata system, inspired by Conway&#x27;s Game of Life, to fill out a 2D cave grid. On top of that it supports seeds, random corridors and rooms, and a detailed set of settings so designers can tune the output exactly.</p></div></div>
+			</div>
+		</section>
+
+		<section class="section">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">03 // Settings</p>
+						<h2 class="title section__title reveal" style="--d:1">Everything you can tweak</h2>
+					</div>
+				</div>
+				<div class="details reveal"><div class="details__head"><span>Details</span><span>24 properties</span></div><dl><dt>Grid Seed</dt><dd>The seed for generating the grid. 0 picks a random one.</dd><dt>Seed Lock</dt><dd>Use the seed above when on, or a random seed when off.</dd><dt>Grid Scale Z</dt><dd>The height of the generated grid.</dd><dt>Cell Spacing X</dt><dd>Spacing between cells along X.</dd><dt>Cell Spacing Y</dt><dd>Spacing between cells along Y.</dd><dt>Fill Probability</dt><dd>The chance of each cell starting filled.</dd><dt>Number of Iterations</dt><dd>How many times the cellular automata rules run.</dd><dt>Empty Neighbour Threshold</dt><dd>A filled cell with fewer live neighbours than this becomes empty.</dd><dt>Fill Neighbour Threshold</dt><dd>An empty cell with at least this many live neighbours becomes filled.</dd><dt>Number of Corridors</dt><dd>How many corridors to carve.</dd><dt>Corridor Length Min</dt><dd>The shortest a corridor can be.</dd><dt>Corridor Length Max</dt><dd>The longest a corridor can be.</dd><dt>Corridor Thickness</dt><dd>Corridor width. Diagonal corridors get one extra.</dd><dt>Allow Straight Corridors</dt><dd>Lets straight corridors generate.</dd><dt>Allow Diagonal Corridors</dt><dd>Lets diagonal corridors generate.</dd><dt>Allow Room Spawning</dt><dd>Turns room generation on or off.</dd><dt>Number of Rooms</dt><dd>How many rooms to generate.</dd><dt>Room Size Minimum</dt><dd>The smallest a room can be.</dd><dt>Room Size Maximum</dt><dd>The largest a room can be.</dd><dt>Allow Room Loot</dt><dd>Spawns loot inside rooms.</dd><dt>Loot Height</dt><dd>The height loot spawns at.</dd><dt>Room Loot</dt><dd>The object to spawn as loot.</dd><dt>Grid Mesh</dt><dd>The static mesh used for each cell.</dd><dt>Grid Material</dt><dd>The material applied to each cell.</dd></dl></div>
+			</div>
+		</section>
+
+		<section class="section" id="docs">
+			<div class="wrap">
+				<div class="section__head">
+					<div>
+						<p class="label reveal">04 // Documents</p>
+						<h2 class="title section__title reveal" style="--d:1">Read the docs</h2>
+					</div>
+				</div>
+				<div class="docs"><article class="doc reveal" style="--d:0"><span class="doc__icon">PDF</span><div><h3 class="doc__title"><a href="documents/cavegentdd.pdf" target="_blank" rel="noopener">Technical design document</a></h3><p class="doc__meta">Opens in a new tab</p></div></article></div>
+			</div>
+		</section>
+
+		<section class="section" aria-label="Next project">
+			<div class="wrap">
+				<a class="next reveal" href="survivorslike.html">
+					<img src="images/site/g/survivorslikegame.jpg" alt="" loading="lazy" />
+					<p class="label">Next project</p>
+					<p class="title next__title">Survivors Like <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></p>
+					<p class="next__text">A fast arena shooter built around game feel, with bouncing projectiles, area attacks, and layered feedback.</p>
+				</a>
+			</div>
+		</section>
+
+		<section class="section" id="contact" aria-labelledby="contact-title">
+			<div class="wrap">
+				<div class="contact contact--compact reveal">
+					<p class="label">Contact</p>
+					<h2 class="title contact__title" id="contact-title">Like what you <span>see?</span></h2>
+					<p class="contact__text">I’m looking for gameplay and systems design roles. Email is the quickest way to reach me.</p>
+					<div class="contact__actions">
+						<a class="btn" href="mailto:jackslaski04@gmail.com">Email me <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+						<a class="btn btn--ghost" href="documents/cvjackslaski.pdf">Download CV</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="wrap footer__inner">
+			<span>© 2026 Jack Slaski</span>
+			<a href="index.html#projects">All projects</a>
+			<a href="#top">Back to top ↑</a>
+		</div>
+	</footer>
+
+	<script src="assets/main.js" defer></script>
+</body>
+</html>
