@@ -247,7 +247,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---------- about ---------- */
 .about__grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: start; }
-.profile { position: sticky; top: 6.5rem; background: var(--panel); border: 1px solid var(--line); }
+.profile { background: var(--panel); border: 1px solid var(--line); }
+.profile__photo { position: relative; margin: 0; aspect-ratio: 1; overflow: hidden; border-bottom: 1px solid var(--line); }
+.profile__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+.profile__photo figcaption { position: absolute; left: 1rem; bottom: 1rem; padding: 0.35rem 0.6rem; background: rgba(10, 12, 17, 0.8); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); }
 .profile__top { display: flex; align-items: center; gap: 1.25rem; padding: 1.5rem; border-bottom: 1px solid var(--line); }
 .profile__avatar { width: 84px; height: 84px; object-fit: cover; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
 .profile__name { font-family: var(--display); font-weight: 800; font-size: 2rem; line-height: 1; text-transform: uppercase; }
