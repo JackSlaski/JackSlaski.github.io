@@ -654,7 +654,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__offer.is-ended time { font-size: 1.1rem; }
 .loot__offer.is-ended b { text-decoration: line-through; opacity: 0.5; }
 .loot__meta { align-items: flex-end; text-align: right; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.loot__limit { display: grid; gap: 0.4rem; width: min(100%, 17rem); }
+.loot__limit { display: grid; gap: 0.4rem; width: min(100%, 24rem); text-align: center; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .loot__limit i { position: relative; display: block; height: 4px; background: rgba(255, 255, 255, 0.08); }
 .loot__limit i::after { content: ""; position: absolute; inset: 0; background: #3fd8e6; transform: scaleX(var(--p, 0)); transform-origin: left; transition: transform 300ms var(--ease); }
 .loot__sound { min-height: 2.25rem; padding: 0 0.8rem; border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 200ms, border-color 200ms; }
@@ -686,6 +686,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__banner { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; pointer-events: none; font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 1.8rem + 3.5vw, 4.6rem); line-height: 1; text-transform: uppercase; color: var(--rc, #fff); text-shadow: 0 0 28px color-mix(in srgb, var(--rc, #fff) 70%, transparent), 0 4px 0 #000; background: radial-gradient(ellipse 45% 40% at center, rgba(7, 10, 16, 0.8), transparent); opacity: 0; }
 .is-celebrate .loot__banner { animation: loot-banner 1.7s var(--ease) both; }
 .is-celebrate .reel { animation: loot-flash 700ms ease-out; }
+.is-charging .reel { animation: loot-charge 750ms ease-in both; }
+@keyframes loot-charge { 0% { box-shadow: inset 0 0 0 0 transparent; } 20% { transform: translate(-2px, 1px); } 40% { transform: translate(3px, -1px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(3px, 0); } 100% { transform: none; box-shadow: inset 0 0 60px rgba(228, 174, 57, 0.35); } }
 @keyframes loot-banner { 0% { opacity: 0; transform: scale(0.4) rotate(-6deg); } 18% { opacity: 1; transform: scale(1.12); } 28% { transform: scale(1); } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
 @keyframes loot-flash { from { box-shadow: inset 0 0 0 100vmax color-mix(in srgb, var(--rc) 30%, transparent); } }
 
@@ -699,13 +701,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__pity { text-align: center; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .loot__pity b { font-weight: 500; color: #d32ce6; }
 .loot__status { min-height: 1.6em; text-align: center; color: #c9d0db; }
-.loot__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.loot__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.75rem; }
+.btn small { font-family: var(--mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.04em; text-transform: none; opacity: 0.8; }
 .loot .btn:disabled { opacity: 0.4; cursor: not-allowed; filter: none; transform: none; }
-.loot__done { margin-left: auto; min-height: 2.75rem; padding: 0 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
+.loot__done { min-height: 2.75rem; padding: 0 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
 .loot__done:hover { color: var(--text); }
 
-.loot__shop, .loot__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--line); }
-.loot__shop .loot__label, .loot__buy .loot__label { margin-right: 0.4rem; }
+.loot__shop { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.6rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+.loot__buy { display: grid; justify-items: center; gap: 0.9rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+.loot__buyrow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.6rem; }
+.loot__shop .loot__label, .loot__buyrow .loot__label { margin-right: 0.4rem; }
+.loot__tag { padding: 0.3rem 0.6rem; border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.loot__age { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.6rem; padding: 1rem 1.25rem; border: 1px solid #3fd8e6; }
+.loot__age p { flex-basis: 100%; text-align: center; }
 .loot__bundle { position: relative; display: grid; gap: 0.15rem; min-height: 3.1rem; padding: 0.5rem 1rem; text-align: left; border: 1px solid var(--line-strong); transition: border-color 200ms, background-color 200ms; }
 .loot__bundle:hover:not(:disabled) { border-color: #e4ae39; background: rgba(228, 174, 57, 0.06); }
 .loot__bundle:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -721,29 +729,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__qty input { width: 3.5rem; border: 0; border-inline: 1px solid var(--line-strong); background: transparent; text-align: center; color: var(--text); font-family: var(--display); font-weight: 700; font-size: 1.35rem; -moz-appearance: textfield; appearance: textfield; }
 .loot__qty input::-webkit-inner-spin-button, .loot__qty input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-.loot__haul { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.loot__haul { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem; }
+.loot__collect { display: flex; flex-basis: 100%; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem 0.9rem; margin-bottom: 0.2rem; }
+.loot__collect i { position: relative; width: min(40%, 12rem); height: 4px; background: rgba(255, 255, 255, 0.08); }
+.loot__collect i::after { content: ""; position: absolute; inset: 0; background: #e4ae39; transform: scaleX(var(--p, 0)); transform-origin: left; }
 .loot__haul:empty { display: none; }
-.loot__haul .loot__label { margin-right: 0.4rem; }
 .haul__item { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.65rem; background: var(--panel-2); box-shadow: inset 3px 0 0 var(--rc); font-size: 0.82rem; }
 .haul__item em { font-family: var(--mono); font-size: 0.7rem; font-style: normal; color: var(--muted); }
+.haul__item em + em { color: #e4ae39; }
 
 .loot__guilt { position: absolute; inset: 0; z-index: 6; display: grid; place-content: center; justify-items: center; gap: 0.9rem; padding: 1.5rem; text-align: center; background: rgba(7, 10, 16, 0.9); }
 .loot__guilt-title { font-family: var(--display); font-weight: 800; font-size: clamp(2.4rem, 1.8rem + 3vw, 4rem); line-height: 1; text-transform: uppercase; }
 .loot__guilt p:not(.loot__guilt-title) { max-width: 28rem; color: #c9d0db; }
 .loot__guilt .loot__done { margin-left: 0; font-size: 0.68rem; }
 
-.loot__report { display: grid; gap: 1.25rem; }
+.loot__report { display: grid; gap: 1.25rem; counter-reset: trick; }
+.loot__group { display: grid; gap: 0.6rem; }
 .loot__report h3 { margin-top: -0.75rem; font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 1.6rem + 2.5vw, 3.4rem); line-height: 1; text-transform: uppercase; }
 .loot__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
 .loot__stats div { padding: 0.9rem 1rem; background: var(--panel-2); }
 .loot__stats b { display: block; font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2rem, 1.5rem + 1.6vw, 2.8rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
 .is-ethical .loot__stats b { color: #3fd8e6; }
 .loot__stats span { display: block; margin-top: 0.4rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.loot__tricks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: 0; padding: 0; list-style: none; counter-reset: trick; }
+.loot__tricks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
 .loot__tricks li { padding: 1rem 1.15rem; border: 1px solid var(--line); counter-increment: trick; }
 .loot__tricks h4 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.35rem; line-height: 1.1; text-transform: uppercase; }
 .loot__tricks h4::before { content: counter(trick, decimal-leading-zero) " "; font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
-.loot__tricks--good h4::before { color: #3fd8e6; }
+.is-ethical .loot__tricks h4::before { color: #3fd8e6; }
 .loot__tricks p { margin-top: 0.45rem; color: #c9d0db; font-size: 0.95rem; }
 .loot__tricks .loot__seen { color: var(--muted); font-size: 0.85rem; }
 .loot__end { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
@@ -759,10 +771,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .reel__card { width: 104px; height: 132px; }
   .reel__card svg { width: 38px; height: 38px; }
   .reel__card b { font-size: 0.92rem; }
-  .loot__done { margin-left: 0; }
-  .loot__shop .loot__label, .loot__buy .loot__label { flex-basis: 100%; }
+  .loot__shop .loot__label, .loot__buyrow .loot__label { flex-basis: 100%; text-align: center; margin-right: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .is-celebrate .loot__banner, .is-celebrate .reel, .loot__bundle.is-pulse, .loot__feed i, .loot__feed b.is-new { animation: none; }
+  .is-celebrate .loot__banner, .is-celebrate .reel, .is-charging .reel, .loot__bundle.is-pulse, .loot__feed i, .loot__feed b.is-new { animation: none; }
   .is-celebrate .loot__banner { opacity: 1; }
 }

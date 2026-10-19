@@ -1,12 +1,12 @@
 // Loot box simulator: a case opener that plays like a real one, then shows how it played you.
-// The tricks come from the analysis sheet in my loot box research report, and Ethical mode shows
-// the fixes. No real money, ever.
+// The tricks come from my loot box literature review and research report (plus a few well-known
+// ones from beyond it), and Ethical mode shows the fixes. No real money, ever.
 (() => {
   const root = document.querySelector('[data-game="loot-box"]');
   if (!root) return;
 
-  const CASE = 275, START = 1000, MAX_CASES = 10, PRICE = 2.5, PITY = 10;
-  const LEN = 60, WIN = 52, NEAR = 0.55, OFFER = 60, COOLDOWN = 20;   // reel length, winning slot, near-miss rate, offer timings (s)
+  const CASE = 275, KEY = 249, START = 1000, MAX_CASES = 10, PRICE = 2.5, PITY = 10;
+  const LEN = 60, WIN = 52, NEAR = 0.5, OFFER = 60, COOLDOWN = 15, CHARGE = 750;   // reel, near-miss rate, event timings (s), build-up (ms)
   const BUNDLES = [   // none of these divide by 275, so there are always gems left over
     { gems: 1000, price: 9.99 },
     { gems: 2800, price: 19.99, tag: 'Most popular' },
@@ -16,30 +16,45 @@
   const money = (gems) => gbp((gems * BUNDLES[0].price) / BUNDLES[0].gems);
   const num = (n) => n.toLocaleString('en-GB');
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
-  const RARITY = [   // the same odds as a Counter-Strike 2 case
-    { id: 'common', name: 'Common', odds: 79.92, tease: 50, col: '#4b69ff' },
-    { id: 'rare', name: 'Rare', odds: 15.98, tease: 26, col: '#8847ff' },
-    { id: 'epic', name: 'Epic', odds: 3.2, tease: 14, col: '#d32ce6' },
-    { id: 'legend', name: 'Legendary', odds: 0.64, tease: 7, col: '#eb4b4b' },
-    { id: 'gold', name: 'Golden', odds: 0.26, tease: 3, col: '#e4ae39' },
+  const RARITY = [   // the same odds as a real game's weapon case; value = the "market value" in gems
+    { id: 'common', name: 'Common', odds: 79.92, tease: 52, value: 40, col: '#4b69ff' },
+    { id: 'rare', name: 'Rare', odds: 15.98, tease: 27, value: 160, col: '#8847ff' },
+    { id: 'epic', name: 'Epic', odds: 3.2, tease: 13, value: 700, col: '#d32ce6' },
+    { id: 'legend', name: 'Legendary', odds: 0.64, tease: 6, value: 2500, col: '#eb4b4b' },
+    { id: 'gold', name: 'Golden', odds: 0.26, tease: 2, value: 15000, col: '#e4ae39' },
   ];
-  const GOLD = RARITY[4];
+  const [, , , LEGEND, GOLD] = RARITY;
   const ITEMS = {   // [name, project, icon]
-    common: [['Rusty Barrel', 'Recoil Works', 'part'], ['Spare Mag', 'Recoil Works', 'part'], ['Paper Crown', 'Gerbert Games', 'hat'], ['Wooden Stool', 'Feudal Living', 'furn'], ['Straw Bed', 'Feudal Living', 'furn']],
-    rare: [['Suppressor', 'Recoil Works', 'part'], ['Party Hat', 'Gerbert Games', 'hat'], ['Oak Table', 'Feudal Living', 'furn']],
-    epic: [['Gem Slot', 'Arms & Assets', 'gem'], ['Wizard Hat', 'Wild Magic', 'hat']],
-    legend: [['Leviathan Fang', 'Leviathan’s Gauntlet', 'fang'], ['Explosive Rounds', 'Recoil Works', 'part']],
+    common: [['Rusty Barrel', 'Recoil Works', 'part'], ['Straw Bed', 'Feudal Living', 'furn'], ['Match Ball', 'Do You Know Ball?', 'ball'], ['Slime Jar', 'Wild Magic', 'potion'], ['Gold Doubloon', 'Leviathan’s Gauntlet', 'coin'], ['Bubbling Potion', 'Formula and Flask', 'potion'], ['Cave Crystal', 'Cave Generation Tool', 'crystal']],
+    rare: [['Extended Mag', 'Recoil Works', 'part'], ['Oak Table', 'Feudal Living', 'furn'], ['Ship Cannon', 'Leviathan’s Gauntlet', 'cannon'], ['Copper Cauldron', 'Formula and Flask', 'cauldron'], ['Captain’s Armband', 'Do You Know Ball?', 'band']],
+    epic: [['Gem Slot', 'Arms & Assets', 'gem'], ['Wizard Hat', 'Wild Magic', 'wizard'], ['Spaceship Cursor', 'Gerbert Games', 'ship'], ['Shockwave', 'Survivors Like', 'wave']],
+    legend: [['Explosive Rounds', 'Recoil Works', 'part'], ['Leviathan Fang', 'Leviathan’s Gauntlet', 'fang'], ['Raise Hell', 'Survivors Like', 'flame']],
     gold: [['Golden Gerbert', 'Gerbert Games', 'gerb']],
   };
+  const TOTAL_ITEMS = Object.values(ITEMS).flat().length;
   const ICON = {
     part: '<circle cx="24" cy="24" r="11"/><path d="M24 5v11M24 32v11M5 24h11M32 24h11"/>',
-    hat: '<path d="M16 31V11h16v20M8 35h32M16 25h16"/>',
     furn: '<path d="M15 6v36M15 26h19v16"/>',
+    ball: '<circle cx="24" cy="24" r="16"/><path d="M24 16l7 5-3 8h-8l-3-8zM24 8v8M31 21l7-3M28 29l4 7M20 29l-4 7M17 21l-7-3"/>',
+    potion: '<path d="M19 6h10M21 6v11L11 36a4 4 0 0 0 4 6h18a4 4 0 0 0 4-6L27 17V6M15 30h18"/>',
+    coin: '<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="10"/><path d="M24 19v10"/>',
+    crystal: '<path d="M8 41h32M14 41l-3-15 6-9 4 12M21 41l3-33 6 13-2 20M29 41l5-15 5 8-2 7"/>',
+    cannon: '<path d="M10 27 36 15l3 7-26 12z"/><circle cx="16" cy="36" r="6"/>',
+    cauldron: '<path d="M8 17h32M11 17c0 13 5 19 13 19s13-6 13-19M16 36l-3 6M32 36l3 6M18 11c0-3 3-3 3-6M27 11c0-3 3-3 3-6"/>',
+    band: '<rect x="8" y="15" width="32" height="18" rx="3"/><path d="M28 20.5a5 5 0 1 0 0 7"/>',
     gem: '<path d="M11 18l6-8h14l6 8-13 21zM11 18h26M20 10l-3 8 7 21 7-21-3-8"/>',
+    wizard: '<path d="M24 5 35 35H13zM8 37h32M22 18l2-4 2 4"/>',
+    ship: '<path d="M12 7l25 15-10 3 6 13-5 2-6-13-9 7z"/>',
+    wave: '<circle cx="24" cy="24" r="4"/><path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18M9 9a21 21 0 0 0 0 30M39 9a21 21 0 0 1 0 30"/>',
     fang: '<path d="M13 9c5 3 17 3 22 0-2 13-6 23-11 30-5-7-9-17-11-30z"/>',
+    flame: '<path d="M24 5c2 8 12 12 12 23a12 12 0 0 1-24 0c0-6 4-9 6-13 1 4 3 6 5 6-1-6 0-11 1-16z"/>',
     gerb: '<circle cx="24" cy="24" r="16"/><circle cx="18" cy="21" r="2.5" fill="currentColor"/><circle cx="30" cy="21" r="2.5" fill="currentColor"/><path d="M18 30c4 3 8 3 12 0"/>',
   };
-  const NAMES = ['Kai_77', 'xXSniperXx', 'GerbertFan', 'NoScopeNan', 'lil_wizard', 'Tobi.exe', 'craftyboi', 'MossyRock', 'FragQueen', 'Dave_RP'];
+  const NAMES = ['NoScopeNan', 'Kai77', 'DanRP', 'TurboTom', 'SweatyPalms', 'BigChungus99', 'MrSprinkles', 'GhostFace21', 'NotAFreeKill', 'SilentSam',
+    'ProbablyLagging', 'ChickenNugget', 'TacoTuesday', 'RektByRob', 'Sn1perMonkey', 'LilYeti', 'WetSocks', 'BoltAction', 'MossyRock', 'GerbertFan',
+    'CrispyBacon', 'OnlyHeadshots', 'SneakyPete', 'MegaMango', 'FrostyBits', 'PixelPirate', 'DoubleTapDave', 'CampingCarl', 'ZeroChill', 'HotSauceHarry',
+    'NoobSlayer', 'ClutchKing', 'AimBotAndy', 'CouchPotato', 'SaltyChips', 'xXDarkLordXx', 'DeadEye', 'Gr4nnySmith', 'OopsAllCrits', 'LagSwitchLarry',
+    'YeetMaster', 'BeansOnToast', 'ToastyBoi', 'WiFiWarrior', 'KeyboardKev', 'LowBattery', 'SpicyMeatball', 'NoodleArms', 'SockGoblin', 'Jynx'];
   const svg = (k) => `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
   const GEM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 9l3-5h8l3 5-7 11z"/></svg>';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -50,13 +65,9 @@
         <div class="loot__top">
           <div class="loot__wallet"><span class="loot__label" data-wallet-label></span><b>${GEM}<span data-wallet></span></b><span class="loot__label" data-wallet-sub></span></div>
           <div class="loot__offer" data-offer><span data-offer-label></span><b>2× Golden Gerbert chance</b><time data-clock></time></div>
-          <div class="loot__meta">
-            <span data-count></span>
-            <div class="loot__limit" data-limit><span data-limit-text></span><i data-limit-bar></i></div>
-            <button class="loot__sound" type="button" data-sound aria-pressed="false">Sound off</button>
-          </div>
+          <div class="loot__meta"><span data-count></span><button class="loot__sound" type="button" data-sound aria-pressed="false">Sound off</button></div>
         </div>
-        <div class="loot__stage">
+        <div class="loot__stage" data-stage>
           <div class="reel"><div class="reel__strip" data-strip></div></div>
           <button class="reel__info" type="button" data-info aria-label="Drop rates" aria-expanded="false">i</button>
           <div class="loot__odds" data-odds hidden></div>
@@ -67,13 +78,22 @@
         <p class="loot__status" data-status aria-live="polite"></p>
         <div class="loot__actions">
           <button class="btn" type="button" data-open></button>
-          <button class="loot__done" type="button" data-done>I’m done</button>
+          <button type="button" data-done>I’m done</button>
         </div>
         <div class="loot__shop" data-shop><span class="loot__label">Top up</span>${BUNDLES.map((b, i) => `<button class="loot__bundle" type="button" data-bundle="${i}"><b>${num(b.gems)} gems</b><span>£${b.price}</span>${b.tag ? `<em>${b.tag}</em>` : ''}</button>`).join('')}</div>
         <div class="loot__buy" data-buy>
-          <span class="loot__label">Buy cases</span>
-          <div class="loot__qty"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" inputmode="numeric" min="1" value="1" data-qty aria-label="Number of cases"><button type="button" data-step="1" aria-label="One more">+</button></div>
-          <button class="btn btn--ghost" type="button" data-purchase></button>
+          <div class="loot__buyrow">
+            <span class="loot__label">Buy cases</span>
+            <div class="loot__qty"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" inputmode="numeric" min="1" value="1" data-qty aria-label="Number of cases"><button type="button" data-step="1" aria-label="One more">+</button></div>
+            <button class="btn btn--ghost" type="button" data-purchase></button>
+          </div>
+          <div class="loot__age" data-age hidden>
+            <p>Paid loot boxes are for adults. Are you 18 or over?</p>
+            <button class="btn" type="button" data-age-yes>Yes, I’m 18+</button>
+            <button class="btn btn--ghost" type="button" data-age-no>No</button>
+          </div>
+          <div class="loot__limit"><span data-limit-text></span><i data-limit-bar></i></div>
+          <p class="loot__tag">18+ · In-game purchases (includes random items)</p>
         </div>
         <div class="loot__haul" data-haul></div>
         <div class="loot__guilt" data-guilt hidden>
@@ -87,32 +107,33 @@
     </div>`;
 
   const $ = (s) => root.querySelector(s);
-  const strip = $('[data-strip]'), reel = $('.reel'), banner = $('[data-banner]'), status = $('[data-status]'), odds = $('[data-odds]');
+  const strip = $('[data-strip]'), reel = $('.reel'), stage = $('[data-stage]'), banner = $('[data-banner]'), status = $('[data-status]'), odds = $('[data-odds]');
   const openBtn = $('[data-open]'), doneBtn = $('[data-done]'), infoBtn = $('[data-info]'), offerEl = $('[data-offer]');
-  const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), guilt = $('[data-guilt]'), reportEl = $('[data-report]');
+  const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), age = $('[data-age]'), guilt = $('[data-guilt]'), reportEl = $('[data-report]');
 
-  let ethical, gems, owned, bought, spent, topups, opened, near, goldSeen, goldWon, dupes, commons, peeked, spinning;
-  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn;
+  let ethical, gems, owned, bought, spent, topups, opened, nearGold, nearLegend, goldSeen, legendSeen, goldWon, dupes, commons, peeked, spinning;
+  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins;
+  let ageOk = false, ageNo = false, bag = [];
 
-  const pickRarity = (key) => {
-    let r = Math.random() * RARITY.reduce((s, x) => s + x[key], 0);
-    for (const rar of RARITY) if ((r -= rar[key]) < 0) return rar;
+  const weighted = (w) => {
+    let r = Math.random() * w.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < w.length; i++) if ((r -= w[i]) < 0) return RARITY[i];
     return RARITY[0];
   };
-  // the case result. Ethical mode guarantees Epic or better within PITY cases
+  const eventOn = () => !ethical && offer.phase === 'live';
+  // the case result. The 2x event really does double gold; Ethical mode guarantees Epic or better within PITY cases
   function rollWin() {
-    if (!ethical || sinceEpic < PITY - 1) return pickRarity('odds');
-    const top = RARITY.slice(2);
-    let r = Math.random() * top.reduce((s, x) => s + x.odds, 0);
-    for (const rar of top) if ((r -= rar.odds) < 0) return rar;
-    return top[0];
+    const w = RARITY.map((r) => (r === GOLD && eventOn() ? r.odds * 2 : r.odds));
+    if (ethical && sinceEpic >= PITY - 1) { w[0] = 0; w[1] = 0; }
+    return weighted(w);
   }
-  // reel filler: the shady version shows rare items far more often than they drop
-  const tease = () => pickRarity(ethical ? 'odds' : 'tease');
+  // reel filler: the original shows rare items far more often than they drop
+  const tease = () => weighted(RARITY.map((r) => (ethical ? r.odds : r.tease)));
   // fresh = duplicate protection: an item you don't own yet, while there are any left in that rarity
   function pick(rar, fresh = false) {
     let list = ITEMS[rar.id];
-    if (fresh) list = list.filter(([n]) => !haul.has(n)).length ? list.filter(([n]) => !haul.has(n)) : list;
+    const unowned = list.filter(([n]) => !haul.has(n));
+    if (fresh && unowned.length) list = unowned;
     const [name, from, icon] = list[Math.floor(Math.random() * list.length)];
     return { name, from, icon, rar };
   }
@@ -120,13 +141,17 @@
 
   function fill(win, rig = true) {
     const cards = Array.from({ length: LEN }, (_, i) => (i === WIN ? win : pick(tease())));
-    let side = 0;
-    if (rig && !ethical && win.rar !== GOLD && Math.random() < NEAR) {   // rigged: park a gold item right next to the marker
-      side = Math.random() < 0.5 ? 1 : -1;
-      cards[WIN + side] = pick(GOLD);
+    let side = 0, bait = null;
+    if (rig && !ethical && Math.random() < NEAR) {   // rigged: park something better right next to the marker
+      const target = Math.random() < 0.35 ? GOLD : LEGEND;
+      if (RARITY.indexOf(win.rar) < RARITY.indexOf(target)) {
+        side = Math.random() < 0.5 ? 1 : -1;
+        bait = cards[WIN + side] = pick(target);
+      }
     }
     strip.innerHTML = cards.map(card).join('');
-    return { side, gold: cards.slice(0, WIN + 4).filter((c) => c.rar === GOLD).length };
+    const passed = cards.slice(0, WIN + 4);
+    return { side, bait, gold: passed.filter((c) => c.rar === GOLD).length, legend: passed.filter((c) => c.rar === LEGEND).length };
   }
 
   // sound: off until the visitor turns it on
@@ -142,8 +167,10 @@
 
   const room = () => MAX_CASES - bought;
   const qtyVal = () => Math.min(Math.max(1, Math.round(Number(qty.value) || 1)), Math.max(1, room()));
+  const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   function hud() {
+    $('[data-count]').textContent = `${opened} / ${MAX_CASES} cases`;
     if (ethical) {
       $('[data-wallet-label]').textContent = 'Cases owned';
       $('[data-wallet]').textContent = owned;
@@ -152,42 +179,43 @@
       $('[data-limit-bar]').style.setProperty('--p', spent / (PRICE * MAX_CASES));
       openBtn.textContent = owned ? `Open case (${owned} left)` : 'Open case';
       openBtn.disabled = spinning || owned < 1;
-      const n = qtyVal(), left = room();
-      buyBtn.textContent = left ? `Buy ${plural(n, 'case')} · ${gbp(n * PRICE)}` : 'Session limit reached';
+      const n = qtyVal(), left = room() && !ageNo;
+      buyBtn.textContent = ageNo ? 'Buying is off' : left ? `Buy ${plural(n, 'case')} · ${gbp(n * PRICE)}` : 'Session limit reached';
       buyBtn.disabled = spinning || !left;
       qty.disabled = !left;
-      root.querySelectorAll('[data-step]').forEach((b) => { b.disabled = !left || (b.dataset.step < 0 ? n <= 1 : n >= left); });
+      root.querySelectorAll('[data-step]').forEach((b) => { b.disabled = !left || (b.dataset.step < 0 ? n <= 1 : n >= room()); });
       $('[data-pity]').innerHTML = `Epic or better guaranteed within <b>${plural(PITY - sinceEpic, 'case')}</b>`;
+      doneBtn.hidden = false;
     } else {
       $('[data-wallet-label]').textContent = 'Wallet';
       $('[data-wallet]').textContent = num(gems);
       $('[data-wallet-sub]').textContent = 'gems';
-      $('[data-count]').textContent = `${opened} / ${MAX_CASES} cases`;
-      openBtn.textContent = `Open case · ${CASE} gems`;
+      openBtn.innerHTML = `Open case · ${KEY} gems <small>+ ${CASE - KEY} case fee</small>`;   // split pricing: the 275 total never appears
       openBtn.disabled = spinning || gems < CASE || opened >= MAX_CASES;
       root.querySelectorAll('[data-bundle]').forEach((b, i) => {
         b.disabled = spinning || opened >= MAX_CASES;
         b.classList.toggle('is-pulse', i === 1 && gems < CASE && opened < MAX_CASES);
       });
       renderOffer();
+      doneBtn.hidden = opened === 0;
     }
-    doneBtn.hidden = opened === 0;
     doneBtn.disabled = spinning;
   }
 
-  // the "limited time" offer: it runs out, goes quiet for a bit, then comes back "by popular demand"
+  // the limited time event: it runs out, cools down, then comes back "by popular demand"
   function renderOffer() {
     const live = offer.phase === 'live';
     offerEl.classList.toggle('is-ended', !live);
-    $('[data-offer-label]').textContent = !live ? 'Offer ended' : offer.returns ? 'Back by popular demand' : 'Limited time';
-    $('[data-clock]').textContent = live ? `${Math.floor(offer.t / 60)}:${String(offer.t % 60).padStart(2, '0')}` : 'Back soon';
+    $('[data-offer-label]').textContent = !live ? 'Event ended' : offer.returns ? 'Back by popular demand' : 'Limited time event';
+    $('[data-clock]').textContent = live ? clock(offer.t) : `Back in ${clock(offer.t)}`;
   }
 
   // fake winners: nobody in this feed exists
   function feed() {
+    if (!bag.length) bag = [...NAMES].sort(() => Math.random() - 0.5);
     const item = Math.random() < 0.4 ? ITEMS.gold[0] : ITEMS.legend[Math.floor(Math.random() * ITEMS.legend.length)];
     const el = $('[data-feed-text]');
-    el.textContent = `${NAMES[Math.floor(Math.random() * NAMES.length)]} just unboxed ${item[0]}`;
+    el.textContent = `${bag.pop()} just unboxed ${item[0]}`;
     el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new');
     fakeWins++;
   }
@@ -196,28 +224,36 @@
     if (spinning || (ethical ? owned < 1 : gems < CASE)) return;
     spinning = true;
     if (ethical) owned--; else gems -= CASE;
+    const during = eventOn();
     root.classList.remove('is-celebrate');
     status.textContent = 'Opening…';
-    const win = pick(rollWin(), ethical), { side, gold } = fill(win);
-    if (!ethical) goldSeen += gold;
+    const win = pick(rollWin(), ethical), { side, bait, gold, legend } = fill(win);
+    if (!ethical) { goldSeen += gold; legendSeen += legend; }
     hud();
     const cards = strip.children, cw = cards[0].offsetWidth, step = cards[1].offsetLeft - cards[0].offsetLeft, mid = reel.clientWidth / 2;
     const offset = side ? side * cw * (0.36 + Math.random() * 0.1) : (Math.random() - 0.5) * cw * 0.7;
     const from = mid - (4 * step + cw / 2), to = mid - (WIN * step + cw / 2 + offset);
-    const dur = reduced ? 400 : ethical ? 1600 : 5200, t0 = performance.now();
-    let last = -1;
-    const frame = (now) => {
-      const t = Math.min(1, (now - t0) / dur), x = from + (to - from) * (1 - Math.pow(1 - t, 4));
-      strip.style.transform = `translateX(${x}px)`;
-      const idx = Math.floor((mid - x) / step);
-      if (idx !== last) { last = idx; beep(1500, 0.025); }
-      if (t < 1) requestAnimationFrame(frame);
-      else land(win, side);
+    const go = () => {
+      const dur = reduced ? 400 : ethical ? 1400 : 5600, t0 = performance.now();
+      let last = -1;
+      const frame = (now) => {
+        const t = Math.min(1, (now - t0) / dur), x = from + (to - from) * (1 - Math.pow(1 - t, 4));
+        strip.style.transform = `translateX(${x}px)`;
+        const idx = Math.floor((mid - x) / step);
+        if (idx !== last) { last = idx; beep(1500, 0.025); }
+        if (t < 1) requestAnimationFrame(frame);
+        else land(win, bait, during);
+      };
+      requestAnimationFrame(frame);
     };
-    requestAnimationFrame(frame);
+    if (ethical || reduced) return go();
+    // suspense: the case shakes and builds up before it opens
+    stage.classList.add('is-charging');
+    [220, 300, 400, 520].forEach((f, i) => beep(f, 0.12, 'sawtooth', 0.025, i * 0.17));
+    setTimeout(() => { stage.classList.remove('is-charging'); go(); }, CHARGE);
   }
 
-  function land(win, side) {
+  function land(win, bait, during) {
     spinning = false;
     opened++;
     strip.children[WIN].classList.add('is-win');
@@ -225,8 +261,8 @@
     haul.set(win.name, { ...win, n: (haul.get(win.name)?.n || 0) + 1 });
     if (dupe) dupes++;
     if (tier === 0) commons++;
-    if (win.rar === GOLD) goldWon++;
-    if (side) near++;
+    if (win.rar === GOLD) { goldWon++; if (during) eventWins++; }
+    if (bait) bait.rar === GOLD ? nearGold++ : nearLegend++;
     sinceEpic = tier >= 2 ? 0 : sinceEpic + 1;
     if (!best || tier > RARITY.indexOf(best.rar)) best = win;
     if (!ethical || tier >= 3) {
@@ -235,22 +271,27 @@
       void root.offsetWidth; root.classList.add('is-celebrate');
       fanfare();
     }
-    status.textContent = side
-      ? 'So close! The Golden Gerbert was right there. One more?'
+    status.textContent = bait
+      ? `So close! ${bait.name} was right there. One more?`
       : `You got ${win.name} (${win.rar.name}) from ${win.from}.`;
     renderHaul();
     hud();
     if (ethical ? !room() && !owned : opened >= MAX_CASES) setTimeout(report, reduced ? 300 : 1800);
   }
 
+  const haulValue = () => [...haul.values()].reduce((s, i) => s + i.rar.value * i.n, 0);
   function renderHaul() {
     const items = [...haul.values()].sort((a, b) => RARITY.indexOf(b.rar) - RARITY.indexOf(a.rar));
-    $('[data-haul]').innerHTML = items.length
-      ? `<span class="loot__label">Your haul</span>` + items.map((i) => `<span class="haul__item" style="--rc:${i.rar.col}">${i.name}${i.n > 1 ? ` <em>×${i.n}</em>` : ''}</span>`).join('')
-      : '';
+    if (!items.length) { $('[data-haul]').innerHTML = ''; return; }
+    // the original turns your haul into a collection to finish, with a "market value" on everything
+    const head = ethical
+      ? '<p class="loot__collect"><span class="loot__label">Your haul</span></p>'
+      : `<p class="loot__collect"><span class="loot__label">Collection ${haul.size} / ${TOTAL_ITEMS}</span><i style="--p:${haul.size / TOTAL_ITEMS}"></i><span class="loot__label">Worth ${num(haulValue())} gems</span></p>`;
+    $('[data-haul]').innerHTML = head + items.map((i) => `<span class="haul__item" style="--rc:${i.rar.col}">${i.name}${i.n > 1 ? ` <em>×${i.n}</em>` : ''}${ethical ? '' : ` <em>${num(i.rar.value)}</em>`}</span>`).join('');
   }
 
-  const trick = (title, body, seen) => `<li><h4>${title}</h4><p>${body}</p>${seen ? `<p class="loot__seen">${seen}</p>` : ''}</li>`;
+  const trick = (title, body, note) => `<li><h4>${title}</h4><p>${body}</p>${note ? `<p class="loot__seen">${note}</p>` : ''}</li>`;
+  const group = (title, items) => `<div class="loot__group"><p class="loot__label">${title}</p><ol class="loot__tricks">${items.join('')}</ol></div>`;
 
   function report() {
     guilt.hidden = true;
@@ -266,19 +307,28 @@
           <div><b>${dupes}</b><span>Duplicates</span></div>
           <div><b>${best ? best.rar.name : 'None'}</b><span>Best pull${best ? `: ${best.name}` : ''}</span></div>
         </div>
-        <ol class="loot__tricks loot__tricks--good">
-          ${trick('Real prices', `Every price was in pounds: ${gbp(PRICE)} a case, no currency in between.`, 'In my research: EA FC 26 prices packs in FC Points, so you have to work out the real cost yourself.')}
-          ${trick('Buy what you need', 'You bought exactly the cases you wanted, and nothing was left over.', 'In my research: FC Points only come in set amounts, so you often have to buy more than you need.')}
-          ${trick('Every item’s odds', 'Each item showed its own drop chance, not just its rarity.', 'In my research: EA FC 26 only shows odds by rarity, and Marvel Contest of Champions keeps its rates on a separate website.')}
-          ${trick('An honest reel', 'No near misses, and the reel showed items at their real odds. It also spins faster, so there’s less suspense.', 'In my research: Counter-Strike 2 and Marvel Contest of Champions both use roulette reels that show what you nearly won.')}
-          ${trick('A pity guarantee', `Epic or better within ${PITY} cases, so bad luck can only cost you so much.`)}
-          ${trick('Duplicate protection', 'No duplicates until you own every item in that rarity.')}
-          ${trick('A spending limit', `A ${gbp(PRICE * MAX_CASES)} session limit, with what you’ve spent always on screen.`)}
-          ${trick('No pressure', 'No timers, fake offers, fake winners, or guilt trips when you leave.', 'In my research: after the backlash, Battlefront II stopped selling crates and made them earnable through play instead.')}
-        </ol>
+        ${group('Clear costs', [
+          trick('Real prices', `One price in pounds: ${gbp(PRICE)} a case. No currency, no case and key split, and no bundles.`, 'In my research: most games I analysed priced loot boxes in their own currency, so players had to work out the real cost.'),
+          trick('Buy what you need', 'You bought exactly the cases you wanted, and nothing was left over.', 'In my research: currency often only came in set amounts, so players had to buy more than they needed.'),
+          trick('A spending limit', `A ${gbp(PRICE * MAX_CASES)} session limit, with what you’ve spent always on screen.`, 'In my research: the biggest harm showed up in heavy spenders, who reported the most distress (Drummond et al., 2022).'),
+          trick('Easy to leave', 'The “I’m done” button is as big as the one to open a case, and one click takes you straight out.'),
+        ])}
+        ${group('Honest odds', [
+          trick('Every item’s odds', 'Each item showed its own drop chance, right under the reel.', 'In my research: odds were missing, optional, on a separate website, or only given by rarity. Disclosure only helps if it’s clear (Xiao et al., 2021).'),
+          trick('An honest reel', 'No build-up, no near misses, and the reel shows items at their real odds. It spins fast too, so there’s less suspense.'),
+          trick('A pity guarantee', `Epic or better within ${PITY} cases, so bad luck can only cost you so much.`),
+          trick('Duplicate protection', 'No duplicates until you own every item in that rarity.'),
+        ])}
+        ${group('No pressure', [
+          trick('No timers or fake winners', 'No limited time events, live feeds, collection bars, or guilt trips.', 'In my research: King and Delfabbro (2018) call limited time offers and daily rewards predatory when young players see them.'),
+          trick('Calm results', 'Only Legendary and Golden pulls get a celebration, and nothing shows a “market value” to make it look like profit.'),
+          trick('An age check and a label', 'Buying asks if you’re 18 or over, and the shop carries PEGI’s “In-game purchases (includes random items)” label.', 'In my research: loot boxes often sit in games with low age ratings, and one store needs no age check to buy.'),
+          trick('Cosmetic only', 'Nothing you can buy makes you stronger, so paying never means winning.', 'In my research: the one game that removed paid crates after a backlash became far less ethically concerning.'),
+        ])}
         <div class="loot__end"><button class="btn" type="button" data-restart>Play the original again</button><a class="loot__link" href="documents/lootboxreport.pdf">Read the full report</a></div>`;
     } else {
-      const worth = money(opened * CASE);
+      const worth = money(opened * CASE), near = nearGold + nearLegend;
+      const ev = RARITY.reduce((s, r) => s + (r.odds / 100) * r.value, 0);
       reportEl.innerHTML = `
         <span class="loot__label">Behind the curtain</span>
         <h3>Here’s how it played you</h3>
@@ -286,20 +336,32 @@
           <div><b>${opened}</b><span>Cases, worth ${worth}</span></div>
           <div><b>${gbp(spent)}</b><span>Topped up (${plural(topups, 'time')})</span></div>
           <div><b>${near}</b><span>Rigged near misses</span></div>
-          <div><b>${goldSeen}</b><span>Gold items shown, ${goldWon} won</span></div>
+          <div><b>${goldSeen + legendSeen}</b><span>Gold and legendary shown, ${goldWon + [...haul.values()].filter((i) => i.rar === LEGEND).reduce((s, i) => s + i.n, 0)} won</span></div>
         </div>
-        <ol class="loot__tricks">
-          ${trick('Premium currency', `Every price was in gems, so you never saw what a case really cost: about ${money(CASE)} at the smallest bundle. You opened ${worth} of cases.`, 'In my research: EA FC 26 sells FC Points, and Marvel Contest of Champions sells currency to buy its crystals.')}
-          ${trick('Gems left over', `Cases cost ${CASE} gems and none of the bundles divide by ${CASE}, so there’s always some left: close to another case, never quite there. You finished with ${num(gems)}.`, 'In my research: EA FC 26 and Marvel Contest of Champions both sell currency in amounts that leave you short.')}
-          ${trick('Bigger bundles', `The bigger bundles give more gems per pound (100, then 140, then 150), so spending more feels like saving. You spent ${gbp(spent)} on ${plural(topups, 'top-up')}.`, 'In my research: Marvel Contest of Champions filters spending through bundles, currencies, and sales.')}
-          ${trick('Near misses', `The reel stopped right next to a Golden Gerbert ${plural(near, 'time')}, on purpose.`, 'In my research: Counter-Strike 2 and Marvel Contest of Champions both use roulette reels that show what you nearly won.')}
-          ${trick('A teaser reel', `${plural(goldSeen, 'gold item')} scrolled past you, but gold really drops 0.26% of the time, about 1 in 385. The reel shows rare items far more often than they drop, so the jackpot feels close.`)}
-          ${trick('Hidden odds', peeked ? 'You found the drop rates behind the tiny “i”. Most people never do.' : 'The drop rates were behind a tiny “i” next to the reel. You never opened it.', 'In my research: Counter-Strike 2 doesn’t show case odds in the game, and I couldn’t find official odds for Battlefront II at all.')}
-          ${trick('A fake offer', `The “2× Golden Gerbert chance” was a lie: the odds never changed. ${offer.returns ? `It ended, went quiet, and came back “by popular demand” ${plural(offer.returns, 'time')}.` : 'It ends, goes quiet for a bit, then comes back “by popular demand”.'}`, 'In my research: EA FC 26 and Marvel Contest of Champions lean on limited time offers, events, and daily deals.')}
-          ${trick('Fake winners', `${plural(fakeWins, '“player”')} unboxed gold or legendary items while you played. None of them exist. Fake winner feeds make big prizes look common.`)}
-          ${trick('Celebrate everything', `Every pull got a fanfare, including ${plural(commons, 'common')} and ${plural(dupes, 'duplicate')}.`, 'In my research: in EA FC 26, the bigger the pack, the bigger the celebration.')}
-          ${trick('A guilt trip', `${guilted ? 'When you tried to leave, it made you feel silly for going and said your luck was “due”.' : 'Pressing “I’m done” brings up a guilt trip that says your luck is “due”.'} Luck is never due: every case has the same odds.`)}
-        </ol>
+        ${group('Hiding the real cost', [
+          trick('Premium currency', `Every price was in gems, and the wallet never showed money, so you never saw what a case really cost: about ${money(CASE)}. You opened ${worth} of cases.`, 'In my research: most games I analysed priced loot boxes in their own currency, and one keeps your balance in a wallet that doesn’t feel like real money.'),
+          trick('Split pricing', `The button said ${KEY} gems plus a ${CASE - KEY} gem case fee. The real total, ${CASE}, never appeared anywhere.`, 'In my research: one game splits the price between the case and a key you buy separately.'),
+          trick('Gems left over', `None of the bundles divide by ${CASE}, so there’s always some left: close to another case, never quite there. You finished with ${num(gems)} gems.`, 'In my research: currency often came in set amounts that left players just short of the next box.'),
+          trick('Bigger bundles', `Bigger bundles give more gems per pound (100, then 140, then 150), and the £49.99 one makes £19.99 feel small. You spent ${gbp(spent)}.`, 'In my research: spending was filtered through bundles, currencies, and sales. Beyond my report, this is anchoring.'),
+        ])}
+        ${group('Making it feel like gambling', [
+          trick('Suspense', 'The case shook and built up before every spin, then the reel took over five seconds and crawled to a stop while the ticks slowed down.', 'In my research: every game with paid loot boxes used suspense and flashy reveals, like showing the rarity colour before the item.'),
+          trick('Near misses', `The reel stopped right next to something better ${plural(near, 'time')} on purpose: ${nearGold} Golden and ${nearLegend} Legendary.`, 'In my research: roulette-style reels show you exactly what you nearly won.'),
+          trick('A teaser reel', `${plural(goldSeen, 'Golden item')} and ${plural(legendSeen, 'Legendary item')} scrolled past you. Gold really drops 0.26% of the time, about 1 in 385, so the jackpot only looks close.`, 'Beyond my report: random rewards on an unpredictable schedule are the most habit-forming kind (variable ratio reinforcement).'),
+          trick('“Market values”', `Your items were “worth” ${num(haulValue())} gems, so a big pull looks like profit. On average a case gives back ${Math.round(ev)} gems of value for ${CASE}, about ${Math.round((ev / CASE) * 100)}%.`, 'In my research: when items can be sold, opening boxes looks potentially profitable, just like gambling.'),
+        ])}
+        ${group('Keeping you opening', [
+          trick('A limited time event', `The 2× Golden Gerbert chance was real, but the timer was there to rush you. It ended and came back “by popular demand” ${plural(offer.returns, 'time')}${eventWins ? `, and you won ${plural(eventWins, 'Golden Gerbert')} during it` : ''}.`, 'In my research: limited time offers, events, and daily deals were everywhere, and King and Delfabbro (2018) call them predatory when young players see them.'),
+          trick('Fake winners', `${plural(fakeWins, '“player”')} unboxed gold or legendary items while you played. None of them exist, but they make big prizes look common.`, 'Beyond my report: this is social proof, and it’s common on case-opening websites.'),
+          trick('Celebrate everything', `Every pull got bright colours, a flash, and a jingle, including ${plural(commons, 'common')} worth 40 gems from a 275 gem case and ${plural(dupes, 'duplicate')}.`, 'In my research: the bigger the pack, the bigger the celebration. Beyond my report, slot machine research calls this a loss disguised as a win.'),
+          trick('Collection chasing', `A bar showed ${haul.size} of ${TOTAL_ITEMS} items collected, so stopping feels like leaving it unfinished.`, 'In my research: chasing rarities and the next level was a big reason to keep opening. Beyond my report, this is the sunk cost effect.'),
+        ])}
+        ${group('What it hides, and who it reaches', [
+          trick('Hidden odds', `${peeked ? 'You found the drop rates behind the tiny “i”. Most people never do.' : 'The drop rates were behind a tiny “i” next to the reel. You never opened it.'} Even then, they only showed rarities, not items.`, 'In my research: odds were missing, optional, on a separate website, or only given by rarity. Disclosure alone isn’t enough (Xiao et al., 2021).'),
+          trick('Hard to leave', `Opening took one click. Leaving meant finding a small grey link, then ${guilted ? 'getting' : 'you’d get'} a guilt trip saying your luck was “due”. Luck is never due: every case has the same odds.`, 'Beyond my report: confirmshaming, a dark pattern, plus the gambler’s fallacy.'),
+          trick('No age check', 'This page never asked how old you are, and nothing warned you that you were paying for random items.', 'In my research: loot boxes often sit in games with low age ratings or free on phones, and early exposure may normalise gambling (Zendle et al., 2020).'),
+          trick('Pay to win', 'These items are only cosmetic. The worst version sells power instead, so paying more means winning more.', 'In my research: one game’s crates sold major progression boosts at launch and were only removed after a huge backlash. Cosmetic boxes are still linked to problem gambling (Zendle et al., 2020).'),
+        ])}
         <div class="loot__end"><button class="btn" type="button" data-ethical>Replay in Ethical mode</button><button class="btn btn--ghost" type="button" data-restart>Start over</button><a class="loot__link" href="documents/lootboxreport.pdf">Read the full report</a></div>`;
       window.secrets?.unlock('house');
     }
@@ -310,17 +372,19 @@
 
   function start(eth) {
     ethical = eth;
-    gems = START; owned = 0; bought = 0; spent = 0; topups = 0; opened = 0; near = 0; goldSeen = 0; goldWon = 0; dupes = 0; commons = 0;
-    peeked = false; spinning = false; sinceEpic = 0; best = null; fakeWins = 0; guilted = false;
+    gems = START; owned = 0; bought = 0; spent = 0; topups = 0; opened = 0; nearGold = 0; nearLegend = 0; goldSeen = 0; legendSeen = 0;
+    goldWon = 0; dupes = 0; commons = 0; peeked = false; spinning = false; sinceEpic = 0; best = null; fakeWins = 0; guilted = false; eventWins = 0;
     haul = new Map();
-    offer = { phase: 'live', t: 45 + Math.floor(Math.random() * 45), returns: 0 };
+    offer = { phase: 'live', t: 45 + Math.floor(Math.random() * 30), returns: 0 };
     feedIn = 2;
     root.classList.toggle('is-ethical', eth);
     root.classList.remove('is-celebrate');
     $('[data-machine]').hidden = false;
     reportEl.hidden = true;
     guilt.hidden = true;
-    for (const [sel, show] of [['[data-offer]', !eth], ['[data-feed]', !eth], ['[data-shop]', !eth], ['[data-count]', !eth], ['[data-buy]', eth], ['[data-pity]', eth], ['[data-limit]', eth]]) $(sel).hidden = !show;
+    age.hidden = true;
+    for (const [sel, show] of [['[data-offer]', !eth], ['[data-feed]', !eth], ['[data-shop]', !eth], ['[data-buy]', eth], ['[data-pity]', eth]]) $(sel).hidden = !show;
+    doneBtn.className = eth ? 'btn' : 'loot__done';
     $('[data-feed-text]').textContent = '';
     odds.innerHTML = eth
       ? `<span class="loot__label">Every item’s drop chance</span><ul>${RARITY.flatMap((r) => ITEMS[r.id].map(([n]) => `<li style="--rc:${r.col}"><span>${n}</span><small>${r.name}</small><b>${(r.odds / ITEMS[r.id].length).toFixed(2)}%</b></li>`)).join('')}</ul>`
@@ -329,10 +393,20 @@
     infoBtn.setAttribute('aria-expanded', 'false');
     qty.value = 1;
     status.textContent = eth ? `Ethical mode: buy exactly the cases you want at ${gbp(PRICE)} each.` : 'You’ve got 1,000 free gems. Open a case to see what you get.';
-    fill(pick(pickRarity('odds')), false);
+    fill(pick(weighted(RARITY.map((r) => r.odds))), false);
     const c = strip.children;
     strip.style.transform = `translateX(${reel.clientWidth / 2 - (4 * (c[1].offsetLeft - c[0].offsetLeft) + c[0].offsetWidth / 2)}px)`;
     renderHaul();
+    hud();
+  }
+
+  function buy() {
+    const n = qtyVal();
+    if (!room() || ageNo) return;
+    if (!ageOk) { age.hidden = false; $('[data-age-yes]').focus(); return; }
+    bought += n; owned += n; spent += n * PRICE;
+    status.textContent = `Bought ${plural(n, 'case')} for ${gbp(n * PRICE)}.`;
+    qty.value = qtyVal();
     hud();
   }
 
@@ -343,12 +417,11 @@
     status.textContent = `+${num(bundle.gems)} gems added.`;
     hud();
   }));
-  buyBtn.addEventListener('click', () => {
-    const n = qtyVal();
-    if (!room()) return;
-    bought += n; owned += n; spent += n * PRICE;
-    status.textContent = `Bought ${plural(n, 'case')} for ${gbp(n * PRICE)}.`;
-    qty.value = qtyVal();
+  buyBtn.addEventListener('click', buy);
+  $('[data-age-yes]').addEventListener('click', () => { ageOk = true; age.hidden = true; buy(); });
+  $('[data-age-no]').addEventListener('click', () => {
+    ageNo = true; age.hidden = true;
+    status.textContent = 'No problem. Buying is off, but you can still look at every item and its odds.';
     hud();
   });
   qty.addEventListener('input', hud);
@@ -358,7 +431,7 @@
     if (spinning) return;
     if (ethical) return report();
     guilted = true;
-    $('[data-guilt-text]').textContent = `Your luck is due${offer.phase === 'live' ? ', and your 2× Golden Gerbert chance is still on' : ''}. ${gems >= CASE ? `You’ve still got ${num(gems)} gems to spend.` : 'One more case could be the one.'}`;
+    $('[data-guilt-text]').textContent = `Your luck is due${eventOn() ? ', and the 2× Golden Gerbert chance is still on' : ''}. ${gems >= CASE ? `You’ve still got ${num(gems)} gems to spend.` : 'One more case could be the one.'}`;
     guilt.hidden = false;
     $('[data-stay]').focus();
   });
