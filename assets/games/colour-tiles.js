@@ -4,23 +4,29 @@
   const root = document.querySelector('[data-game="colour-tiles"]');
   if (!root) return;
 
-  const N = 13, ROUND = 20, YOU = 1, BOT = 2;
+  const ROUND = 20, HURRY = 5, YOU = 1, BOT = 2;
   const STEP_YOU = 105, STEP_BOT = 165, DASH = 3, DASH_COOLDOWN = 2500;
   const COL = { 0: '#1a2130', [YOU]: '#ff5a36', [BOT]: '#3fd8e6' };
   const DIRS = { arrowup: [0, -1], w: [0, -1], arrowdown: [0, 1], s: [0, 1], arrowleft: [-1, 0], a: [-1, 0], arrowright: [1, 0], d: [1, 0] };
 
   root.innerHTML = `
-    <div class="arcade__hud">
-      <div class="arcade__side"><span class="arcade__who">You</span><b data-you>0</b></div>
-      <div class="arcade__time"><b data-time>${ROUND}.0</b><span class="arcade__who">seconds</span></div>
-      <div class="arcade__side arcade__side--bot"><span class="arcade__who">Bot</span><b data-bot>0</b></div>
+    <div class="score">
+      <div class="score__side score__side--you">
+        <div class="score__id"><span class="score__name">You</span><span class="score__tag">Leading</span></div>
+        <b class="score__num" data-you>0</b>
+      </div>
+      <div class="score__clock"><b data-time>${ROUND}.0</b><span>Time left</span></div>
+      <div class="score__side score__side--bot">
+        <div class="score__id"><span class="score__name">Bot</span><span class="score__tag">Leading</span></div>
+        <b class="score__num" data-bot>0</b>
+      </div>
     </div>
-    <div class="arcade__share" aria-hidden="true"><span data-share-you></span><span data-share-bot></span></div>
+    <div class="score__bar" aria-hidden="true"><span data-share-you></span><span data-share-bot></span></div>
     <div class="arcade__screen">
       <canvas tabindex="0" aria-label="Colour Tiles board. Move with WASD or the arrow keys, dash with Space."></canvas>
       <div class="arcade__overlay" data-overlay>
         <p class="arcade__big" data-headline>Colour Tiles</p>
-        <p class="arcade__msg" data-msg>Claim more tiles than the bot in ${ROUND} seconds.</p>
+        <p class="arcade__msg" data-msg aria-live="polite">Claim more tiles than the bot in ${ROUND} seconds.</p>
         <button class="btn" type="button" data-start>Start</button>
       </div>
     </div>
@@ -30,33 +36,43 @@
     </div>`;
 
   const $ = (s) => root.querySelector(s);
-  const cv = $('canvas'), cx = cv.getContext('2d');
+  const cv = $('canvas'), cx = cv.getContext('2d'), screen = $('.arcade__screen');
   const overlay = $('[data-overlay]'), headline = $('[data-headline]'), msg = $('[data-msg]'), startBtn = $('[data-start]'), dashBtn = $('[data-dash]');
 
-  let grid, claimedAt, you, bot, dir, facing, target, state = 'idle', endAt = 0, lastYou = 0, lastBot = 0, lastDash = -1e9, raf = 0, size = 0;
+  let COLS = 25, ROWS = 11;
+  let grid, claimedAt, you, bot, dir, facing, target, state = 'idle', endAt = 0, lastYou = 0, lastBot = 0, lastDash = -1e9, raf = 0, w = 0, h = 0;
+
+  // a wide board on desktop, a taller one on phones so the tiles stay big enough to tap
+  function shape() {
+    const wide = root.clientWidth >= 640;
+    COLS = wide ? 25 : 11; ROWS = wide ? 11 : 13;
+    screen.style.setProperty('--ar', COLS / ROWS);
+  }
 
   function fit() {
+    if (state === 'idle') reset();
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    size = cv.clientWidth;
-    cv.width = Math.round(size * dpr); cv.height = Math.round(size * dpr);
+    w = cv.clientWidth; h = cv.clientHeight;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
     cx.setTransform(dpr, 0, 0, dpr, 0, 0);
     draw(performance.now());
   }
 
   function reset() {
-    grid = new Uint8Array(N * N);
-    claimedAt = new Float64Array(N * N);
-    const mid = Math.floor(N / 2);
-    you = { x: 1, y: mid }; bot = { x: N - 2, y: mid };
+    shape();
+    grid = new Uint8Array(COLS * ROWS);
+    claimedAt = new Float64Array(COLS * ROWS);
+    const mid = Math.floor(ROWS / 2);
+    you = { x: 1, y: mid }; bot = { x: COLS - 2, y: mid };
     claim(you, YOU, 0); claim(bot, BOT, 0);
     dir = null; facing = [1, 0]; target = null; lastDash = -1e9;
   }
 
   function claim(p, who, now) {
-    const k = p.y * N + p.x;
+    const k = p.y * COLS + p.x;
     if (grid[k] !== who) { grid[k] = who; claimedAt[k] = now; }
   }
-  const inside = (x, y) => x >= 0 && y >= 0 && x < N && y < N;
+  const inside = (x, y) => x >= 0 && y >= 0 && x < COLS && y < ROWS;
   function step(p, dx, dy, who, now) {
     if (!inside(p.x + dx, p.y + dy)) return false;
     p.x += dx; p.y += dy; claim(p, who, now);
@@ -69,16 +85,16 @@
       const [dx, dy] = [[1, 0], [-1, 0], [0, 1], [0, -1]][Math.floor(Math.random() * 4)];
       return step(bot, dx, dy, BOT, now);
     }
-    if (grid[bot.y * N + bot.x] !== BOT) return claim(bot, BOT, now);
-    const seen = new Uint8Array(N * N), q = [[bot.x, bot.y, null]];
-    seen[bot.y * N + bot.x] = 1;
+    if (grid[bot.y * COLS + bot.x] !== BOT) return claim(bot, BOT, now);
+    const seen = new Uint8Array(COLS * ROWS), q = [[bot.x, bot.y, null]];
+    seen[bot.y * COLS + bot.x] = 1;
     while (q.length) {
       const [x, y, first] = q.shift();
-      if (first && grid[y * N + x] !== BOT) return step(bot, first[0], first[1], BOT, now);
+      if (first && grid[y * COLS + x] !== BOT) return step(bot, first[0], first[1], BOT, now);
       for (const d of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
         const nx = x + d[0], ny = y + d[1];
-        if (!inside(nx, ny) || seen[ny * N + nx]) continue;
-        seen[ny * N + nx] = 1; q.push([nx, ny, first || d]);
+        if (!inside(nx, ny) || seen[ny * COLS + nx]) continue;
+        seen[ny * COLS + nx] = 1; q.push([nx, ny, first || d]);
       }
     }
   }
@@ -106,12 +122,13 @@
   const count = (who) => grid.reduce((n, g) => n + (g === who), 0);
 
   function hud(now) {
-    const a = count(YOU), b = count(BOT);
+    const a = count(YOU), b = count(BOT), total = COLS * ROWS;
     $('[data-you]').textContent = a;
     $('[data-bot]').textContent = b;
     const left = state === 'play' ? Math.max(0, endAt - now) / 1000 : state === 'over' ? 0 : ROUND;
     $('[data-time]').textContent = left.toFixed(1);
-    const total = N * N;
+    root.classList.toggle('is-hurry', state === 'play' && left <= HURRY);
+    root.dataset.lead = a > b ? 'you' : b > a ? 'bot' : '';
     $('[data-share-you]').style.width = `${(a / total) * 100}%`;
     $('[data-share-bot]').style.width = `${(b / total) * 100}%`;
     const cd = Math.min(1, (now - lastDash) / DASH_COOLDOWN);
@@ -120,11 +137,11 @@
   }
 
   function draw(now) {
-    if (!grid) return;
-    const cell = size / N, gap = Math.max(2, cell * 0.08);
-    cx.clearRect(0, 0, size, size);
-    for (let i = 0; i < N * N; i++) {
-      const x = (i % N) * cell, y = Math.floor(i / N) * cell;
+    if (!grid || !w) return;
+    const cell = w / COLS, gap = Math.max(2, cell * 0.08);
+    cx.clearRect(0, 0, w, h);
+    for (let i = 0; i < COLS * ROWS; i++) {
+      const x = (i % COLS) * cell, y = Math.floor(i / COLS) * cell;
       const pop = grid[i] ? Math.min(1, (now - claimedAt[i]) / 180) : 1;
       const s = (cell - gap) * (0.7 + 0.3 * pop), o = (cell - s) / 2;
       cx.fillStyle = COL[grid[i]];
@@ -153,6 +170,7 @@
   function start() {
     reset();
     state = 'countdown';
+    fit();
     startBtn.hidden = true;
     msg.textContent = '';
     cv.focus({ preventScroll: true });
@@ -199,7 +217,7 @@
   addEventListener('keyup', (e) => { const d = DIRS[e.key.toLowerCase()]; if (d && dir === d) dir = null; });
   const toCell = (e) => {
     const r = cv.getBoundingClientRect();
-    return { x: Math.max(0, Math.min(N - 1, Math.floor(((e.clientX - r.left) / r.width) * N))), y: Math.max(0, Math.min(N - 1, Math.floor(((e.clientY - r.top) / r.height) * N))) };
+    return { x: Math.max(0, Math.min(COLS - 1, Math.floor(((e.clientX - r.left) / r.width) * COLS))), y: Math.max(0, Math.min(ROWS - 1, Math.floor(((e.clientY - r.top) / r.height) * ROWS))) };
   };
   cv.addEventListener('pointerdown', (e) => { if (state !== 'play') return; cv.setPointerCapture(e.pointerId); target = toCell(e); dir = null; });
   cv.addEventListener('pointermove', (e) => { if (state === 'play' && cv.hasPointerCapture(e.pointerId)) target = toCell(e); });
@@ -208,7 +226,6 @@
   dashBtn.addEventListener('click', dash);
   addEventListener('resize', fit);
 
-  reset();
   fit();
   hud(performance.now());
 })();
