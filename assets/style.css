@@ -23,7 +23,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .nav__secrets.is-new { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   margin: 0;
   background: var(--bg);
@@ -110,18 +110,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: var(--accent); color: #fff; font-size: 1rem; letter-spacing: 0.02em;
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
-.nav__links { display: flex; align-items: center; gap: 2rem; }
+.nav__links { display: flex; align-items: center; gap: 2rem; margin-left: auto; }
 .nav__links a:not(.btn) { position: relative; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms ease; padding-block: 0.5rem; }
 .nav__links a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 250ms var(--ease); }
 .nav__links a:not(.btn):hover, .nav__links a.is-active { color: var(--text); }
 .nav__links a:not(.btn):hover::after, .nav__links a.is-active::after { transform: scaleX(1); }
 .nav__links .btn { min-height: 2.6rem; padding: 0 1.1rem; font-size: 0.95rem; --cut: 10px; }
-.nav__secrets { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.5rem; margin-left: auto; padding: 0 0.85rem; border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 200ms, border-color 200ms; }
-.nav__secrets::before { content: ""; width: 9px; height: 9px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
-.nav__secrets b { font-weight: 500; color: var(--text); }
-.nav__secrets:hover { color: var(--text); border-color: var(--accent); }
-.nav__secrets.is-new { animation: secrets-pulse 1.8s ease-in-out 3; }
-@keyframes secrets-pulse { 50% { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft), 0 0 18px rgba(255, 90, 54, 0.35); } }
+.nav__secrets { display: grid; place-items: center; flex: none; width: 2.6rem; height: 2.6rem; border: 1px solid var(--line-strong); transition: border-color 200ms, background-color 200ms; }
+.nav__secrets::before { content: ""; width: 10px; height: 10px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
+.nav__secrets.is-complete::before { background: var(--accent); }
+.nav__secrets:hover { border-color: var(--accent); background: var(--accent-soft); }
 .nav__toggle { display: none; width: 2.75rem; height: 2.75rem; place-items: center; }
 .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after { display: block; width: 22px; height: 2px; background: var(--text); position: relative; transition: transform 250ms var(--ease), background-color 200ms; }
 .nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; }
@@ -164,12 +162,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__lede { max-width: 34rem; margin-top: 1.75rem; font-size: clamp(1.1rem, 1rem + 0.45vw, 1.3rem); color: #cfd5df; }
 .hero__lede strong { color: var(--text); font-weight: 600; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
-.hero__secrets { display: inline-flex; align-items: center; gap: 0.9rem; max-width: 100%; margin-top: 1.75rem; padding: 0.75rem 1.1rem; text-align: left; background: rgba(10, 12, 17, 0.65); border: 1px solid var(--line-strong); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 0.95rem; color: #c9d0db; transition: border-color 200ms; }
-.hero__secrets:hover { border-color: var(--accent); }
-.hero__secrets b { font-weight: 600; color: var(--text); }
-.hero__secrets em { margin-left: 0.35rem; font-family: var(--mono); font-size: 0.72rem; font-style: normal; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
-.hero__pips { display: inline-flex; flex: none; gap: 0.45rem; }
-.hero__pips i { width: 10px; height: 10px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
+.hero__secrets { position: absolute; right: calc(var(--pad) + 4.75rem); bottom: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms; }
+.hero__secrets b { font-weight: 500; color: var(--text); }
+.hero__secrets:hover { color: var(--text); }
+.hero__pips { display: inline-flex; gap: 0.4rem; }
+.hero__pips i { width: 7px; height: 7px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
 .hero__pips i.is-on { background: var(--accent); }
 .hero__now {
   position: absolute; left: calc(var(--pad) + 2.25rem); bottom: 3rem;
@@ -336,8 +333,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .profile { position: static; max-width: 34rem; }
 }
 @media (max-width: 820px) {
-  .nav__toggle { display: grid; }
-  .nav__secrets span { display: none; }
+  .nav__toggle { display: grid; order: 3; }
+  .nav__secrets { order: 2; margin-left: auto; }
+  .hero__secrets { right: var(--pad); }
   .nav__links {
     position: absolute; top: 4.5rem; left: 0; right: 0;
     flex-direction: column; align-items: stretch; gap: 0;
@@ -365,6 +363,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero__content { padding-block: 7rem 7.5rem; }
   .hero__frame { inset: 5rem 0.75rem 1rem; }
   .hero__now { left: var(--pad); bottom: 2rem; flex-wrap: wrap; }
+  .hero__secrets { left: var(--pad); right: auto; bottom: 3.6rem; }
   .hero::before { background: linear-gradient(0deg, var(--bg) 0%, rgba(10, 12, 17, 0.85) 45%, rgba(10, 12, 17, 0.7) 100%); }
   .contact__actions .btn { width: 100%; justify-content: center; }
 }

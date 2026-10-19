@@ -69,14 +69,11 @@
     const n = got.size, total = LIST.length;
     document.querySelectorAll('[data-secrets]').forEach((b) => {
       b.hidden = false;
-      if (b.dataset.secrets === 'nav') {
-        b.innerHTML = `<span>Secrets</span> <b>${n}/${total}</b>`;
+      if (b.dataset.secrets === 'nav') {   // icon only: the word "secrets" waits until you open it
         b.setAttribute('aria-label', `Secrets: ${n} of ${total} found`);
+        b.classList.toggle('is-complete', n === total);
       } else if (b.dataset.secrets === 'hero') {
-        const line = n === total ? `<b>You found all ${total} secrets.</b> Nice work.`
-          : n ? `<b>You’ve found ${n} of ${total} secrets.</b> Keep looking.`
-          : `<b>${total} secrets are hidden on this site.</b> Can you find them all?`;
-        b.innerHTML = `<span class="hero__pips" aria-hidden="true">${LIST.map((a) => `<i${got.has(a.id) ? ' class="is-on"' : ''}></i>`).join('')}</span><span>${line} <em>See the list</em></span>`;
+        b.innerHTML = `<span>Secrets found <b>${n} / ${total}</b></span><span class="hero__pips" aria-hidden="true">${LIST.map((a) => `<i${got.has(a.id) ? ' class="is-on"' : ''}></i>`).join('')}</span>`;
       } else b.textContent = `${n} / ${total} secrets`;
     });
     sheet.querySelector('.trophies__bar span').style.width = `${(n / total) * 100}%`;
@@ -108,7 +105,5 @@
   if (document.body.dataset.page === '404') setTimeout(() => unlock('oob'), 900);
 
   render();
-  // a little pulse on the nav counter while there are still secrets to find
-  if (got.size < LIST.length) document.querySelector('[data-secrets="nav"]')?.classList.add('is-new');
   window.secrets = { unlock, has: (id) => got.has(id) };
 })();

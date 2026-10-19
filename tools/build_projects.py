@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026101913" />
+	<link rel="stylesheet" href="assets/style.css?v=2026101914" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -60,7 +60,6 @@ def head(title, desc, image, slug):
 	<header class="nav" id="nav">
 		<div class="wrap nav__inner">
 			<a class="brand" href="index.html" aria-label="Jack Slaski, home"><span class="brand__mark">JS</span><span>Jack Slaski</span></a>
-			<button class="nav__secrets" type="button" data-secrets="nav" hidden></button>
 			<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
 			<nav class="nav__links" id="nav-links" aria-label="Main">
 				<a href="index.html#work">Work</a>
@@ -69,6 +68,7 @@ def head(title, desc, image, slug):
 				<a href="#contact">Contact</a>
 				<a class="btn" href="documents/cvjackslaski.pdf">Download CV</a>
 			</nav>
+			<button class="nav__secrets" type="button" data-secrets="nav" hidden></button>
 		</div>
 	</header>
 """
@@ -99,8 +99,8 @@ FOOT = """
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026101913" defer></script>
-	<script src="assets/secrets.js?v=2026101913" defer></script>
+	<script src="assets/main.js?v=2026101914" defer></script>
+	<script src="assets/secrets.js?v=2026101914" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -242,7 +242,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026101913" defer></script>', f'<script src="assets/secrets.js?v=2026101913" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026101913" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026101914" defer></script>', f'<script src="assets/secrets.js?v=2026101914" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026101914" defer></script>')
     out.append(foot)
     return "".join(out)
 
