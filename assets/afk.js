@@ -8,11 +8,7 @@
   // PROJECT keys are the page names the cards link to (gerbertgames.html -> gerbertgames).
   const THOUGHTS = {
     hero: ['Who’s this then?', 'Let’s have a look at what Jack Slaski has been up to.', 'This website looks pretty good so far.'],
-    stats: ['An MSc with a Distinction means he clearly knows his stuff.', 'Four years of experience in UE5 is pretty decent.', 'A First and a Distinction, he must have worked hard for those.', 'Thirteen games and tools is a lot of work.'],
-    profile: ['Those grades are actually really good.', 'He looks pretty professional in that graduation photo.', 'He seems like a nice guy to be fair.'],
-    log: ['Running his own game servers at sixteen is pretty impressive.', 'A quest log instead of a timeline is a nice touch.', 'His next quest is getting a job, and maybe I can help with that.'],
     contact: ['Seems pretty good, I should email him.', 'I think I’m going to hire him.', 'He’d be a good fit for the team to be fair.'],
-    again: ['Actually, let me have another look at this one.', 'I want to see this one again.', 'I keep coming back to this one.'],
     // for any project, including tools and research
     project: [
       'That’s decent.',
@@ -26,6 +22,24 @@
     // only for things you can actually play
     game: ['I’d actually play this.', 'This looks like a lot of fun.', 'I’d like a go on this one.'],
   };
+  // These point the cursor at the exact thing they talk about: [what to point at, line]
+  const STATS = [
+    ['.stats__grid > :nth-child(1)', 'Four years of experience in UE5 is pretty decent.'],
+    ['.stats__grid > :nth-child(1)', 'He’s been using Unreal Engine for over four years, so he knows his way around it.'],
+    ['.stats__grid > :nth-child(2)', 'An MSc with a Distinction means he clearly knows his stuff.'],
+    ['.stats__grid > :nth-child(3)', 'A First Class degree as well, he must have worked hard for that.'],
+    ['.stats__grid > :nth-child(4)', 'Thirteen games and tools is a lot of work.'],
+  ];
+  const PROFILE = [
+    ['.profile__photo', 'He looks pretty professional in that graduation photo.'],
+    ['.profile__photo', 'He seems like a nice guy to be fair.'],
+    ['.profile__rows', 'Those grades are actually really good.'],
+  ];
+  const LOG = [
+    ['.log li:first-child', 'Running his own game servers at sixteen is pretty impressive.'],
+    ['.log', 'A quest log instead of a timeline is a nice touch.'],
+    ['.log li:last-child', 'His next quest is getting a job, and maybe I can help with that.'],
+  ];
   const TOOLS = new Set(['cavegen', 'uishow', 'uidiss', 'lootbox']);   // not games, so no "I'd play this"
   const PROJECT = {
     recoilworks: ['Building your own gun from parts sounds really fun.', 'Having every part change how the gun fires is really clever.'],
@@ -112,12 +126,24 @@
     const r = el.getBoundingClientRect();
     return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top - dy + Math.min(r.height * rand(0.2, 0.55), 240))];
   };
-  // go to the next thing: only scroll if it isn't already in view, and move the cursor while the page scrolls
-  async function visit(el, my) {
+  // go to the next thing. If it's fully on screen, just move the mouse. If it's cut off, scroll: frame its section
+  // with the title at the top when that shows the whole thing, otherwise centre it. The cursor moves while it scrolls.
+  const NAV = 84;
+  function scrollFor(el, up) {
     const r = el.getBoundingClientRect(), max = document.documentElement.scrollHeight - innerHeight;
-    const inView = r.top >= 96 && r.top + Math.min(r.height, 260) <= innerHeight - 48;
-    const dy = inView || reduced ? 0 : Math.max(0, Math.min(max, scrollY + r.top + Math.min(r.height, 420) / 2 - innerHeight / 2)) - scrollY;
-    const [x, y] = spot(el, dy);
+    if (r.top >= NAV && r.bottom <= innerHeight - 12) return 0;
+    const clamp = (y) => Math.max(0, Math.min(max, y));
+    const fits = (y) => r.top - (y - scrollY) >= NAV && r.bottom - (y - scrollY) <= innerHeight - 12;
+    const section = el.closest('section');
+    if (section) {
+      const y = clamp(scrollY + section.getBoundingClientRect().top - NAV);
+      if (y >= scrollY && fits(y)) return y - scrollY;
+    }
+    const y = r.height > innerHeight - NAV - 24 ? scrollY + r.top - NAV - 16 : scrollY + r.top + r.height / 2 - (innerHeight + NAV) / 2;
+    return up ? clamp(y) - scrollY : Math.max(0, clamp(y) - scrollY);   // only the first stop of a lap may scroll up
+  }
+  async function visit(el, my, up = false) {
+    const dy = reduced ? 0 : scrollFor(el, up), [x, y] = spot(el, dy);
     if (Math.abs(dy) < 4) return moveTo(x, y, my);
     const dur = Math.min(3200, 1100 + Math.abs(dy) * 0.9);
     await Promise.all([
@@ -136,34 +162,36 @@
     if (PROJECT[id] && Math.random() < 0.7) return PROJECT[id];
     return TOOLS.has(id) ? THOUGHTS.project : [...THOUGHTS.project, ...THOUGHTS.game];
   };
-  // the route changes every lap: random cards, sometimes out of order, and sometimes a look back up
+  // a steady trip down the page: different cards and stats each lap, but always top to bottom
+  const pair = (pairs) => { const line = any(pairs.map(([, l]) => l)); return pairs.find(([, l]) => l === line); };
   function beats() {
     const top = (el) => el.getBoundingClientRect().top + scrollY;
     const cards = [...document.querySelectorAll('.card')].filter((c) => !c.hidden).sort(() => Math.random() - 0.5).slice(0, 4)
       .sort((a, b) => top(a) - top(b) || a.getBoundingClientRect().left - b.getBoundingClientRect().left);
-    if (Math.random() < 0.5) { const i = Math.floor(rand(1, cards.length)); [cards[i - 1], cards[i]] = [cards[i], cards[i - 1]]; }
-    const features = [...document.querySelectorAll('.feature')];
-    const route = [
+    const stats = [pair(STATS)];
+    const second = pair(STATS.filter(([sel]) => sel !== stats[0][0]));
+    if (second) stats.push(second);
+    stats.sort(([a], [b]) => a.localeCompare(b));
+    return [
       ['.hero__name', THOUGHTS.hero],
-      ['.stats', THOUGHTS.stats],
-      ...features.map((f) => [f, linesFor(f)]),
+      ...stats.map(([sel, line]) => [sel, [line]]),
+      ...[...document.querySelectorAll('.feature')].map((f) => [f, linesFor(f)]),
       ...cards.map((c) => [c, linesFor(c)]),
+      ...[pair(PROFILE), pair(LOG)].map(([sel, line]) => [sel, [line]]),
     ];
-    if (Math.random() < 0.5) route.push([features[Math.floor(Math.random() * features.length)], THOUGHTS.again]);
-    return [...route, ['.profile', THOUGHTS.profile], ['.log', THOUGHTS.log]];
   }
 
   async function tour(my) {
     place(innerWidth * rand(0.55, 0.7), innerHeight * rand(0.45, 0.6));
     for (;;) {
-      for (const [target, lines] of beats()) {
+      for (const [i, [target, lines]] of beats().entries()) {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
         if (!el) continue;
         say('');
-        await visit(el, my);
+        await visit(el, my, i === 0);
         el.classList.add('is-afk-hover');
         say(any(lines));
-        await wait(rand(3600, 5200), my);
+        await wait(rand(5500, 7500), my);
         el.classList.remove('is-afk-hover');
       }
       // the ending: parked on "Email me", so you might come back to find it there
