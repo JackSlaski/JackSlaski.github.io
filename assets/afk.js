@@ -4,37 +4,54 @@
 (() => {
   const IDLE = new URLSearchParams(location.search).has('afk') ? 5000 : 45000;   // ?afk shortens it for testing
 
-  // What the AI thinks. Edit freely: one line is picked at random each time.
+  // What the AI thinks. Edit freely: lines are picked at random, and none repeats until its whole list has been used.
   // PROJECT keys are the page names the cards link to (gerbertgames.html -> gerbertgames).
   const THOUGHTS = {
-    hero: ['Right then, who’s this?', 'Jack Slaski. Gameplay designer. Let’s have a look.', 'Nice website, this.'],
-    stats: ['An MSc with Distinction? This lad’s qualified.', 'Four years of Unreal Engine. Fair play.', 'A First and a Distinction. Clever clogs.'],
-    profile: ['Proper grades, these. Not bad at all.', 'Graduation photo. Looks the part.', 'Seems like a sound lad.'],
-    log: ['Running his own game servers at sixteen? Fair play.', 'A quest log. Very on brand.', 'Next quest: get a job. Someone sort this lad out.'],
-    contact: ['Right, I’m hiring him.', 'This lad’s class. Somebody hire him.', 'Need a gameplay designer? Go on then.'],
-    project: ['Ooh, this looks decent.', 'Now that’s tidy.', 'Proper bit of work, that.', 'Not bad. Not bad at all.', 'I’d have a go on that.'],
+    hero: ['Who’s this then?', 'Jack Slaski, gameplay and systems designer. Let’s have a look around.', 'This website looks pretty good so far.'],
+    stats: ['An MSc with Distinction? He’s clearly qualified.', 'Four years of experience in UE5 is pretty decent.', 'A First and a Distinction, he must have worked hard.', 'Thirteen games and tools? He’s been busy.'],
+    profile: ['Those grades are actually really good.', 'He looks pretty professional in that graduation photo.', 'Seems like a nice guy to be fair.'],
+    log: ['He was running his own game servers at sixteen? That’s impressive.', 'A quest log instead of a timeline is a nice touch.', 'His next quest is getting a job. Maybe I can help with that.'],
+    contact: ['Seems pretty good, I should email him.', 'I think I’m going to hire him.', 'He’d be a good fit for the team to be fair.'],
+    project: [
+      'That’s decent.',
+      'This one looks pretty good.',
+      'I’d actually play this.',
+      'That looks like a lot of work.',
+      'This looks really polished.',
+      'I like the look of this one.',
+      'How did he find the time for all of these?',
+      'Okay, this one’s really cool.',
+    ],
   };
   const PROJECT = {
-    recoilworks: ['Build your own gun from parts? Brilliant.', 'Swap the barrel and the whole gun changes. Clever, that.'],
-    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'Second at GradEx, made on his own in eight weeks. Fair play.'],
-    gerbertgames: ['What on earth is a Gerbert?', 'Four mates fighting over tiles above a black hole. Proper party game.'],
-    lggame: ['Pirate ships and a sea monster. Sold.', 'Tech lead on a team of 29? Rather him than me.'],
-    wmgame: ['A wizard against loads of slimes. Classic.', 'He did all the UI and effects on this one. Tidy.'],
-    armsandassets: ['Procedural guns and a grid inventory. Very Garry’s Mod.', 'Gems you slot into your weapons? Go on then.'],
-    dykbgame: ['Footy trivia where you take penalties at the answers. Class.', 'Do You Know Ball? I’d get relegated.'],
-    formandflask: ['A potion factory. Like a brewery, but for wizards.', 'Fuzzy logic marking your potions. Very clever.'],
-    cavegen: ['He writes C++ as well? Showing off now.', 'Cellular automata. Yeah, I definitely know what that means.'],
-    survivorslike: ['Bouncy bullets and big explosions. Get in.', 'Look at all that screen shake. Proper game feel.'],
-    uishow: ['A whole RPG menu system. Someone likes a menu.', 'Shop, inventory, minimap… he’s been busy.'],
-    uidiss: ['A whole dissertation on minimalist UI. Less is more, apparently.', 'Research into immersion. Brainy stuff.'],
-    lootbox: ['Loot box research. Is there a case I can open? Oh, there is.', 'Loot box ethics. Very responsible, that.'],
+    recoilworks: ['Building your own gun from parts sounds really fun.', 'Every part changes how the gun fires? That’s clever.'],
+    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'He made this on his own in eight weeks and came second at GradEx? Impressive.'],
+    gerbertgames: ['What on earth is a Gerbert?', 'Four players fighting over tiles above a black hole sounds chaotic.'],
+    lggame: ['Pirate ships fighting a sea monster? I’m sold.', 'Keeping 29 people’s work together on one game can’t have been easy.'],
+    wmgame: ['A wizard against a whole world of slimes is a classic.', 'He made all the UI and effects for this one, and they look great.'],
+    armsandassets: ['Procedural guns and a grid inventory remind me of Garry’s Mod.', 'Slotting gems into weapons is a cool idea.'],
+    dykbgame: ['Football trivia where you shoot penalties at the right answer is a great idea.', 'I’d probably score more own goals than right answers.'],
+    formandflask: ['A potion factory sounds like a brewery for wizards.', 'Automating a whole potion factory looks really satisfying.'],
+    cavegen: ['He can write C++ as well? Now he’s just showing off.', 'I definitely know what cellular automata means. Definitely.'],
+    survivorslike: ['Bouncing bullets and big explosions are my kind of game.', 'There’s a lot of screen shake in this one, and it feels great.'],
+    uishow: ['Someone really likes making menus.', 'A shop, an inventory, and a minimap all in one UI? He’s been busy.'],
+    uidiss: ['A whole dissertation on minimalist UI, so less really is more.', 'Research into immersion sounds pretty interesting.'],
+    lootbox: ['Loot box research? Is there a case I can open? Oh, there is.', 'Researching loot box ethics is pretty responsible of him.'],
   };
-  const ENDING = ['…honestly, just email him.', 'Still here? Go on, I’ll have another look round.'];
+  const ENDING = ['Honestly, I should just email him.', 'Still here? I’ll have another look around.'];
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hero = document.querySelector('.hero');
   if (!hero) return;
-  const any = (list) => list[Math.floor(Math.random() * list.length)];
+  // no line repeats until every line in its list has had a turn
+  const used = new Set();
+  const any = (list) => {
+    let fresh = list.filter((l) => !used.has(l));
+    if (!fresh.length) { list.forEach((l) => used.delete(l)); fresh = list; }
+    const line = fresh[Math.floor(Math.random() * fresh.length)];
+    used.add(line);
+    return line;
+  };
   const rand = (a, b) => a + Math.random() * (b - a);
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const STOP = Symbol('stop');
@@ -133,11 +150,11 @@
         await moveTo(...spot(email), my);
         email.classList.add('is-afk-hover');
         say(any(THOUGHTS.contact));
-        await wait(10000, my);
+        await wait(15000, my);
         say(ENDING[0]);
-        await wait(8000, my);
+        await wait(10000, my);
         say(ENDING[1]);
-        await wait(2500, my);
+        await wait(3000, my);
         email.classList.remove('is-afk-hover');
       }
       say('');
