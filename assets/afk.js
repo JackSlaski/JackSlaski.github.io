@@ -1,47 +1,39 @@
-// AFK takeover, like Feudal Living's idle AI: leave the home page alone on the hero and an AI
+// AFK takeover, like Feudal Living's idle AI: leave the home page alone for 45 seconds and an AI
 // "visitor" takes the mouse, wanders round the site thinking out loud, and loops until you're back.
-// Any input hands control back and unlocks Autopilot. It only starts from the hero, so nobody
-// reading further down gets interrupted, and only once per visit.
+// Any input hands control back and unlocks Autopilot.
 (() => {
   const IDLE = new URLSearchParams(location.search).has('afk') ? 5000 : 45000;   // ?afk shortens it for testing
 
   // What the AI thinks. Edit freely: one line is picked at random each time.
   // PROJECT keys are the page names the cards link to (gerbertgames.html -> gerbertgames).
   const THOUGHTS = {
-    hero: ['Right, who’s this then?', 'Jack Slaski. Gameplay and systems designer. Go on then.', 'Nice site. Very orange.'],
-    stats: ['Four years in Unreal Engine 5. That’s a lot of Blueprints.', 'A Distinction and a First? Bit of an overachiever.', 'Thirteen games and tools. Busy man.'],
-    profile: ['Nice graduation photo. Very professional.', 'Okay, those grades are actually really good.', 'A player profile instead of an About Me. I see what he did there.'],
-    log: ['A quest log instead of a boring timeline. Cute.', 'Running Garry’s Mod servers since 2020? Respect.', 'Next quest: get hired. I can help with that.'],
-    contact: ['Wow, this guy is good. I should hire him.', 'Right, I’m emailing him. Today.', 'Need a gameplay designer? I think I do, actually.'],
-    project: [
-      'Ooh, look at this project. This is cool.',
-      'Okay, this one looks good.',
-      'Bookmarking this one.',
-      'How did he make all of these?',
-      'I need to play this.',
-    ],
+    hero: ['Right then, who’s this?', 'Jack Slaski. Gameplay designer. Let’s have a look.', 'Nice website, this.'],
+    stats: ['An MSc with Distinction? This lad’s qualified.', 'Four years of Unreal Engine. Fair play.', 'A First and a Distinction. Clever clogs.'],
+    profile: ['Proper grades, these. Not bad at all.', 'Graduation photo. Looks the part.', 'Seems like a sound lad.'],
+    log: ['Running his own game servers at sixteen? Fair play.', 'A quest log. Very on brand.', 'Next quest: get a job. Someone sort this lad out.'],
+    contact: ['Right, I’m hiring him.', 'This lad’s class. Somebody hire him.', 'Need a gameplay designer? Go on then.'],
+    project: ['Ooh, this looks decent.', 'Now that’s tidy.', 'Proper bit of work, that.', 'Not bad. Not bad at all.', 'I’d have a go on that.'],
   };
   const PROJECT = {
-    recoilworks: ['A weapon crafting FPS where every part changes how it fires? Cool.', 'Swap a barrel, change the whole gun. I want this.'],
-    flgame: ['A life sim with an AI that takes over when you go idle. Wait a minute…', 'Second at GradEx, built solo in eight weeks. Not bad at all.'],
-    gerbertgames: ['A party game about Gerberts. What even is a Gerbert?', 'Four players fighting over tiles above a black hole. Chaos. Love it.'],
-    lggame: ['Pirate ships and a leviathan. Say no more.', 'Tech lead on a team of 29? That’s a lot of merge conflicts.'],
-    wmgame: ['A wizard versus a world of slimes. Classic.', 'He did all the UI and VFX for this one. Shiny.'],
-    armsandassets: ['Procedural guns and a grid inventory. Big Garry’s Mod energy.', 'Gem slots on weapons? Okay, I’m interested.'],
-    dykbgame: ['Football trivia where you shoot penalties at the answer. Genius.', 'Do You Know Ball? I do not, actually.'],
-    formandflask: ['A potion factory. Automation and potions, my two favourite things.', 'Fuzzy logic judging potion quality. Fancy.'],
-    cavegen: ['A cave generator written in C++. He codes too?', 'Cellular automata. I definitely know what that means.'],
-    survivorslike: ['Bouncing projectiles and big explosions. Game feel is everything.', 'Look at all that screen shake. Lovely.'],
-    uishow: ['A whole RPG interface. Someone likes menus.', 'Inventory, minimap, shop… that’s a lot of UI.'],
-    uidiss: ['A dissertation on minimalist UI. Less is more, apparently.', 'Research into immersion. Brains and games.'],
-    lootbox: ['Loot box research. Is there a case I can open? Oh wait, there is.', 'Loot box ethics. Very responsible of him.'],
+    recoilworks: ['Build your own gun from parts? Brilliant.', 'Swap the barrel and the whole gun changes. Clever, that.'],
+    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'Second at GradEx, made on his own in eight weeks. Fair play.'],
+    gerbertgames: ['What on earth is a Gerbert?', 'Four mates fighting over tiles above a black hole. Proper party game.'],
+    lggame: ['Pirate ships and a sea monster. Sold.', 'Tech lead on a team of 29? Rather him than me.'],
+    wmgame: ['A wizard against loads of slimes. Classic.', 'He did all the UI and effects on this one. Tidy.'],
+    armsandassets: ['Procedural guns and a grid inventory. Very Garry’s Mod.', 'Gems you slot into your weapons? Go on then.'],
+    dykbgame: ['Footy trivia where you take penalties at the answers. Class.', 'Do You Know Ball? I’d get relegated.'],
+    formandflask: ['A potion factory. Like a brewery, but for wizards.', 'Fuzzy logic marking your potions. Very clever.'],
+    cavegen: ['He writes C++ as well? Showing off now.', 'Cellular automata. Yeah, I definitely know what that means.'],
+    survivorslike: ['Bouncy bullets and big explosions. Get in.', 'Look at all that screen shake. Proper game feel.'],
+    uishow: ['A whole RPG menu system. Someone likes a menu.', 'Shop, inventory, minimap… he’s been busy.'],
+    uidiss: ['A whole dissertation on minimalist UI. Less is more, apparently.', 'Research into immersion. Brainy stuff.'],
+    lootbox: ['Loot box research. Is there a case I can open? Oh, there is.', 'Loot box ethics. Very responsible, that.'],
   };
-  const ENDING = ['…seriously, someone hire this man.', 'Still here? I’ll go round again.'];
+  const ENDING = ['…honestly, just email him.', 'Still here? Go on, I’ll have another look round.'];
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hero = document.querySelector('.hero');
   if (!hero) return;
-  const session = (k, v) => { try { return v === undefined ? sessionStorage.getItem(k) : sessionStorage.setItem(k, v); } catch { return null; } };
   const any = (list) => list[Math.floor(Math.random() * list.length)];
   const rand = (a, b) => a + Math.random() * (b - a);
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -49,8 +41,7 @@
 
   let idle = 0, running = false, gen = 0, ui = null, cursor = null, thought = null, pos = [0, 0], frames = new Set(), start = null;
 
-  const eligible = () => !running && !session('afk-done') && !window.secrets?.has('autopilot')
-    && document.visibilityState === 'visible' && scrollY < hero.offsetHeight * 0.3 && !document.querySelector('dialog[open]');
+  const eligible = () => !running && document.visibilityState === 'visible' && !document.querySelector('dialog[open]');
   function arm() {
     clearTimeout(idle);
     idle = setTimeout(() => { if (eligible()) takeover(); else arm(); }, IDLE);
@@ -86,29 +77,20 @@
     cursor.style.transform = `translate(${x}px, ${y}px)`;
     cursor.classList.toggle('is-left', x > innerWidth - 320);
   }
-  // a curved, slightly shaky path at a human pace, landing somewhere inside the element, not dead centre
+  // a gentle curve at a human pace, landing somewhere inside the element, not dead centre
   function moveTo(x, y, my, dur) {
     if (reduced) return Promise.resolve();
     const [x0, y0] = pos, dx = x - x0, dy = y - y0, dist = Math.hypot(dx, dy) || 1, bend = rand(-0.3, 0.3) * dist;
     const cx = x0 + dx / 2 - (dy / dist) * bend, cy = y0 + dy / 2 + (dx / dist) * bend;
-    return animate(dur || Math.min(2600, 900 + dist * 1.4), my, (e, now) => {
-      const u = 1 - e, shake = Math.sin(now / 70) * 0.8;
-      place(u * u * x0 + 2 * u * e * cx + e * e * x + shake, u * u * y0 + 2 * u * e * cy + e * e * y + shake);
+    return animate(dur || Math.min(2600, 900 + dist * 1.4), my, (e) => {
+      const u = 1 - e;
+      place(u * u * x0 + 2 * u * e * cx + e * e * x, u * u * y0 + 2 * u * e * cy + e * e * y);
     });
   }
   const spot = (el) => {
     const r = el.getBoundingClientRect();
     return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top + Math.min(r.height * rand(0.2, 0.55), 240))];
   };
-  // little drifts while it "reads", like a hand resting on a mouse
-  async function linger(ms, my) {
-    const end = performance.now() + ms;
-    while (performance.now() < end) {
-      await wait(rand(300, 900), my);
-      if (performance.now() >= end) break;
-      await moveTo(pos[0] + rand(-28, 28), pos[1] + rand(-16, 16), my, rand(600, 1100));
-    }
-  }
   function say(text) {
     thought.textContent = text;
     thought.classList.toggle('is-on', !!text);
@@ -140,7 +122,7 @@
         await moveTo(...spot(el), my);
         el.classList.add('is-afk-hover');
         say(any(lines));
-        await linger(rand(3600, 5200), my);
+        await wait(rand(3600, 5200), my);
         el.classList.remove('is-afk-hover');
       }
       // the ending: parked on "Email me", so you might come back to find it there
@@ -151,9 +133,9 @@
         await moveTo(...spot(email), my);
         email.classList.add('is-afk-hover');
         say(any(THOUGHTS.contact));
-        await linger(9000, my);
+        await wait(10000, my);
         say(ENDING[0]);
-        await linger(9000, my);
+        await wait(8000, my);
         say(ENDING[1]);
         await wait(2500, my);
         email.classList.remove('is-afk-hover');
@@ -165,7 +147,6 @@
 
   function takeover() {
     running = true;
-    session('afk-done', '1');
     const my = ++gen;
     ui = document.createElement('div');
     ui.innerHTML = `
@@ -203,6 +184,7 @@
     const old = ui;
     setTimeout(() => old.remove(), 2200);
     ui = null;
+    arm();   // go idle again and it'll come back
   }
 
   for (const type of ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart']) addEventListener(type, wake, { passive: true });
