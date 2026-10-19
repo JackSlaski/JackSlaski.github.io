@@ -162,7 +162,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__lede { max-width: 34rem; margin-top: 1.75rem; font-size: clamp(1.1rem, 1rem + 0.45vw, 1.3rem); color: #cfd5df; }
 .hero__lede strong { color: var(--text); font-weight: 600; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
-.hero__secrets { position: absolute; right: calc(var(--pad) + 4.75rem); bottom: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms; }
+.hero__secrets { position: absolute; right: calc(var(--pad) + 2.25rem); bottom: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms; }
 .hero__secrets b { font-weight: 500; color: var(--text); }
 .hero__secrets:hover { color: var(--text); }
 .hero__pips { display: inline-flex; gap: 0.4rem; }
@@ -178,8 +178,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__dots button { width: 26px; height: 18px; position: relative; }
 .hero__dots button::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--line-strong); transition: background-color 200ms; }
 .hero__dots button[aria-current="true"]::before { background: var(--accent); }
-.hero__scroll { position: absolute; right: calc(var(--pad) + 2.25rem); bottom: 3rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); writing-mode: vertical-rl; display: flex; align-items: center; gap: 0.75rem; }
-.hero__scroll::after { content: ""; width: 1px; height: 48px; background: linear-gradient(var(--accent), transparent); }
 
 /* ---------- stats ---------- */
 .stats { border-block: 1px solid var(--line); background: var(--panel); }
@@ -352,7 +350,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .feature, .feature:nth-child(even) { grid-template-columns: 1fr; }
   .feature:nth-child(even) .feature__media { order: 0; }
   .feature__media { min-height: 0; aspect-ratio: 16 / 9; }
-  .hero__scroll { display: none; }
 }
 @media (max-width: 640px) {
   body { font-size: 1rem; }
@@ -844,12 +841,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .afk { position: fixed; top: 5.25rem; left: 50%; z-index: 70; display: flex; align-items: center; gap: 0.75rem; max-width: calc(100% - 2rem); padding: 0.6rem 1rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.92); border: 1px solid var(--accent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 0.88rem; color: #c9d0db; animation: afk-in 400ms var(--ease); }
 .afk b { flex: none; font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 .afk__dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: afk-blink 1s ease-in-out infinite; }
-.afk-cursor { position: fixed; top: 0; left: 0; z-index: 71; display: flex; align-items: flex-start; gap: 0.2rem; pointer-events: none; transition: transform 900ms var(--ease); filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6)); }
-.afk-cursor svg { width: 26px; height: 26px; }
-.afk-cursor span { margin-top: 1.2rem; padding: 0.1rem 0.35rem; background: var(--accent); font-family: var(--mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; color: #fff; }
-.afk-caption { position: fixed; bottom: 2rem; left: 50%; z-index: 70; max-width: min(40rem, calc(100% - 2rem)); padding: 0.9rem 1.2rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.94); border-left: 3px solid var(--accent); font-size: 1rem; color: var(--text); }
-.afk-caption:empty { display: none; }
+.afk-cursor { position: fixed; top: 0; left: 0; z-index: 71; pointer-events: none; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6)); }
+.afk-cursor svg { display: block; width: 26px; height: 26px; }
+.afk-cursor__tag { position: absolute; top: 20px; left: 18px; padding: 0.1rem 0.35rem; background: var(--accent); font-family: var(--mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; color: #fff; }
+.afk-thought { position: absolute; top: 42px; left: 18px; width: max-content; max-width: 17rem; padding: 0.6rem 0.85rem; background: rgba(10, 12, 17, 0.95); border: 1px solid var(--line-strong); border-left: 3px solid var(--accent); font-size: 0.92rem; font-style: italic; line-height: 1.4; color: var(--text); opacity: 0; transform: translateY(4px); transition: opacity 250ms, transform 250ms var(--ease); }
+.afk-thought.is-on { opacity: 1; transform: none; }
+.afk-cursor.is-left .afk-thought { left: auto; right: -6px; }
+.afk-cursor.is-still { top: auto; bottom: 2rem; left: 50%; transform: translateX(-50%) !important; }
+.afk-cursor.is-still svg, .afk-cursor.is-still .afk-cursor__tag { display: none; }
+.afk-cursor.is-still .afk-thought { position: static; max-width: min(30rem, calc(100vw - 2rem)); }
 .is-afk-hover { outline: 2px solid var(--accent); outline-offset: 4px; }
+.btn.is-afk-hover { outline: none; filter: brightness(1.15); }
 @keyframes afk-in { from { opacity: 0; transform: translate(-50%, -10px); } }
 @keyframes afk-blink { 50% { opacity: 0.25; } }
-@media (prefers-reduced-motion: reduce) { .afk, .afk__dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .afk, .afk__dot { animation: none; } .afk-thought { transition: none; } }
