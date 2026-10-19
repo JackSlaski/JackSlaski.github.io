@@ -24,38 +24,19 @@
     { id: 'gold', name: 'Golden', odds: 0.26, tease: 2, value: 15000, col: '#e4ae39' },
   ];
   const [, , , LEGEND, GOLD] = RARITY;
-  const ITEMS = {   // [name, project, icon]
-    common: [['Rusty Barrel', 'Recoil Works', 'part'], ['Straw Bed', 'Feudal Living', 'furn'], ['Match Ball', 'Do You Know Ball?', 'ball'], ['Slime Jar', 'Wild Magic', 'potion'], ['Gold Doubloon', 'Leviathan’s Gauntlet', 'coin'], ['Bubbling Potion', 'Formula and Flask', 'potion'], ['Cave Crystal', 'Cave Generation Tool', 'crystal']],
-    rare: [['Extended Mag', 'Recoil Works', 'part'], ['Oak Table', 'Feudal Living', 'furn'], ['Ship Cannon', 'Leviathan’s Gauntlet', 'cannon'], ['Copper Cauldron', 'Formula and Flask', 'cauldron'], ['Captain’s Armband', 'Do You Know Ball?', 'band']],
-    epic: [['Gem Slot', 'Arms & Assets', 'gem'], ['Wizard Hat', 'Wild Magic', 'wizard'], ['Spaceship Cursor', 'Gerbert Games', 'ship'], ['Shockwave', 'Survivors Like', 'wave']],
-    legend: [['Explosive Rounds', 'Recoil Works', 'part'], ['Leviathan Fang', 'Leviathan’s Gauntlet', 'fang'], ['Raise Hell', 'Survivors Like', 'flame']],
-    gold: [['Golden Gerbert', 'Gerbert Games', 'gerb']],
+  const ITEMS = {   // [name, project, icon file in assets/games/loot-icons]
+    common: [['Wooden Stock', 'Recoil Works', 'gun-stock'], ['Straw Bed', 'Feudal Living', 'bed'], ['Match Ball', 'Do You Know Ball?', 'soccer-ball'], ['Slime Jar', 'Wild Magic', 'mason-jar'], ['Gold Doubloon', 'Leviathan’s Gauntlet', 'crown-coin'], ['Bubbling Potion', 'Formula and Flask', 'bubbling-flask'], ['Cave Crystal', 'Cave Generation Tool', 'crystal-growth']],
+    rare: [['Extended Mag', 'Recoil Works', 'machine-gun-magazine'], ['Oak Table', 'Feudal Living', 'table'], ['Ship Cannon', 'Leviathan’s Gauntlet', 'pirate-cannon'], ['Copper Cauldron', 'Formula and Flask', 'cauldron'], ['Referee Whistle', 'Do You Know Ball?', 'whistle']],
+    epic: [['Gem Slot', 'Arms & Assets', 'gems'], ['Wizard Hat', 'Wild Magic', 'pointy-hat'], ['Spaceship Cursor', 'Gerbert Games', 'spaceship'], ['Shockwave', 'Survivors Like', 'sonic-boom']],
+    legend: [['Explosive Rounds', 'Recoil Works', 'heavy-bullets'], ['Leviathan Fang', 'Leviathan’s Gauntlet', 'bestial-fangs'], ['Raise Hell', 'Survivors Like', 'fire-ring']],
+    gold: [['Golden Gerbert', 'Gerbert Games', 'slime']],
   };
   const TOTAL_ITEMS = Object.values(ITEMS).flat().length;
-  const ICON = {
-    part: '<circle cx="24" cy="24" r="11"/><path d="M24 5v11M24 32v11M5 24h11M32 24h11"/>',
-    furn: '<path d="M15 6v36M15 26h19v16"/>',
-    ball: '<circle cx="24" cy="24" r="16"/><path d="M24 16l7 5-3 8h-8l-3-8zM24 8v8M31 21l7-3M28 29l4 7M20 29l-4 7M17 21l-7-3"/>',
-    potion: '<path d="M19 6h10M21 6v11L11 36a4 4 0 0 0 4 6h18a4 4 0 0 0 4-6L27 17V6M15 30h18"/>',
-    coin: '<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="10"/><path d="M24 19v10"/>',
-    crystal: '<path d="M8 41h32M14 41l-3-15 6-9 4 12M21 41l3-33 6 13-2 20M29 41l5-15 5 8-2 7"/>',
-    cannon: '<path d="M10 27 36 15l3 7-26 12z"/><circle cx="16" cy="36" r="6"/>',
-    cauldron: '<path d="M8 17h32M11 17c0 13 5 19 13 19s13-6 13-19M16 36l-3 6M32 36l3 6M18 11c0-3 3-3 3-6M27 11c0-3 3-3 3-6"/>',
-    band: '<rect x="8" y="15" width="32" height="18" rx="3"/><path d="M28 20.5a5 5 0 1 0 0 7"/>',
-    gem: '<path d="M11 18l6-8h14l6 8-13 21zM11 18h26M20 10l-3 8 7 21 7-21-3-8"/>',
-    wizard: '<path d="M24 5 35 35H13zM8 37h32M22 18l2-4 2 4"/>',
-    ship: '<path d="M12 7l25 15-10 3 6 13-5 2-6-13-9 7z"/>',
-    wave: '<circle cx="24" cy="24" r="4"/><path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18M9 9a21 21 0 0 0 0 30M39 9a21 21 0 0 1 0 30"/>',
-    fang: '<path d="M13 9c5 3 17 3 22 0-2 13-6 23-11 30-5-7-9-17-11-30z"/>',
-    flame: '<path d="M24 5c2 8 12 12 12 23a12 12 0 0 1-24 0c0-6 4-9 6-13 1 4 3 6 5 6-1-6 0-11 1-16z"/>',
-    gerb: '<circle cx="24" cy="24" r="16"/><circle cx="18" cy="21" r="2.5" fill="currentColor"/><circle cx="30" cy="21" r="2.5" fill="currentColor"/><path d="M18 30c4 3 8 3 12 0"/>',
-  };
   const NAMES = ['NoScopeNan', 'Kai77', 'DanRP', 'TurboTom', 'SweatyPalms', 'BigChungus99', 'MrSprinkles', 'GhostFace21', 'NotAFreeKill', 'SilentSam',
     'ProbablyLagging', 'ChickenNugget', 'TacoTuesday', 'RektByRob', 'Sn1perMonkey', 'LilYeti', 'WetSocks', 'BoltAction', 'MossyRock', 'GerbertFan',
     'CrispyBacon', 'OnlyHeadshots', 'SneakyPete', 'MegaMango', 'FrostyBits', 'PixelPirate', 'DoubleTapDave', 'CampingCarl', 'ZeroChill', 'HotSauceHarry',
     'NoobSlayer', 'ClutchKing', 'AimBotAndy', 'CouchPotato', 'SaltyChips', 'xXDarkLordXx', 'DeadEye', 'Gr4nnySmith', 'OopsAllCrits', 'LagSwitchLarry',
     'YeetMaster', 'BeansOnToast', 'ToastyBoi', 'WiFiWarrior', 'KeyboardKev', 'LowBattery', 'SpicyMeatball', 'NoodleArms', 'SockGoblin', 'Jynx'];
-  const svg = (k) => `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
   const GEM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 9l3-5h8l3 5-7 11z"/></svg>';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const bundles = BUNDLES.map((b, i) => `<button class="loot__bundle" type="button" data-bundle="${i}"><b>${num(b.gems)} gems</b><span>£${b.price}</span>${b.tag ? `<em>${b.tag}</em>` : ''}</button>`).join('');
@@ -111,6 +92,7 @@
         </div>
       </div>
       <div class="loot__report" data-report hidden></div>
+      <p class="loot__credit">Item icons by Delapouite, Lorc, and Caro Asercion from <a href="https://game-icons.net">game-icons.net</a>, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
     </div>`;
 
   const $ = (s) => root.querySelector(s);
@@ -144,7 +126,7 @@
     const [name, from, icon] = list[Math.floor(Math.random() * list.length)];
     return { name, from, icon, rar };
   }
-  const card = (c) => `<div class="reel__card" style="--rc:${c.rar.col}">${svg(c.icon)}<b>${c.name}</b><span>${c.from}</span></div>`;
+  const card = (c) => `<div class="reel__card" style="--rc:${c.rar.col}"><i class="reel__icon" style="-webkit-mask-image:url(assets/games/loot-icons/${c.icon}.svg);mask-image:url(assets/games/loot-icons/${c.icon}.svg)"></i><b>${c.name}</b><span>${c.from}</span></div>`;
 
   function fill(win, rig = true) {
     const fixed = new Map([[WIN, win]]);
