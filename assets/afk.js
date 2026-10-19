@@ -7,35 +7,39 @@
   // What the AI thinks. Edit freely: lines are picked at random, and none repeats until its whole list has been used.
   // PROJECT keys are the page names the cards link to (gerbertgames.html -> gerbertgames).
   const THOUGHTS = {
-    hero: ['Who’s this then?', 'Jack Slaski, gameplay and systems designer. Let’s have a look around.', 'This website looks pretty good so far.'],
-    stats: ['An MSc with Distinction? He’s clearly qualified.', 'Four years of experience in UE5 is pretty decent.', 'A First and a Distinction, he must have worked hard.', 'Thirteen games and tools? He’s been busy.'],
-    profile: ['Those grades are actually really good.', 'He looks pretty professional in that graduation photo.', 'Seems like a nice guy to be fair.'],
-    log: ['He was running his own game servers at sixteen? That’s impressive.', 'A quest log instead of a timeline is a nice touch.', 'His next quest is getting a job. Maybe I can help with that.'],
+    hero: ['Who’s this then?', 'Let’s have a look at what Jack Slaski has been up to.', 'This website looks pretty good so far.'],
+    stats: ['An MSc with a Distinction means he clearly knows his stuff.', 'Four years of experience in UE5 is pretty decent.', 'A First and a Distinction, he must have worked hard for those.', 'Thirteen games and tools is a lot of work.'],
+    profile: ['Those grades are actually really good.', 'He looks pretty professional in that graduation photo.', 'He seems like a nice guy to be fair.'],
+    log: ['Running his own game servers at sixteen is pretty impressive.', 'A quest log instead of a timeline is a nice touch.', 'His next quest is getting a job, and maybe I can help with that.'],
     contact: ['Seems pretty good, I should email him.', 'I think I’m going to hire him.', 'He’d be a good fit for the team to be fair.'],
+    again: ['Actually, let me have another look at this one.', 'I want to see this one again.', 'I keep coming back to this one.'],
+    // for any project, including tools and research
     project: [
       'That’s decent.',
       'This one looks pretty good.',
-      'I’d actually play this.',
       'That looks like a lot of work.',
       'This looks really polished.',
       'I like the look of this one.',
       'How did he find the time for all of these?',
       'Okay, this one’s really cool.',
     ],
+    // only for things you can actually play
+    game: ['I’d actually play this.', 'This looks like a lot of fun.', 'I’d like a go on this one.'],
   };
+  const TOOLS = new Set(['cavegen', 'uishow', 'uidiss', 'lootbox']);   // not games, so no "I'd play this"
   const PROJECT = {
-    recoilworks: ['Building your own gun from parts sounds really fun.', 'Every part changes how the gun fires? That’s clever.'],
-    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'He made this on his own in eight weeks and came second at GradEx? Impressive.'],
+    recoilworks: ['Building your own gun from parts sounds really fun.', 'Having every part change how the gun fires is really clever.'],
+    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'Making this alone in eight weeks and coming second at GradEx is impressive.'],
     gerbertgames: ['What on earth is a Gerbert?', 'Four players fighting over tiles above a black hole sounds chaotic.'],
-    lggame: ['Pirate ships fighting a sea monster? I’m sold.', 'Keeping 29 people’s work together on one game can’t have been easy.'],
+    lggame: ['I’d happily play a game about pirate ships fighting a sea monster.', 'Keeping 29 people’s work together on one game can’t have been easy.'],
     wmgame: ['A wizard against a whole world of slimes is a classic.', 'He made all the UI and effects for this one, and they look great.'],
     armsandassets: ['Procedural guns and a grid inventory remind me of Garry’s Mod.', 'Slotting gems into weapons is a cool idea.'],
     dykbgame: ['Football trivia where you shoot penalties at the right answer is a great idea.', 'I’d probably score more own goals than right answers.'],
     formandflask: ['A potion factory sounds like a brewery for wizards.', 'Automating a whole potion factory looks really satisfying.'],
-    cavegen: ['He can write C++ as well? Now he’s just showing off.', 'I definitely know what cellular automata means. Definitely.'],
+    cavegen: ['He can write C++ as well? Now he’s just showing off.', 'Cellular automata sounds clever, so I’ll pretend I know what it means.'],
     survivorslike: ['Bouncing bullets and big explosions are my kind of game.', 'There’s a lot of screen shake in this one, and it feels great.'],
-    uishow: ['Someone really likes making menus.', 'A shop, an inventory, and a minimap all in one UI? He’s been busy.'],
-    uidiss: ['A whole dissertation on minimalist UI, so less really is more.', 'Research into immersion sounds pretty interesting.'],
+    uishow: ['Someone really likes making menus.', 'A shop, an inventory, and a minimap all in one UI must have taken ages.'],
+    uidiss: ['A whole dissertation on minimalist UI, so less really is more.', 'Research into how UI affects immersion is actually really interesting.'],
     lootbox: ['Loot box research? Is there a case I can open? Oh, there is.', 'Researching loot box ethics is pretty responsible of him.'],
   };
   const ENDING = ['Honestly, I should just email him.', 'Still here? I’ll have another look around.'];
@@ -87,7 +91,6 @@
     if (reduced || Math.abs(y1 - y0) < 4) return Promise.resolve();
     return animate(dur || Math.min(3200, 1100 + Math.abs(y1 - y0) * 0.9), my, (e) => scrollTo({ top: y0 + (y1 - y0) * e, behavior: 'instant' }));
   }
-  const centre = (el, my) => { const r = el.getBoundingClientRect(); return scrollToY(scrollY + r.top + r.height / 2 - innerHeight / 2, my); };
 
   function place(x, y) {
     pos = [x, y];
@@ -104,27 +107,50 @@
       place(u * u * x0 + 2 * u * e * cx + e * e * x, u * u * y0 + 2 * u * e * cy + e * e * y);
     });
   }
-  const spot = (el) => {
+  // a point inside the element, shifted by how far the page is about to scroll
+  const spot = (el, dy = 0) => {
     const r = el.getBoundingClientRect();
-    return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top + Math.min(r.height * rand(0.2, 0.55), 240))];
+    return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top - dy + Math.min(r.height * rand(0.2, 0.55), 240))];
   };
+  // go to the next thing: only scroll if it isn't already in view, and move the cursor while the page scrolls
+  async function visit(el, my) {
+    const r = el.getBoundingClientRect(), max = document.documentElement.scrollHeight - innerHeight;
+    const inView = r.top >= 96 && r.top + Math.min(r.height, 260) <= innerHeight - 48;
+    const dy = inView || reduced ? 0 : Math.max(0, Math.min(max, scrollY + r.top + Math.min(r.height, 420) / 2 - innerHeight / 2)) - scrollY;
+    const [x, y] = spot(el, dy);
+    if (Math.abs(dy) < 4) return moveTo(x, y, my);
+    const dur = Math.min(3200, 1100 + Math.abs(dy) * 0.9);
+    await Promise.all([
+      scrollToY(scrollY + dy, my, dur),
+      wait(rand(0, dur * 0.45), my).then(() => moveTo(x, y, my, rand(dur * 0.6, dur * 0.95))),
+    ]);
+  }
   function say(text) {
     thought.textContent = text;
     thought.classList.toggle('is-on', !!text);
   }
   const slug = (el) => (el.querySelector('a[href$=".html"]')?.getAttribute('href') || '').replace('.html', '');
 
+  const linesFor = (el) => {
+    const id = slug(el);
+    if (PROJECT[id] && Math.random() < 0.7) return PROJECT[id];
+    return TOOLS.has(id) ? THOUGHTS.project : [...THOUGHTS.project, ...THOUGHTS.game];
+  };
+  // the route changes every lap: random cards, sometimes out of order, and sometimes a look back up
   function beats() {
+    const top = (el) => el.getBoundingClientRect().top + scrollY;
     const cards = [...document.querySelectorAll('.card')].filter((c) => !c.hidden).sort(() => Math.random() - 0.5).slice(0, 4)
-      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top || a.getBoundingClientRect().left - b.getBoundingClientRect().left);
-    return [
+      .sort((a, b) => top(a) - top(b) || a.getBoundingClientRect().left - b.getBoundingClientRect().left);
+    if (Math.random() < 0.5) { const i = Math.floor(rand(1, cards.length)); [cards[i - 1], cards[i]] = [cards[i], cards[i - 1]]; }
+    const features = [...document.querySelectorAll('.feature')];
+    const route = [
       ['.hero__name', THOUGHTS.hero],
       ['.stats', THOUGHTS.stats],
-      ...[...document.querySelectorAll('.feature')].map((f) => [f, PROJECT[slug(f)] || THOUGHTS.project]),
-      ...cards.map((c) => [c, Math.random() < 0.7 && PROJECT[slug(c)] ? PROJECT[slug(c)] : THOUGHTS.project]),
-      ['.profile', THOUGHTS.profile],
-      ['.log', THOUGHTS.log],
+      ...features.map((f) => [f, linesFor(f)]),
+      ...cards.map((c) => [c, linesFor(c)]),
     ];
+    if (Math.random() < 0.5) route.push([features[Math.floor(Math.random() * features.length)], THOUGHTS.again]);
+    return [...route, ['.profile', THOUGHTS.profile], ['.log', THOUGHTS.log]];
   }
 
   async function tour(my) {
@@ -134,9 +160,7 @@
         const el = typeof target === 'string' ? document.querySelector(target) : target;
         if (!el) continue;
         say('');
-        await centre(el, my);
-        await wait(rand(300, 700), my);
-        await moveTo(...spot(el), my);
+        await visit(el, my);
         el.classList.add('is-afk-hover');
         say(any(lines));
         await wait(rand(3600, 5200), my);
@@ -146,8 +170,7 @@
       const email = document.querySelector('.contact__actions .btn');
       if (email) {
         say('');
-        await centre(email, my);
-        await moveTo(...spot(email), my);
+        await visit(email, my);
         email.classList.add('is-afk-hover');
         say(any(THOUGHTS.contact));
         await wait(15000, my);
