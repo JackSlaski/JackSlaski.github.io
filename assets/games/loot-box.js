@@ -62,7 +62,7 @@
           <button class="btn" type="button" data-open></button>
           <button type="button" data-done>I’m done</button>
         </div>
-        <div class="loot__shop" data-shop><span class="loot__label">Top up</span>${bundles}</div>
+        <div class="loot__shop" data-shop><span class="loot__label">Top up</span>${bundles}<p class="loot__fake">Pretend prices. No real money is ever taken.</p></div>
         <div class="loot__buy" data-buy>
           <div class="loot__buyrow">
             <span class="loot__label">Buy cases</span>
@@ -76,12 +76,14 @@
           </div>
           <div class="loot__limit"><span data-limit-text></span><i data-limit-bar></i></div>
           <p class="loot__tag">18+ · In-game purchases (includes random items)</p>
+          <p class="loot__fake">Pretend prices. No real money is ever taken.</p>
         </div>
         <div class="loot__haul" data-haul></div>
         <div class="loot__pop" data-pop hidden>
           <p class="loot__guilt-title" data-pop-title></p>
           <p data-pop-text></p>
           <div class="loot__popshop">${bundles}</div>
+          <p class="loot__fake">Pretend prices. No real money is ever taken.</p>
           <button class="loot__done" type="button" data-pop-close>Not now</button>
         </div>
         <div class="loot__guilt" data-guilt hidden>
@@ -128,11 +130,11 @@
   }
   const card = (c) => `<div class="reel__card" style="--rc:${c.rar.col}"><i class="reel__icon" style="-webkit-mask-image:url(assets/games/loot-icons/${c.icon}.svg);mask-image:url(assets/games/loot-icons/${c.icon}.svg)"></i><b>${c.name}</b><span>${c.from}</span></div>`;
 
-  function fill(win, rig = true) {
+  function fill(win, rig = true, hook = false) {
     const fixed = new Map([[WIN, win]]);
     let side = 0, bait = null;
-    if (rig && !ethical && Math.random() < NEAR) {   // rigged: park something better right next to the marker
-      const target = Math.random() < 0.35 ? GOLD : LEGEND;
+    if (rig && !ethical && (hook || Math.random() < NEAR)) {   // rigged: park something better right next to the marker
+      const target = hook || Math.random() < 0.35 ? GOLD : LEGEND;
       if (RARITY.indexOf(win.rar) < RARITY.indexOf(target)) {
         side = Math.random() < 0.5 ? 1 : -1;
         bait = pick(target);
@@ -222,11 +224,12 @@
   function spin() {
     if (spinning || (ethical ? owned < 1 : !free && gems < CASE)) return;
     spinning = true;
+    const hook = !ethical && free > 0;   // the free case always "nearly" wins gold
     if (ethical) owned--; else if (free) free--; else gems -= CASE;
     const during = eventOn();
     root.classList.remove('is-celebrate');
     status.textContent = 'Opening…';
-    const win = pick(rollWin(), ethical), { side, bait, gold, legend } = fill(win);
+    const win = pick(rollWin(), ethical), { side, bait, gold, legend } = fill(win, true, hook);
     if (!ethical) { goldSeen += gold; legendSeen += legend; }
     hud();
     const cards = strip.children, cw = cards[0].offsetWidth, step = cards[1].offsetLeft - cards[0].offsetLeft, mid = reel.clientWidth / 2;
@@ -348,13 +351,10 @@
         <h3>Here’s how it played you</h3>
         <div class="loot__stats">
           <div><b>${gbp(spent)}</b><span>Spent on gems</span></div>
-          <div><b>£0.00</b><span>Money you can get back</span></div>
+          <div><b>${money(worth)}</b><span>What your items are “worth”</span></div>
           <div><b>${near}</b><span>Rigged near misses</span></div>
           <div><b>${goldSeen + legendSeen}</b><span>Gold and legendary shown, ${goldWon + legendWon} won</span></div>
         </div>
-        <p class="loot__lede">${spent
-          ? `You spent ${gbp(spent)}. Your items are “worth” ${money(worth)} on paper, but there’s nowhere to sell them, so you got nothing back. Even where items can be sold, a case returns about ${Math.round((ev / CASE) * 100)}% of its price on average.`
-          : `Your free case got you items “worth” ${money(worth)} on paper, but you can’t sell them. Every case after it would have cost real money.`}</p>
         ${group('Hiding the real cost', [
           trick('Premium currency', `Every price was in gems and the wallet never showed money, so you never saw what a case really cost: about ${money(CASE)}.`),
           trick('A free first case', `The first one was free, then a pop-up pushed you to buy gems straight away${popups > 1 ? `. It came back ${plural(popups - 1, 'more time')} when you ran out` : ''}.`),
