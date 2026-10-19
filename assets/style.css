@@ -702,7 +702,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__pity b { font-weight: 500; color: #d32ce6; }
 .loot__status { min-height: 1.6em; text-align: center; color: #c9d0db; }
 .loot__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.75rem; }
-.btn small { font-family: var(--mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.04em; text-transform: none; opacity: 0.8; }
 .loot .btn:disabled { opacity: 0.4; cursor: not-allowed; filter: none; transform: none; }
 .loot__done { min-height: 2.75rem; padding: 0 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
 .loot__done:hover { color: var(--text); }
@@ -738,12 +737,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .haul__item em { font-family: var(--mono); font-size: 0.7rem; font-style: normal; color: var(--muted); }
 .haul__item em + em { color: #e4ae39; }
 
-.loot__guilt { position: absolute; inset: 0; z-index: 6; display: grid; place-content: center; justify-items: center; gap: 0.9rem; padding: 1.5rem; text-align: center; background: rgba(7, 10, 16, 0.9); }
+.loot__guilt, .loot__pop { position: absolute; inset: 0; z-index: 6; display: grid; place-content: center; justify-items: center; gap: 0.9rem; padding: 1.5rem; text-align: center; background: rgba(7, 10, 16, 0.9); }
 .loot__guilt-title { font-family: var(--display); font-weight: 800; font-size: clamp(2.4rem, 1.8rem + 3vw, 4rem); line-height: 1; text-transform: uppercase; }
-.loot__guilt p:not(.loot__guilt-title) { max-width: 28rem; color: #c9d0db; }
-.loot__guilt .loot__done { margin-left: 0; font-size: 0.68rem; }
+.loot__popshop { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; padding-top: 0.5rem; }
+.loot__guilt p:not(.loot__guilt-title), .loot__pop p:not(.loot__guilt-title) { max-width: 28rem; color: #c9d0db; }
+.loot__guilt .loot__done, .loot__pop .loot__done { font-size: 0.68rem; }
 
 .loot__report { display: grid; gap: 1.25rem; counter-reset: trick; }
+.loot__lede { max-width: 46rem; color: var(--text); font-size: 1.15rem; }
 .loot__group { display: grid; gap: 0.6rem; }
 .loot__report h3 { margin-top: -0.75rem; font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 1.6rem + 2.5vw, 3.4rem); line-height: 1; text-transform: uppercase; }
 .loot__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
@@ -757,7 +758,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .loot__tricks h4::before { content: counter(trick, decimal-leading-zero) " "; font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
 .is-ethical .loot__tricks h4::before { color: #3fd8e6; }
 .loot__tricks p { margin-top: 0.45rem; color: #c9d0db; font-size: 0.95rem; }
-.loot__tricks .loot__seen { color: var(--muted); font-size: 0.85rem; }
 .loot__end { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; }
 .loot__link { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
 .loot__link:hover { color: var(--text); }

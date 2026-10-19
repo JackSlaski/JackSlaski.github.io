@@ -265,7 +265,7 @@ PROJECTS = {
     how={'tools': ['Literature review', 'Content analysis'], 'ps': ['The literature review covered academic and industry research on gambling-like mechanics, psychological risk, player vulnerability, and regulation.', "The research portfolio then analysed modern games with loot box mechanics: how they're presented, priced, and designed to keep players engaged, from reward randomness and rarity to how open the odds are."]},
     play=dict(game="loot-box", title="Open a case", ps=[
         "I built this case opener from what I looked for in my research: how loot boxes are priced, presented, and designed to keep you opening.",
-        "You get 1,000 free gems to spend. There’s no real money anywhere on this page. Open ten cases, or stop whenever you like.",
+        "Your first case is free. There’s no real money anywhere on this page. Open ten cases, or stop whenever you like.",
     ]),
     docs=[("Literature review", "documents/lootboxreview.pdf"), ("Research report", "documents/lootboxreport.pdf")],
 ),

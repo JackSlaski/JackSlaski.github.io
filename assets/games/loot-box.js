@@ -5,7 +5,7 @@
   const root = document.querySelector('[data-game="loot-box"]');
   if (!root) return;
 
-  const CASE = 275, KEY = 249, START = 1000, MAX_CASES = 10, PRICE = 2.5, PITY = 10;
+  const CASE = 275, MAX_CASES = 10, PRICE = 2.5, PITY = 10;
   const LEN = 60, WIN = 52, NEAR = 0.5, OFFER = 60, COOLDOWN = 15, CHARGE = 750;   // reel, near-miss rate, event timings (s), build-up (ms)
   const BUNDLES = [   // none of these divide by 275, so there are always gems left over
     { gems: 1000, price: 9.99 },
@@ -58,6 +58,7 @@
   const svg = (k) => `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
   const GEM = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 9l3-5h8l3 5-7 11z"/></svg>';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bundles = BUNDLES.map((b, i) => `<button class="loot__bundle" type="button" data-bundle="${i}"><b>${num(b.gems)} gems</b><span>£${b.price}</span>${b.tag ? `<em>${b.tag}</em>` : ''}</button>`).join('');
 
   root.innerHTML = `
     <div class="loot">
@@ -80,7 +81,7 @@
           <button class="btn" type="button" data-open></button>
           <button type="button" data-done>I’m done</button>
         </div>
-        <div class="loot__shop" data-shop><span class="loot__label">Top up</span>${BUNDLES.map((b, i) => `<button class="loot__bundle" type="button" data-bundle="${i}"><b>${num(b.gems)} gems</b><span>£${b.price}</span>${b.tag ? `<em>${b.tag}</em>` : ''}</button>`).join('')}</div>
+        <div class="loot__shop" data-shop><span class="loot__label">Top up</span>${bundles}</div>
         <div class="loot__buy" data-buy>
           <div class="loot__buyrow">
             <span class="loot__label">Buy cases</span>
@@ -96,6 +97,12 @@
           <p class="loot__tag">18+ · In-game purchases (includes random items)</p>
         </div>
         <div class="loot__haul" data-haul></div>
+        <div class="loot__pop" data-pop hidden>
+          <p class="loot__guilt-title" data-pop-title></p>
+          <p data-pop-text></p>
+          <div class="loot__popshop">${bundles}</div>
+          <button class="loot__done" type="button" data-pop-close>Not now</button>
+        </div>
         <div class="loot__guilt" data-guilt hidden>
           <p class="loot__guilt-title">Leaving already?</p>
           <p data-guilt-text></p>
@@ -109,10 +116,10 @@
   const $ = (s) => root.querySelector(s);
   const strip = $('[data-strip]'), reel = $('.reel'), stage = $('[data-stage]'), banner = $('[data-banner]'), status = $('[data-status]'), odds = $('[data-odds]');
   const openBtn = $('[data-open]'), doneBtn = $('[data-done]'), infoBtn = $('[data-info]'), offerEl = $('[data-offer]');
-  const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), age = $('[data-age]'), guilt = $('[data-guilt]'), reportEl = $('[data-report]');
+  const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), age = $('[data-age]'), guilt = $('[data-guilt]'), pop = $('[data-pop]'), reportEl = $('[data-report]');
 
-  let ethical, gems, owned, bought, spent, topups, opened, nearGold, nearLegend, goldSeen, legendSeen, goldWon, dupes, commons, peeked, spinning;
-  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins;
+  let ethical, gems, free, owned, bought, spent, topups, opened, nearGold, nearLegend, goldSeen, legendSeen, goldWon, dupes, commons, peeked, spinning;
+  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins, popups;
   let ageOk = false, ageNo = false, bag = [];
 
   const weighted = (w) => {
@@ -140,14 +147,24 @@
   const card = (c) => `<div class="reel__card" style="--rc:${c.rar.col}">${svg(c.icon)}<b>${c.name}</b><span>${c.from}</span></div>`;
 
   function fill(win, rig = true) {
-    const cards = Array.from({ length: LEN }, (_, i) => (i === WIN ? win : pick(tease())));
+    const fixed = new Map([[WIN, win]]);
     let side = 0, bait = null;
     if (rig && !ethical && Math.random() < NEAR) {   // rigged: park something better right next to the marker
       const target = Math.random() < 0.35 ? GOLD : LEGEND;
       if (RARITY.indexOf(win.rar) < RARITY.indexOf(target)) {
         side = Math.random() < 0.5 ? 1 : -1;
-        bait = cards[WIN + side] = pick(target);
+        bait = pick(target);
+        fixed.set(WIN + side, bait);
       }
+    }
+    // filler never repeats the item right next to it
+    const cards = [];
+    for (let i = 0; i < LEN; i++) {
+      if (fixed.has(i)) { cards.push(fixed.get(i)); continue; }
+      const avoid = [cards[i - 1]?.name, fixed.get(i + 1)?.name];
+      let c;
+      do c = pick(tease()); while (avoid.includes(c.name));
+      cards.push(c);
     }
     strip.innerHTML = cards.map(card).join('');
     const passed = cards.slice(0, WIN + 4);
@@ -189,12 +206,12 @@
     } else {
       $('[data-wallet-label]').textContent = 'Wallet';
       $('[data-wallet]').textContent = num(gems);
-      $('[data-wallet-sub]').textContent = 'gems';
-      openBtn.innerHTML = `Open case · ${KEY} gems <small>+ ${CASE - KEY} case fee</small>`;   // split pricing: the 275 total never appears
-      openBtn.disabled = spinning || gems < CASE || opened >= MAX_CASES;
-      root.querySelectorAll('[data-bundle]').forEach((b, i) => {
+      $('[data-wallet-sub]').textContent = free ? 'gems · 1 free case' : 'gems';
+      openBtn.textContent = free ? 'Open your free case' : `Open case · ${CASE} gems`;
+      openBtn.disabled = spinning || (!free && gems < CASE) || opened >= MAX_CASES;
+      root.querySelectorAll('[data-bundle]').forEach((b) => {
         b.disabled = spinning || opened >= MAX_CASES;
-        b.classList.toggle('is-pulse', i === 1 && gems < CASE && opened < MAX_CASES);
+        b.classList.toggle('is-pulse', b.dataset.bundle === '1' && !free && gems < CASE && opened < MAX_CASES);
       });
       renderOffer();
       doneBtn.hidden = opened === 0;
@@ -221,9 +238,9 @@
   }
 
   function spin() {
-    if (spinning || (ethical ? owned < 1 : gems < CASE)) return;
+    if (spinning || (ethical ? owned < 1 : !free && gems < CASE)) return;
     spinning = true;
-    if (ethical) owned--; else gems -= CASE;
+    if (ethical) owned--; else if (free) free--; else gems -= CASE;
     const during = eventOn();
     root.classList.remove('is-celebrate');
     status.textContent = 'Opening…';
@@ -277,6 +294,19 @@
     renderHaul();
     hud();
     if (ethical ? !room() && !owned : opened >= MAX_CASES) setTimeout(report, reduced ? 300 : 1800);
+    else if (!ethical && gems < CASE) setTimeout(shopPop, reduced ? 300 : 1400);
+  }
+
+  // the free first case is the hook: as soon as you can't afford another, a shop pops up
+  function shopPop() {
+    if (spinning || !reportEl.hidden || !guilt.hidden) return;
+    popups++;
+    $('[data-pop-title]').textContent = popups === 1 ? 'Want another go?' : 'Out of gems';
+    $('[data-pop-text]').textContent = popups === 1
+      ? 'Your first case was on us. Grab some gems to keep opening.'
+      : 'You’re on a roll. Top up now and keep it going.';
+    pop.hidden = false;
+    pop.querySelector('[data-bundle="1"]').focus();
   }
 
   const haulValue = () => [...haul.values()].reduce((s, i) => s + i.rar.value * i.n, 0);
@@ -290,11 +320,12 @@
     $('[data-haul]').innerHTML = head + items.map((i) => `<span class="haul__item" style="--rc:${i.rar.col}">${i.name}${i.n > 1 ? ` <em>×${i.n}</em>` : ''}${ethical ? '' : ` <em>${num(i.rar.value)}</em>`}</span>`).join('');
   }
 
-  const trick = (title, body, note) => `<li><h4>${title}</h4><p>${body}</p>${note ? `<p class="loot__seen">${note}</p>` : ''}</li>`;
+  const trick = (title, body) => `<li><h4>${title}</h4><p>${body}</p></li>`;
   const group = (title, items) => `<div class="loot__group"><p class="loot__label">${title}</p><ol class="loot__tricks">${items.join('')}</ol></div>`;
 
   function report() {
     guilt.hidden = true;
+    pop.hidden = true;
     $('[data-machine]').hidden = true;
     reportEl.hidden = false;
     if (ethical) {
@@ -308,59 +339,63 @@
           <div><b>${best ? best.rar.name : 'None'}</b><span>Best pull${best ? `: ${best.name}` : ''}</span></div>
         </div>
         ${group('Clear costs', [
-          trick('Real prices', `One price in pounds: ${gbp(PRICE)} a case. No currency, no case and key split, and no bundles.`, 'In my research: most games I analysed priced loot boxes in their own currency, so players had to work out the real cost.'),
-          trick('Buy what you need', 'You bought exactly the cases you wanted, and nothing was left over.', 'In my research: currency often only came in set amounts, so players had to buy more than they needed.'),
-          trick('A spending limit', `A ${gbp(PRICE * MAX_CASES)} session limit, with what you’ve spent always on screen.`, 'In my research: the biggest harm showed up in heavy spenders, who reported the most distress (Drummond et al., 2022).'),
+          trick('Real prices', `One price in pounds: ${gbp(PRICE)} a case. No currency and no bundles.`),
+          trick('Buy what you need', 'You bought exactly the cases you wanted, and nothing was left over.'),
+          trick('A spending limit', `A ${gbp(PRICE * MAX_CASES)} session limit, with what you’ve spent always on screen.`),
           trick('Easy to leave', 'The “I’m done” button is as big as the one to open a case, and one click takes you straight out.'),
         ])}
         ${group('Honest odds', [
-          trick('Every item’s odds', 'Each item showed its own drop chance, right under the reel.', 'In my research: odds were missing, optional, on a separate website, or only given by rarity. Disclosure only helps if it’s clear (Xiao et al., 2021).'),
+          trick('Every item’s odds', 'Each item showed its own drop chance, right under the reel.'),
           trick('An honest reel', 'No build-up, no near misses, and the reel shows items at their real odds. It spins fast too, so there’s less suspense.'),
           trick('A pity guarantee', `Epic or better within ${PITY} cases, so bad luck can only cost you so much.`),
           trick('Duplicate protection', 'No duplicates until you own every item in that rarity.'),
         ])}
         ${group('No pressure', [
-          trick('No timers or fake winners', 'No limited time events, live feeds, collection bars, or guilt trips.', 'In my research: King and Delfabbro (2018) call limited time offers and daily rewards predatory when young players see them.'),
+          trick('No timers or fake winners', 'No limited time events, live feeds, pop-ups, collection bars, or guilt trips.'),
           trick('Calm results', 'Only Legendary and Golden pulls get a celebration, and nothing shows a “market value” to make it look like profit.'),
-          trick('An age check and a label', 'Buying asks if you’re 18 or over, and the shop carries PEGI’s “In-game purchases (includes random items)” label.', 'In my research: loot boxes often sit in games with low age ratings, and one store needs no age check to buy.'),
-          trick('Cosmetic only', 'Nothing you can buy makes you stronger, so paying never means winning.', 'In my research: the one game that removed paid crates after a backlash became far less ethically concerning.'),
+          trick('An age check and a label', 'Buying asks if you’re 18 or over, and the shop carries the “In-game purchases (includes random items)” label.'),
+          trick('Cosmetic only', 'Nothing you can buy makes you stronger, so paying never means winning.'),
         ])}
         <div class="loot__end"><button class="btn" type="button" data-restart>Play the original again</button><a class="loot__link" href="documents/lootboxreport.pdf">Read the full report</a></div>`;
     } else {
-      const worth = money(opened * CASE), near = nearGold + nearLegend;
+      const near = nearGold + nearLegend, worth = haulValue();
       const ev = RARITY.reduce((s, r) => s + (r.odds / 100) * r.value, 0);
+      const legendWon = [...haul.values()].filter((i) => i.rar === LEGEND).reduce((s, i) => s + i.n, 0);
       reportEl.innerHTML = `
         <span class="loot__label">Behind the curtain</span>
         <h3>Here’s how it played you</h3>
         <div class="loot__stats">
-          <div><b>${opened}</b><span>Cases, worth ${worth}</span></div>
-          <div><b>${gbp(spent)}</b><span>Topped up (${plural(topups, 'time')})</span></div>
+          <div><b>${gbp(spent)}</b><span>Spent on gems</span></div>
+          <div><b>£0.00</b><span>Money you can get back</span></div>
           <div><b>${near}</b><span>Rigged near misses</span></div>
-          <div><b>${goldSeen + legendSeen}</b><span>Gold and legendary shown, ${goldWon + [...haul.values()].filter((i) => i.rar === LEGEND).reduce((s, i) => s + i.n, 0)} won</span></div>
+          <div><b>${goldSeen + legendSeen}</b><span>Gold and legendary shown, ${goldWon + legendWon} won</span></div>
         </div>
+        <p class="loot__lede">${spent
+          ? `You spent ${gbp(spent)}. Your items are “worth” ${money(worth)} on paper, but there’s nowhere to sell them, so you got nothing back. Even where items can be sold, a case returns about ${Math.round((ev / CASE) * 100)}% of its price on average.`
+          : `Your free case got you items “worth” ${money(worth)} on paper, but you can’t sell them. Every case after it would have cost real money.`}</p>
         ${group('Hiding the real cost', [
-          trick('Premium currency', `Every price was in gems, and the wallet never showed money, so you never saw what a case really cost: about ${money(CASE)}. You opened ${worth} of cases.`, 'In my research: most games I analysed priced loot boxes in their own currency, and one keeps your balance in a wallet that doesn’t feel like real money.'),
-          trick('Split pricing', `The button said ${KEY} gems plus a ${CASE - KEY} gem case fee. The real total, ${CASE}, never appeared anywhere.`, 'In my research: one game splits the price between the case and a key you buy separately.'),
-          trick('Gems left over', `None of the bundles divide by ${CASE}, so there’s always some left: close to another case, never quite there. You finished with ${num(gems)} gems.`, 'In my research: currency often came in set amounts that left players just short of the next box.'),
-          trick('Bigger bundles', `Bigger bundles give more gems per pound (100, then 140, then 150), and the £49.99 one makes £19.99 feel small. You spent ${gbp(spent)}.`, 'In my research: spending was filtered through bundles, currencies, and sales. Beyond my report, this is anchoring.'),
+          trick('Premium currency', `Every price was in gems and the wallet never showed money, so you never saw what a case really cost: about ${money(CASE)}.`),
+          trick('A free first case', `The first one was free, then a pop-up pushed you to buy gems straight away${popups > 1 ? `. It came back ${plural(popups - 1, 'more time')} when you ran out` : ''}.`),
+          trick('Gems left over', `None of the bundles divide by ${CASE}, so there’s always some left: close to another case, never quite there. You finished with ${num(gems)} gems.`),
+          trick('Bigger bundles', `Bigger bundles give more gems per pound (100, then 140, then 150), and the £49.99 one makes £19.99 feel small. You bought ${plural(topups, 'bundle')}.`),
         ])}
         ${group('Making it feel like gambling', [
-          trick('Suspense', 'The case shook and built up before every spin, then the reel took over five seconds and crawled to a stop while the ticks slowed down.', 'In my research: every game with paid loot boxes used suspense and flashy reveals, like showing the rarity colour before the item.'),
-          trick('Near misses', `The reel stopped right next to something better ${plural(near, 'time')} on purpose: ${nearGold} Golden and ${nearLegend} Legendary.`, 'In my research: roulette-style reels show you exactly what you nearly won.'),
-          trick('A teaser reel', `${plural(goldSeen, 'Golden item')} and ${plural(legendSeen, 'Legendary item')} scrolled past you. Gold really drops 0.26% of the time, about 1 in 385, so the jackpot only looks close.`, 'Beyond my report: random rewards on an unpredictable schedule are the most habit-forming kind (variable ratio reinforcement).'),
-          trick('“Market values”', `Your items were “worth” ${num(haulValue())} gems, so a big pull looks like profit. On average a case gives back ${Math.round(ev)} gems of value for ${CASE}, about ${Math.round((ev / CASE) * 100)}%.`, 'In my research: when items can be sold, opening boxes looks potentially profitable, just like gambling.'),
+          trick('Suspense', 'The case shook and built up before every spin, then the reel took over five seconds and crawled to a stop while the ticks slowed down.'),
+          trick('Near misses', `The reel stopped right next to something better ${plural(near, 'time')} on purpose: ${nearGold} Golden and ${nearLegend} Legendary.`),
+          trick('A teaser reel', `${plural(goldSeen, 'Golden item')} and ${plural(legendSeen, 'Legendary item')} scrolled past you. Gold really drops 0.26% of the time, about 1 in 385, so the jackpot only looks close.`),
+          trick('“Market values”', `Your items were “worth” ${num(worth)} gems, so a big pull looks like profit. You can’t sell them, and even if you could, a case gives back ${Math.round(ev)} gems of value for ${CASE} on average, about ${Math.round((ev / CASE) * 100)}%. The house keeps the rest.`),
         ])}
         ${group('Keeping you opening', [
-          trick('A limited time event', `The 2× Golden Gerbert chance was real, but the timer was there to rush you. It ended and came back “by popular demand” ${plural(offer.returns, 'time')}${eventWins ? `, and you won ${plural(eventWins, 'Golden Gerbert')} during it` : ''}.`, 'In my research: limited time offers, events, and daily deals were everywhere, and King and Delfabbro (2018) call them predatory when young players see them.'),
-          trick('Fake winners', `${plural(fakeWins, '“player”')} unboxed gold or legendary items while you played. None of them exist, but they make big prizes look common.`, 'Beyond my report: this is social proof, and it’s common on case-opening websites.'),
-          trick('Celebrate everything', `Every pull got bright colours, a flash, and a jingle, including ${plural(commons, 'common')} worth 40 gems from a 275 gem case and ${plural(dupes, 'duplicate')}.`, 'In my research: the bigger the pack, the bigger the celebration. Beyond my report, slot machine research calls this a loss disguised as a win.'),
-          trick('Collection chasing', `A bar showed ${haul.size} of ${TOTAL_ITEMS} items collected, so stopping feels like leaving it unfinished.`, 'In my research: chasing rarities and the next level was a big reason to keep opening. Beyond my report, this is the sunk cost effect.'),
+          trick('A limited time event', `The 2× Golden Gerbert chance was real, but the timer was there to rush you. It ended and came back “by popular demand” ${plural(offer.returns, 'time')}${eventWins ? `, and you won ${plural(eventWins, 'Golden Gerbert')} during it` : ''}.`),
+          trick('Fake winners', `${plural(fakeWins, 'fake player')} unboxed gold or legendary items while you played. None of them exist, but they make big prizes look common.`),
+          trick('Celebrate everything', `Every pull got bright colours, a flash, and a jingle, including ${plural(commons, 'common')} worth 40 gems from a 275 gem case and ${plural(dupes, 'duplicate')}. That’s a loss dressed up as a win.`),
+          trick('Collection chasing', `A bar showed ${haul.size} of ${TOTAL_ITEMS} items collected, so stopping feels like leaving it unfinished.`),
         ])}
         ${group('What it hides, and who it reaches', [
-          trick('Hidden odds', `${peeked ? 'You found the drop rates behind the tiny “i”. Most people never do.' : 'The drop rates were behind a tiny “i” next to the reel. You never opened it.'} Even then, they only showed rarities, not items.`, 'In my research: odds were missing, optional, on a separate website, or only given by rarity. Disclosure alone isn’t enough (Xiao et al., 2021).'),
-          trick('Hard to leave', `Opening took one click. Leaving meant finding a small grey link, then ${guilted ? 'getting' : 'you’d get'} a guilt trip saying your luck was “due”. Luck is never due: every case has the same odds.`, 'Beyond my report: confirmshaming, a dark pattern, plus the gambler’s fallacy.'),
-          trick('No age check', 'This page never asked how old you are, and nothing warned you that you were paying for random items.', 'In my research: loot boxes often sit in games with low age ratings or free on phones, and early exposure may normalise gambling (Zendle et al., 2020).'),
-          trick('Pay to win', 'These items are only cosmetic. The worst version sells power instead, so paying more means winning more.', 'In my research: one game’s crates sold major progression boosts at launch and were only removed after a huge backlash. Cosmetic boxes are still linked to problem gambling (Zendle et al., 2020).'),
+          trick('Hidden odds', `${peeked ? 'You found the drop rates behind the tiny “i”. Most people never do.' : 'The drop rates were behind a tiny “i” next to the reel. You never opened it.'} Even then, they only showed rarities, not items.`),
+          trick('Hard to leave', `Opening took one click. Leaving meant finding a small grey link, then ${guilted ? 'getting' : 'you’d get'} a guilt trip saying your luck was “due”. Luck is never due: every case has the same odds.`),
+          trick('No age check', 'This page never asked how old you are, and nothing warned you that you were paying for random items.'),
+          trick('Pay to win', 'These items are only cosmetic. The worst version sells power, so paying more means winning more. Even cosmetic boxes are linked to problem gambling.'),
         ])}
         <div class="loot__end"><button class="btn" type="button" data-ethical>Replay in Ethical mode</button><button class="btn btn--ghost" type="button" data-restart>Start over</button><a class="loot__link" href="documents/lootboxreport.pdf">Read the full report</a></div>`;
       window.secrets?.unlock('house');
@@ -372,7 +407,7 @@
 
   function start(eth) {
     ethical = eth;
-    gems = START; owned = 0; bought = 0; spent = 0; topups = 0; opened = 0; nearGold = 0; nearLegend = 0; goldSeen = 0; legendSeen = 0;
+    gems = 0; free = 1; popups = 0; owned = 0; bought = 0; spent = 0; topups = 0; opened = 0; nearGold = 0; nearLegend = 0; goldSeen = 0; legendSeen = 0;
     goldWon = 0; dupes = 0; commons = 0; peeked = false; spinning = false; sinceEpic = 0; best = null; fakeWins = 0; guilted = false; eventWins = 0;
     haul = new Map();
     offer = { phase: 'live', t: 45 + Math.floor(Math.random() * 30), returns: 0 };
@@ -382,6 +417,7 @@
     $('[data-machine]').hidden = false;
     reportEl.hidden = true;
     guilt.hidden = true;
+    pop.hidden = true;
     age.hidden = true;
     for (const [sel, show] of [['[data-offer]', !eth], ['[data-feed]', !eth], ['[data-shop]', !eth], ['[data-buy]', eth], ['[data-pity]', eth]]) $(sel).hidden = !show;
     doneBtn.className = eth ? 'btn' : 'loot__done';
@@ -392,7 +428,7 @@
     odds.hidden = !eth;
     infoBtn.setAttribute('aria-expanded', 'false');
     qty.value = 1;
-    status.textContent = eth ? `Ethical mode: buy exactly the cases you want at ${gbp(PRICE)} each.` : 'You’ve got 1,000 free gems. Open a case to see what you get.';
+    status.textContent = eth ? `Ethical mode: buy exactly the cases you want at ${gbp(PRICE)} each.` : 'Your first case is free. Open it to see what you get.';
     fill(pick(weighted(RARITY.map((r) => r.odds))), false);
     const c = strip.children;
     strip.style.transform = `translateX(${reel.clientWidth / 2 - (4 * (c[1].offsetLeft - c[0].offsetLeft) + c[0].offsetWidth / 2)}px)`;
@@ -415,6 +451,7 @@
     const bundle = BUNDLES[b.dataset.bundle];
     gems += bundle.gems; spent += bundle.price; topups++;
     status.textContent = `+${num(bundle.gems)} gems added.`;
+    pop.hidden = true;
     hud();
   }));
   buyBtn.addEventListener('click', buy);
@@ -435,6 +472,7 @@
     guilt.hidden = false;
     $('[data-stay]').focus();
   });
+  $('[data-pop-close]').addEventListener('click', () => { pop.hidden = true; });
   $('[data-stay]').addEventListener('click', () => { guilt.hidden = true; openBtn.focus(); });
   $('[data-leave]').addEventListener('click', report);
   infoBtn.addEventListener('click', () => {
