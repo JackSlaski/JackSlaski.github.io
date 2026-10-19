@@ -29,7 +29,7 @@
     rare: [['Extended Mag', 'Recoil Works', 'machine-gun-magazine'], ['Oak Table', 'Feudal Living', 'table'], ['Ship Cannon', 'Leviathan’s Gauntlet', 'pirate-cannon'], ['Copper Cauldron', 'Formula and Flask', 'cauldron'], ['Referee Whistle', 'Do You Know Ball?', 'whistle']],
     epic: [['Gem Slot', 'Arms & Assets', 'gems'], ['Wizard Hat', 'Wild Magic', 'pointy-hat'], ['Spaceship Cursor', 'Gerbert Games', 'spaceship'], ['Shockwave', 'Survivors Like', 'sonic-boom']],
     legend: [['Explosive Rounds', 'Recoil Works', 'heavy-bullets'], ['Leviathan Fang', 'Leviathan’s Gauntlet', 'bestial-fangs'], ['Raise Hell', 'Survivors Like', 'fire-ring']],
-    gold: [['Golden Gerbert', 'Gerbert Games', 'slime']],
+    gold: [['Golden Gerbert', 'Gerbert Games', 'alien-stare']],
   };
   const TOTAL_ITEMS = Object.values(ITEMS).flat().length;
   const NAMES = ['NoScopeNan', 'Kai77', 'DanRP', 'TurboTom', 'SweatyPalms', 'BigChungus99', 'MrSprinkles', 'GhostFace21', 'NotAFreeKill', 'SilentSam',
