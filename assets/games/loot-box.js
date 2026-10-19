@@ -480,7 +480,7 @@
     if (--feedIn <= 0) { feed(); feedIn = 4 + Math.floor(Math.random() * 4); }
   }, 1000);
 
-  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  // debug build cheats (see assets/debug.js).
   window.cheats = Object.assign(window.cheats || {}, {
     givegems: { help: 'givegems <n>: add free gems', args: ['1000', '5000', '10000'], run: (n) => {
       if (ethical) return 'Ethical mode has no gems. Go back to the original.';

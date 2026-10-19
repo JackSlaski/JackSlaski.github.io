@@ -76,7 +76,8 @@
 
   let idle = 0, running = false, gen = 0, ui = null, cursor = null, thought = null, pos = [0, 0], frames = new Set(), start = null;
 
-  const eligible = () => !running && document.visibilityState === 'visible' && !document.querySelector('dialog[open]');
+  const switchedOff = () => { try { return localStorage.getItem('jackslaski-afk') === 'off'; } catch { return false; } };   // "ai off" in the debug console
+  const eligible = () => !running && !switchedOff() && document.visibilityState === 'visible' && !document.querySelector('dialog[open]');
   function arm() {
     clearTimeout(idle);
     idle = setTimeout(() => { if (eligible()) takeover(); else arm(); }, IDLE);
@@ -275,4 +276,7 @@
   addEventListener('scroll', () => { if (!running) arm(); }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (!running) arm(); });
   arm();
+  // "ai takeover" in the debug console starts it straight away
+  window.afk = { start: () => { if (!running) takeover(); } };
+  if (new URLSearchParams(location.search).has('takeover')) setTimeout(window.afk.start, 2500);
 })();

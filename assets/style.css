@@ -887,4 +887,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .is-console .dbg-mark { bottom: calc(min(40vh, 22rem) + 0.75rem); }
 .is-console .trophy { bottom: calc(min(40vh, 22rem) + 1.25rem); }
 .is-bounds body *:not(.dbg-console, .dbg-console *, .dbg-mark, .dbg-mark *) { outline: 1px solid rgba(63, 216, 230, 0.35) !important; outline-offset: -1px; }
+.is-noclip body { transform: translateY(110vh) rotate(6deg); transition: transform 0.9s cubic-bezier(0.55, 0, 1, 0.45); }
+.is-bighead h1, .is-bighead h2, .is-bighead h3 { transform: scale(1.35); transform-origin: left center; }
+.is-bighead .profile__photo img, .is-bighead .card__media img { transform: scale(1.6); }
+.is-australia body { transform: rotate(180deg); }
+.is-comic body, .is-comic body * { font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive !important; }
 .cave__crystal.is-hint { outline: 2px solid #3fd8e6; outline-offset: 6px; border-radius: 50%; }

@@ -1,6 +1,6 @@
 // Debug build: the Konami code (or five quick taps on the JS logo on a phone) flips the site into an
 // Unreal-style development build, with a live stat overlay and an Output Log console that takes commands.
-// Games add their own cheats to window.cheats. Using a cheat switches achievements off until you reload.
+// Games add their own cheats to window.cheats.
 (() => {
   const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
   const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
@@ -9,7 +9,7 @@
 
   // everything logged since the page loaded, so the Output Log has history when it opens
   const history = [];
-  let on = false, ui = null, list = null, input = null, stat = null, mode = null, raf = 0, cheated = false;
+  let on = false, ui = null, list = null, input = null, stat = null, mode = null, raf = 0;
   const typed = [], konami = [];   // command history, and the last keys pressed for the Konami code
   let cmdAt = -1;
 
@@ -37,6 +37,31 @@
   const seenIO = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && log('LogNav', `Entered section "${names.get(e.target)}"`)), { threshold: 0.5 });
   names.forEach((_, s) => seenIO.observe(s));
 
+  // ---- silly extras ----
+  const THEMES = { orange: '#ff5a36', blue: '#3d8bff', green: '#36d27a', purple: '#9b5cff', pink: '#ff4fa3', gold: '#e4ae39' };
+  const paint = (c) => {
+    document.documentElement.style.setProperty('--accent', c);
+    document.documentElement.style.setProperty('--accent-soft', `color-mix(in srgb, ${c} 14%, transparent)`);
+  };
+  try { const saved = sessionStorage.getItem('jackslaski-theme'); if (saved) paint(saved); } catch { /* private mode */ }
+  // gibberish swaps every letter on the page for a random one, and remembers the real text so it can swap back
+  const real = new Map();
+  function gibberish() {
+    if (real.size) { real.forEach((t, node) => { node.nodeValue = t; }); real.clear(); return false; }
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n) => (n.nodeValue.trim() && !n.parentElement.closest('script, style, .dbg-console, .dbg-mark') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
+    });
+    const abc = 'abcdefghijklmnopqrstuvwxyz';
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      real.set(n, n.nodeValue);
+      n.nodeValue = n.nodeValue.replace(/[a-z]/gi, (ch) => {
+        const r = abc[Math.floor(Math.random() * 26)];
+        return ch === ch.toUpperCase() ? r.toUpperCase() : r;
+      });
+    }
+    return true;
+  }
+
   // ---- the commands ----
   const sections = () => [...names.entries()];
   const COMMANDS = {
@@ -45,7 +70,7 @@
       log('', 'Commands:', 'ok');
       for (const [k, [h]] of Object.entries(COMMANDS)) log('', `  ${k.padEnd(14)}${h}`);
       if (page.length) {
-        log('', 'Cheats on this page (these switch achievements off until you reload):', 'w');
+        log('', 'Cheats on this page:', 'w');
         for (const [k, c] of page) log('', `  ${k.padEnd(14)}${c.help}`);
       }
       return null;
@@ -78,14 +103,44 @@
       hit[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
       return `Teleported to "${hit[1]}"`;
     }],
-    open: ['open <project>: go to a project page', (p = '') => {
+    open: ['open <page>: go to the home page or a project page', (p = '') => {
       p = p.toLowerCase().replace('.html', '');
-      if (!PROJECTS.includes(p)) return [`Projects: ${PROJECTS.join(', ')}`, 'w'];
+      if (p === 'home') { location.href = '/'; return 'Loading home…'; }
+      if (!PROJECTS.includes(p)) return [`Pages: home, ${PROJECTS.join(', ')}`, 'w'];
       location.href = `/${p}.html`;
       return `Loading ${p}…`;
     }],
     god: ['Toggle god mode', () => 'God mode on. You were already invincible, it’s a website.'],
-    noclip: ['Walk through walls', () => 'You can walk through walls now. Try a page that doesn’t exist.'],
+    noclip: ['Walk through walls', () => {
+      if (document.body.dataset.page === '404') return 'You’re already out of bounds.';
+      document.documentElement.classList.add('is-noclip');   // the whole page drops away
+      setTimeout(() => { location.href = '/404.html'; }, 900);
+      return 'Noclip on. Whoops, wrong way…';
+    }],
+    ai: ['ai takeover starts the AFK tour, ai off stops it starting, ai on brings it back', (what = '') => {
+      what = what.toLowerCase();
+      if (what === 'off' || what === 'on') {
+        try { localStorage.setItem('jackslaski-afk', what); } catch { /* private mode */ }
+        return what === 'off' ? 'AI takeover is off. It won’t start when you go idle.' : 'AI takeover is back on.';
+      }
+      if (what !== 'takeover') return ['Usage: ai takeover | ai off | ai on', 'w'];
+      if (!window.afk) { location.href = '/?takeover'; return 'The AI lives on the home page. Taking you there…'; }
+      toggleConsole(false);
+      setTimeout(() => window.afk.start(), 2500);
+      return 'AI takeover in a couple of seconds. Hands off the mouse.';
+    }],
+    unlockall: ['Unlock every achievement', () => ['Nice try. It’s not going to be that easy.', 'w']],
+    theme: ['theme <colour>: recolour the site', (name = '') => {
+      const c = THEMES[name.toLowerCase()];
+      if (!c) return [`Themes: ${Object.keys(THEMES).join(', ')}`, 'w'];
+      paint(c);
+      try { name.toLowerCase() === 'orange' ? sessionStorage.removeItem('jackslaski-theme') : sessionStorage.setItem('jackslaski-theme', c); } catch { /* private mode */ }
+      return `Theme set to ${name.toLowerCase()}.`;
+    }],
+    gibberish: ['Turn every word on the page into nonsense (run again to undo)', () => (gibberish() ? 'Ghbbersh ennbled.' : 'Back to English.')],
+    bighead: ['Big head mode', () => (document.documentElement.classList.toggle('is-bighead') ? 'Big head mode on.' : 'Big head mode off.')],
+    australia: ['View the site from Australia', () => (document.documentElement.classList.toggle('is-australia') ? 'G’day.' : 'Back to the right way up.')],
+    comicsans: ['Use the most professional font there is', () => (document.documentElement.classList.toggle('is-comic') ? 'Much more professional.' : 'Fine, back to normal.')],
     hire: ['hire jack', (who = '') => {
       if (who.toLowerCase() !== 'jack') return ['Hire who? Try: hire jack', 'w'];
       const email = document.querySelector('#contact');
@@ -100,8 +155,10 @@
     stat: () => ['fps', 'unit', 'secrets', 'none'],
     show: () => ['bounds'],
     teleport: () => sections().map(([s, n]) => s.id || n.toLowerCase()),
-    open: () => PROJECTS,
+    open: () => ['home', ...PROJECTS],
     hire: () => ['jack'],
+    ai: () => ['takeover', 'off', 'on'],
+    theme: () => Object.keys(THEMES),
   };
 
   // suggestions as you type, like Minecraft and Unreal: commands first, then what they take. Tab completes.
@@ -125,14 +182,8 @@
     const key = name.toLowerCase(), cheat = (window.cheats || {})[key];
     let res;
     if (COMMANDS[key]) res = COMMANDS[key][1](...args);
-    else if (cheat) {
-      if (!cheated) {
-        cheated = true;
-        window.secrets?.cheat?.();
-        log('LogCheat', 'Cheats enabled. Achievements are switched off until you reload.', 'w');
-      }
-      res = cheat.run(...args);
-    } else res = [`Command not recognized: ${name}. Type help for a list.`, 'e'];
+    else if (cheat) res = cheat.run(...args);
+    else res = [`Command not recognized: ${name}. Type help for a list.`, 'e'];
     if (res) { const [m, k] = Array.isArray(res) ? res : [res, '']; log('Cmd', m, k); }
   }
 
@@ -250,7 +301,8 @@
     store(false);
     mode = null;
     cancelAnimationFrame(raf);
-    document.documentElement.classList.remove('is-debug', 'is-console', 'is-bounds');
+    document.documentElement.classList.remove('is-debug', 'is-console', 'is-bounds', 'is-bighead', 'is-australia', 'is-comic');
+    if (real.size) gibberish();
     if (ui) { ui.hidden = true; stat.hidden = true; ui.querySelector('.dbg-console').hidden = true; }
   }
 

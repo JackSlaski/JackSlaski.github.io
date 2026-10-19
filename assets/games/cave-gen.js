@@ -298,7 +298,7 @@
   }));
   addEventListener('resize', () => grid && fit());
 
-  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  // debug build cheats (see assets/debug.js).
   window.cheats = Object.assign(window.cheats || {}, {
     seed: { help: 'seed <n>: generate a cave from a seed', args: ['42', '1337', '20261'], run: (n) => {
       const v = parseInt(n, 10);

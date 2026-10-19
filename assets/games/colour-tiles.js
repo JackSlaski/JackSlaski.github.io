@@ -273,7 +273,7 @@
   dashBtn.addEventListener('click', dash);
   addEventListener('resize', fit);
 
-  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  // debug build cheats (see assets/debug.js).
   window.cheats = Object.assign(window.cheats || {}, {
     freezebot: { help: 'freezebot: the bot stops moving (run again to unfreeze)', run: () => { botFrozen = !botFrozen; return botFrozen ? 'The bot is frozen.' : 'The bot can move again.'; } },
     speed: { help: 'speed <n>: move n times faster, from 0.25 to 4', args: ['0.5', '1', '2', '4'], run: (n) => {

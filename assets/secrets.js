@@ -42,13 +42,10 @@
     setTimeout(() => { toast.classList.remove('is-on'); setTimeout(next, 400); }, 4200);
   };
 
-  // the debug build's cheats switch achievements off until the page is reloaded, like a real game
-  let cheated = false;
   const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
   function unlock(id) {
     const a = LIST.find((x) => x.id === id);
     if (!a || got.has(id)) return;
-    if (cheated) return devlog('LogSecrets', `"${a.name}" not awarded: cheats are on`, 'w');
     devlog('LogSecrets', `Achievement unlocked: "${a.name}"`, 'ok');
     got.add(id);
     write(KEY, [...got]);
@@ -118,7 +115,6 @@
   window.secrets = {
     unlock,
     has: (id) => got.has(id),
-    cheat: () => { cheated = true; },
     list: () => LIST.map((a) => ({ name: a.name, done: a.done, hint: a.hint, found: got.has(a.id) })),
   };
 })();
