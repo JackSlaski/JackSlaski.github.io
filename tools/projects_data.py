@@ -206,6 +206,10 @@ PROJECTS = {
         ("Grid Mesh", "The static mesh used for each cell."),
         ("Grid Material", "The material applied to each cell."),
     ])],
+    play=dict(game="cave-gen", title="Generate a cave", ps=[
+        "This is my cave tool rebuilt for the web, with the same cellular automata rules and settings as the Unreal version.",
+        "Press Generate to watch random noise smooth into a cave one pass at a time. Then tweak the Details panel, try a preset, or paint your own rock and smooth it.",
+    ]),
     docs=[("Technical design document", "documents/cavegentdd.pdf")],
 ),
 "survivorslike": dict(
