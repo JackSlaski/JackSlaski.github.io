@@ -16,7 +16,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026101912" />
+	<link rel="stylesheet" href="assets/style.css?v=2026101913" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -25,6 +25,7 @@
 	<header class="nav" id="nav">
 		<div class="wrap nav__inner">
 			<a class="brand" href="#top" aria-label="Jack Slaski, back to top"><span class="brand__mark">JS</span><span>Jack Slaski</span></a>
+			<button class="nav__secrets" type="button" data-secrets="nav" hidden></button>
 			<button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><span></span></button>
 			<nav class="nav__links" id="nav-links" aria-label="Main">
 				<a href="#work">Work</a>
@@ -54,6 +55,7 @@
 					<a class="btn" href="#work">View my work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 					<a class="btn btn--ghost" href="documents/cvjackslaski.pdf">Download CV</a>
 				</div>
+				<button class="hero__secrets reveal" style="--d:4" type="button" data-secrets="hero" hidden></button>
 			</div>
 
 			<div class="hero__now" aria-hidden="true">
@@ -321,7 +323,7 @@
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026101912" defer></script>
-	<script src="assets/secrets.js?v=2026101912" defer></script>
+	<script src="assets/main.js?v=2026101913" defer></script>
+	<script src="assets/secrets.js?v=2026101913" defer></script>
 </body>
 </html>
