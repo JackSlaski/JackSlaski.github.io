@@ -875,6 +875,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .dbg-log li.ok { color: #7dff7d; }
 .dbg-log li.w { color: #e4ae39; }
 .dbg-log li.e { color: #ff6b6b; }
+.dbg-suggest { max-height: 10rem; margin: 0; padding: 0.25rem 0; overflow-y: auto; list-style: none; background: #10141c; border-top: 1px solid var(--line); }
+.dbg-suggest li { display: flex; align-items: baseline; gap: 1rem; padding: 0.2rem 0.75rem; cursor: pointer; color: var(--muted); }
+.dbg-suggest li b { min-width: 9rem; font-weight: 500; color: var(--text); }
+.dbg-suggest li.is-cheat b { color: #e4ae39; }
+.dbg-suggest li.is-on { background: rgba(255, 90, 54, 0.14); }
+.dbg-suggest kbd { margin-left: auto; padding: 0 0.35rem; border: 1px solid var(--line-strong); font: inherit; font-size: 0.66rem; color: var(--muted); }
 .dbg-input { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; border-top: 1px solid var(--line); }
 .dbg-input label { color: var(--accent); }
 .dbg-input input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; color: var(--text); }

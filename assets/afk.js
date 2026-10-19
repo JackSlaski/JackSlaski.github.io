@@ -40,21 +40,21 @@
     ['.log', 'A quest log instead of a timeline is a nice touch.'],
     ['.log li:last-child', 'His next quest is getting a job, and maybe I can help with that.'],
   ];
-  const TOOLS = new Set(['cavegen', 'uishow', 'uidiss', 'lootbox']);   // not games, so no "I'd play this"
+  const TOOLS = new Set(['cavegenerationtool', 'uishowcase', 'minimalistui', 'lootboxethics']);   // not games, so no "I'd play this"
   const PROJECT = {
     recoilworks: ['Building your own gun from parts sounds really fun.', 'Having every part change how the gun fires is really clever.'],
-    flgame: ['An AI that takes over when you go AFK? Hang on a minute…', 'Making this alone in eight weeks and coming second at GradEx is impressive.'],
+    feudalliving: ['An AI that takes over when you go AFK? Hang on a minute…', 'Making this alone in eight weeks and coming second at GradEx is impressive.'],
     gerbertgames: ['What on earth is a Gerbert?', 'Four players fighting over tiles above a black hole sounds chaotic.'],
-    lggame: ['I’d happily play a game about pirate ships fighting a sea monster.', 'Keeping 29 people’s work together on one game can’t have been easy.'],
-    wmgame: ['A wizard against a whole world of slimes is a classic.', 'He made all the UI and effects for this one, and they look great.'],
+    leviathansgauntlet: ['I’d happily play a game about pirate ships fighting a sea monster.', 'Keeping 29 people’s work together on one game can’t have been easy.'],
+    wildmagic: ['A wizard against a whole world of slimes is a classic.', 'He made all the UI and effects for this one, and they look great.'],
     armsandassets: ['Procedural guns and a grid inventory remind me of Garry’s Mod.', 'Slotting gems into weapons is a cool idea.'],
-    dykbgame: ['Football trivia where you shoot penalties at the right answer is a great idea.', 'I’d probably score more own goals than right answers.'],
-    formandflask: ['A potion factory sounds like a brewery for wizards.', 'Automating a whole potion factory looks really satisfying.'],
-    cavegen: ['He can write C++ as well? Now he’s just showing off.', 'Cellular automata sounds clever, so I’ll pretend I know what it means.'],
+    doyouknowball: ['Football trivia where you shoot penalties at the right answer is a great idea.', 'I’d probably score more own goals than right answers.'],
+    formulaandflask: ['A potion factory sounds like a brewery for wizards.', 'Automating a whole potion factory looks really satisfying.'],
+    cavegenerationtool: ['He can write C++ as well? Now he’s just showing off.', 'Cellular automata sounds clever, so I’ll pretend I know what it means.'],
     survivorslike: ['Bouncing bullets and big explosions are my kind of game.', 'There’s a lot of screen shake in this one, and it feels great.'],
-    uishow: ['Someone really likes making menus.', 'A shop, an inventory, and a minimap all in one UI must have taken ages.'],
-    uidiss: ['A whole dissertation on minimalist UI, so less really is more.', 'Research into how UI affects immersion is actually really interesting.'],
-    lootbox: ['Loot box research? Is there a case I can open? Oh, there is.', 'Researching loot box ethics is pretty responsible of him.'],
+    uishowcase: ['Someone really likes making menus.', 'A shop, an inventory, and a minimap all in one UI must have taken ages.'],
+    minimalistui: ['A whole dissertation on minimalist UI, so less really is more.', 'Research into how UI affects immersion is actually really interesting.'],
+    lootboxethics: ['Loot box research? Is there a case I can open? Oh, there is.', 'Researching loot box ethics is pretty responsible of him.'],
   };
   const ENDING = ['Honestly, I should just email him.', 'Still here? I’ll have another look around.'];
 

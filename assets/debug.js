@@ -3,13 +3,13 @@
 // Games add their own cheats to window.cheats. Using a cheat switches achievements off until you reload.
 (() => {
   const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
-  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'lggame', 'wmgame', 'flgame', 'dykbgame', 'formandflask', 'cavegen', 'survivorslike', 'uishow', 'uidiss', 'lootbox'];
+  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
   const KEY = 'jackslaski-debug';
   const store = (v) => { try { return v === undefined ? sessionStorage.getItem(KEY) : v ? sessionStorage.setItem(KEY, '1') : sessionStorage.removeItem(KEY); } catch { return null; } };
 
   // everything logged since the page loaded, so the Output Log has history when it opens
   const history = [];
-  let on = false, ui = null, list = null, input = null, stat = null, mode = null, raf = 0, slomo = 1, slomoTimer = 0, cheated = false;
+  let on = false, ui = null, list = null, input = null, stat = null, mode = null, raf = 0, cheated = false;
   const typed = [], konami = [];   // command history, and the last keys pressed for the Konami code
   let cmdAt = -1;
 
@@ -29,7 +29,11 @@
 
   // section changes, for a bit of life in the log
   const names = new Map();
-  document.querySelectorAll('main section').forEach((s) => names.set(s, (s.querySelector('.section__title, h1, h2')?.innerText || s.getAttribute('aria-label') || s.id || 'section').trim().replace(/\s+/g, ' ')));
+  const words = (el) => (el.children.length ? [...el.children].map((c) => c.textContent).join(' ') : el.textContent);   // "Jack Slaski", not "JackSlaski"
+  document.querySelectorAll('main section').forEach((s) => {
+    const h = s.querySelector('.section__title, h1, h2');
+    names.set(s, ((h && words(h)) || s.getAttribute('aria-label') || s.id || 'section').trim().replace(/\s+/g, ' '));
+  });
   const seenIO = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && log('LogNav', `Entered section "${names.get(e.target)}"`)), { threshold: 0.5 });
   names.forEach((_, s) => seenIO.observe(s));
 
@@ -67,16 +71,6 @@
       const b = document.documentElement.classList.toggle('is-bounds');
       return `bounds ${b ? 'on' : 'off'}`;
     }],
-    slomo: ['slomo 0.5 slows every animation, slomo 2 speeds them up', (n) => {
-      const v = parseFloat(n);
-      if (!(v >= 0.1 && v <= 4)) return ['Usage: slomo <0.1 to 4>', 'w'];
-      slomo = v;
-      clearInterval(slomoTimer);
-      const apply = () => document.getAnimations().forEach((a) => { a.playbackRate = slomo; });
-      apply();
-      if (slomo !== 1) slomoTimer = setInterval(apply, 300);   // catch animations that start later
-      return `Time dilation set to ${v}`;
-    }],
     teleport: ['teleport <section>: jump to a section on this page', (where = '') => {
       where = where.toLowerCase();
       const hit = sections().find(([s, n]) => s.id === where || n.toLowerCase().includes(where) || (where === 'top' && s.matches('.hero, .phero')));
@@ -102,6 +96,27 @@
     quit: ['Leave the development build', () => { disable(); return null; }],
   };
   COMMANDS.exit = ['Same as quit', COMMANDS.quit[1]];
+  const ARGS = {
+    stat: () => ['fps', 'unit', 'secrets', 'none'],
+    show: () => ['bounds'],
+    teleport: () => sections().map(([s, n]) => s.id || n.toLowerCase()),
+    open: () => PROJECTS,
+    hire: () => ['jack'],
+  };
+
+  // suggestions as you type, like Minecraft and Unreal: commands first, then what they take. Tab completes.
+  function suggest(text) {
+    const parts = text.trimStart().split(/\s+/), cheats = window.cheats || {};
+    if (parts.length < 2) {
+      const start = parts[0].toLowerCase();
+      if (!start) return [];
+      return [...Object.entries(COMMANDS).map(([k, [h]]) => [k, h, false]), ...Object.entries(cheats).map(([k, c]) => [k, c.help, true])]
+        .filter(([k]) => k.startsWith(start)).map(([k, help, cheat]) => ({ fill: `${k} `, label: k, help, cheat }));
+    }
+    const name = parts[0].toLowerCase(), arg = (parts[1] || '').toLowerCase();
+    const options = ARGS[name]?.() || cheats[name]?.args || [];
+    return options.filter((o) => o.startsWith(arg) && o !== arg).map((o) => ({ fill: `${parts[0]} ${o}`, label: `${parts[0]} ${o}`, help: '', cheat: !!cheats[name] }));
+  }
 
   function run(line) {
     const [name, ...args] = line.trim().split(/\s+/);
@@ -150,11 +165,31 @@
       <section class="dbg-console" aria-label="Output Log" hidden>
         <div class="dbg-console__head"><b>Output Log</b><button type="button" data-close aria-label="Close the console">✕</button></div>
         <ul class="dbg-log" aria-live="polite"></ul>
-        <form class="dbg-input"><label for="dbg-cmd">Cmd</label><input id="dbg-cmd" autocomplete="off" spellcheck="false" placeholder="Type help"></form>
+        <ul class="dbg-suggest" hidden></ul>
+        <form class="dbg-input"><label for="dbg-cmd">Cmd</label><input id="dbg-cmd" autocomplete="off" spellcheck="false" placeholder="Type a command, or help. Tab completes."></form>
       </section>`;
     document.body.append(ui);
     list = ui.querySelector('.dbg-log');
     input = ui.querySelector('input');
+    const box = ui.querySelector('.dbg-suggest');
+    let picks = [], at = 0;
+    const show = () => {
+      picks = suggest(input.value);
+      at = Math.min(at, Math.max(0, picks.length - 1));
+      box.hidden = !picks.length;
+      box.innerHTML = '';
+      picks.slice(0, 8).forEach((p, i) => {
+        const li = document.createElement('li');
+        li.className = (i === at ? 'is-on' : '') + (p.cheat ? ' is-cheat' : '');
+        const b = document.createElement('b'), h = document.createElement('span');
+        b.textContent = p.label; h.textContent = p.help;
+        li.append(b, h);
+        if (i === at) { const k = document.createElement('kbd'); k.textContent = 'Tab'; li.append(k); }
+        li.addEventListener('mousedown', (e) => { e.preventDefault(); input.value = p.fill; at = 0; show(); input.focus(); });
+        box.append(li);
+      });
+    };
+    input.addEventListener('input', () => { at = 0; show(); });
     stat = ui.querySelector('.dbg-stat');
     history.splice(0).forEach(([c, m, k]) => log(c, m, k));   // replay what happened before it opened
     ui.querySelector('[data-console]').addEventListener('click', () => toggleConsole());
@@ -163,12 +198,23 @@
       e.preventDefault();
       const line = input.value;
       if (line.trim()) { typed.unshift(line); cmdAt = -1; }
+      box.hidden = true;
       input.value = '';
       run(line);
     });
     input.addEventListener('keydown', (e) => {
       if (e.key === '`') { e.preventDefault(); toggleConsole(false); }
-      else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {   // command history, like Unreal's console
+      else if (e.key === 'Tab' && picks.length) {   // fill in the highlighted suggestion
+        e.preventDefault();
+        input.value = picks[at].fill;
+        at = 0;
+        show();
+      } else if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !box.hidden) {   // move through the suggestions
+        e.preventDefault();
+        const n = Math.min(picks.length, 8);
+        at = (at + (e.key === 'ArrowDown' ? 1 : n - 1)) % n;
+        show();
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {   // command history, like Unreal's console
         e.preventDefault();
         cmdAt = Math.max(-1, Math.min(typed.length - 1, cmdAt + (e.key === 'ArrowUp' ? 1 : -1)));
         input.value = cmdAt < 0 ? '' : typed[cmdAt];
@@ -204,8 +250,6 @@
     store(false);
     mode = null;
     cancelAnimationFrame(raf);
-    clearInterval(slomoTimer);
-    if (slomo !== 1) { slomo = 1; document.getAnimations().forEach((a) => { a.playbackRate = 1; }); }
     document.documentElement.classList.remove('is-debug', 'is-console', 'is-bounds');
     if (ui) { ui.hidden = true; stat.hidden = true; ui.querySelector('.dbg-console').hidden = true; }
   }

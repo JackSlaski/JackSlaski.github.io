@@ -103,7 +103,7 @@
   const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), age = $('[data-age]'), guilt = $('[data-guilt]'), pop = $('[data-pop]'), reportEl = $('[data-report]');
 
   let ethical, gems, free, owned, bought, spent, topups, opened, nearGold, nearLegend, goldSeen, legendSeen, goldWon, dupes, commons, peeked, spinning;
-  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins, popups, forceGold = false;
+  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins, popups, forced = null;
   let ageOk = false, ageNo = false, bag = [];
 
   const weighted = (w) => {
@@ -114,7 +114,7 @@
   const eventOn = () => !ethical && offer.phase === 'live';
   // the case result. The 2x event really does double gold; Ethical mode guarantees Epic or better within PITY cases
   function rollWin() {
-    if (forceGold) { forceGold = false; return GOLD; }   // the forcedrop cheat
+    if (forced) { const r = forced; forced = null; return r; }   // the forcedrop cheat
     const w = RARITY.map((r) => (r === GOLD && eventOn() ? r.odds * 2 : r.odds));
     if (ethical && sinceEpic >= PITY - 1) { w[0] = 0; w[1] = 0; }
     return weighted(w);
@@ -482,16 +482,17 @@
 
   // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
   window.cheats = Object.assign(window.cheats || {}, {
-    givegems: { help: 'givegems <n>: add free gems', run: (n) => {
+    givegems: { help: 'givegems <n>: add free gems', args: ['1000', '5000', '10000'], run: (n) => {
       if (ethical) return 'Ethical mode has no gems. Go back to the original.';
       const add = Math.max(1, Math.min(1000000, parseInt(n, 10) || 1000));
       gems += add; hud();
       return `Added ${num(add)} gems.`;
     } },
-    forcedrop: { help: 'forcedrop golden: the next case lands a Golden Gerbert', run: (what = '') => {
-      if (what.toLowerCase() !== 'golden') return 'Usage: forcedrop golden';
-      forceGold = true;
-      return 'The next case will be a Golden Gerbert.';
+    forcedrop: { help: 'forcedrop <rarity>: choose what the next case lands', args: ['common', 'rare', 'epic', 'legendary', 'golden'], run: (what = '') => {
+      const w = what.toLowerCase(), rar = RARITY.find((r) => r.id === w || r.name.toLowerCase() === w || (w === 'gold' && r === GOLD));
+      if (!rar) return 'Usage: forcedrop common | rare | epic | legendary | golden';
+      forced = rar;
+      return `The next case will be ${rar === GOLD ? 'a Golden Gerbert' : `${/^[aeiou]/i.test(rar.name) ? 'an' : 'a'} ${rar.name} item`}.`;
     } },
     showodds: { help: 'showodds: reveal the drop rates', run: () => { odds.hidden = false; infoBtn.setAttribute('aria-expanded', 'true'); return 'Drop rates revealed.'; } },
   });

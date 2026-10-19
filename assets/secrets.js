@@ -3,11 +3,14 @@
 (() => {
   const KEY = 'jackslaski-secrets';
   const SEEN_KEY = 'jackslaski-seen';
-  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'lggame', 'wmgame', 'flgame', 'dykbgame', 'formandflask', 'cavegen', 'survivorslike', 'uishow', 'uidiss', 'lootbox'];
+  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
 
   const read = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
   const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode: progress just won't stick */ } };
   const seen = () => new Set(read(SEEN_KEY, []));
+  // project pages were renamed to match their titles: carry visits over from the old page names
+  const RENAMED = { lggame: 'leviathansgauntlet', wmgame: 'wildmagic', flgame: 'feudalliving', dykbgame: 'doyouknowball', formandflask: 'formulaandflask', cavegen: 'cavegenerationtool', uishow: 'uishowcase', uidiss: 'minimalistui', lootbox: 'lootboxethics' };
+  write(SEEN_KEY, [...new Set(read(SEEN_KEY, []).map((p) => RENAMED[p] || p))]);
 
   const LIST = [
     { id: 'explorer', name: 'Explorer', done: 'You visited every project page.', hint: 'Every project has its own page. Seen them all?', progress: () => `${PROJECTS.filter((p) => seen().has(p)).length} / ${PROJECTS.length} pages` },

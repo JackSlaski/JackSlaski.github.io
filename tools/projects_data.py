@@ -83,7 +83,7 @@ PROJECTS = {
     ],
     docs=[("Pitch document", "documents/gerbgames.pdf")],
 ),
-"lggame": dict(
+"leviathansgauntlet": dict(
     title="Leviathan's Gauntlet",
     desc="A wave-based pirate combat game made by a team of 29, where I was tech lead.",
     kicker="BSc project · Team of 29 · 8 weeks",
@@ -99,7 +99,7 @@ PROJECTS = {
         "Ship currency and gold pickups", "Several enemy types", "World borders with a twist",
     ])],
 ),
-"wmgame": dict(
+"wildmagic": dict(
     title="Wild Magic",
     desc="A collaborative survivors-like where I built the full game UI and the VFX.",
     kicker="BSc project · Team of 18 · 9 weeks",
@@ -111,7 +111,7 @@ PROJECTS = {
     why=['Wild Magic was my second-year collaborative project, a survivors-like made by a team of 18 students.', 'I wanted to own a whole area of the game, so I took on all of the UI and the VFX.'],
     how={'tools': ['UE5', 'UMG', 'VFX'], 'ps': ['I implemented the full game UI, from menus to the in-game HUD.', "I also created the game's visual effects."]},
 ),
-"flgame": dict(
+"feudalliving": dict(
     title="Feudal Living",
     desc="A medieval life sim built solo in UE5 in eight weeks. 2nd place at the GradEx Awards.",
     kicker="BSc project · Solo · 8 weeks",
@@ -130,7 +130,7 @@ PROJECTS = {
     ])],
     docs=[("Technical design document", "documents/fltdd.pdf")],
 ),
-"dykbgame": dict(
+"doyouknowball": dict(
     title="Do You Know Ball?",
     desc="A mobile football trivia game where you answer questions by taking penalties.",
     kicker="BSc project · Solo · 8 weeks · Mobile",
@@ -153,7 +153,7 @@ PROJECTS = {
     ],
     docs=[("Game design document", "documents/dykbgdd.pdf"), ("Technical design document", "documents/dykbtdd.pdf")],
 ),
-"formandflask": dict(
+"formulaandflask": dict(
     title="Formula and Flask",
     desc="A first-person potion factory prototype built solo in Unreal Engine 5.",
     kicker="MSc project · Solo · 8 weeks",
@@ -170,7 +170,7 @@ PROJECTS = {
     ])],
     docs=[("Pitch and planning document", "documents/fafpap.pdf"), ("Game tutorial", "documents/faftut.pdf")],
 ),
-"cavegen": dict(
+"cavegenerationtool": dict(
     title="Cave Generation Tool",
     desc="A procedural cave generator for Unreal Engine 5, written in C++ with cellular automata.",
     kicker="BSc project · Solo · UE5 C++",
@@ -230,7 +230,7 @@ PROJECTS = {
     ])],
     docs=[("Pitch and planning document", "documents/sldoc.pdf")],
 ),
-"uishow": dict(
+"uishowcase": dict(
     title="UI Showcase",
     desc="A full RPG interface built in Unreal Engine 5's UMG.",
     kicker="BSc project · Solo · 9 weeks",
@@ -246,7 +246,7 @@ PROJECTS = {
         "Options and settings", "Currency with animation",
     ])],
 ),
-"uidiss": dict(
+"minimalistui": dict(
     title="Minimalist UI",
     desc="My BSc dissertation on how minimalist UI can improve player immersion, with a playable UE5 artefact.",
     kicker="BSc dissertation · Solo · 16 weeks",
@@ -258,7 +258,7 @@ PROJECTS = {
     how={'tools': ['UE5', 'UMG', 'User testing', 'Research'], 'ps': ["I reviewed UI and UX research, including Fitts's Law, Hick's Law, and the Gestalt principles, and studied the interfaces of popular games.", 'Then I built two minimalist UIs in UMG and tested them with players, rating clarity, usability, and immersion. Their feedback shaped the second version.', 'The second iteration came out ahead on immersion, cognitive load, and clarity, thanks to a clearer visual hierarchy, better feedback, and fewer unnecessary elements.']},
     docs=[("Full dissertation", "documents/fyp.pdf")],
 ),
-"lootbox": dict(
+"lootboxethics": dict(
     title="Loot box ethics",
     desc="MSc research on loot boxes, gambling, and their effect on younger and vulnerable players.",
     kicker="MSc research · Solo · 24 weeks",

@@ -300,7 +300,7 @@
 
   // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
   window.cheats = Object.assign(window.cheats || {}, {
-    seed: { help: 'seed <n>: generate a cave from a seed', run: (n) => {
+    seed: { help: 'seed <n>: generate a cave from a seed', args: ['42', '1337', '20261'], run: (n) => {
       const v = parseInt(n, 10);
       if (!(v > 0 && v <= 999999)) return 'Usage: seed <1 to 999999>';
       $('[data-key="seed"]').value = v; $('[data-key="lock"]').checked = true;
