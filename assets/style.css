@@ -839,3 +839,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ue__count b { font-weight: 500; color: var(--text); }
 @media (max-width: 900px) { .cave { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .cave__crystal, .cave__crystal.is-found { animation: none; } }
+
+/* AFK takeover (home page) */
+.afk { position: fixed; top: 5.25rem; left: 50%; z-index: 70; display: flex; align-items: center; gap: 0.75rem; max-width: calc(100% - 2rem); padding: 0.6rem 1rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.92); border: 1px solid var(--accent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 0.88rem; color: #c9d0db; animation: afk-in 400ms var(--ease); }
+.afk b { flex: none; font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.afk__dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: afk-blink 1s ease-in-out infinite; }
+.afk-cursor { position: fixed; top: 0; left: 0; z-index: 71; display: flex; align-items: flex-start; gap: 0.2rem; pointer-events: none; transition: transform 900ms var(--ease); filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6)); }
+.afk-cursor svg { width: 26px; height: 26px; }
+.afk-cursor span { margin-top: 1.2rem; padding: 0.1rem 0.35rem; background: var(--accent); font-family: var(--mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; color: #fff; }
+.afk-caption { position: fixed; bottom: 2rem; left: 50%; z-index: 70; max-width: min(40rem, calc(100% - 2rem)); padding: 0.9rem 1.2rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.94); border-left: 3px solid var(--accent); font-size: 1rem; color: var(--text); }
+.afk-caption:empty { display: none; }
+.is-afk-hover { outline: 2px solid var(--accent); outline-offset: 4px; }
+@keyframes afk-in { from { opacity: 0; transform: translate(-50%, -10px); } }
+@keyframes afk-blink { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .afk, .afk__dot { animation: none; } }

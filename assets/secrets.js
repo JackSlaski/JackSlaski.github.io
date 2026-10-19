@@ -15,6 +15,7 @@
     { id: 'tiles', name: 'Party starter', done: 'You beat the bot at Colour Tiles.', hint: 'One of my party games is playable on its own page. Win a round.' },
     { id: 'house', name: 'The house always wins', done: 'You opened the cases and saw how they played you.', hint: 'My loot box research comes with a case you can open. See it through to the end.' },
     { id: 'crystal', name: 'Struck gold', done: 'You found a crystal hidden in a generated cave.', hint: 'One of my tools carves caves. Keep an eye out for something shiny.' },
+    { id: 'autopilot', name: 'Autopilot', done: 'You went idle and let the AI show you around.', hint: 'Like one of my games, this site has a mind of its own if you leave it alone for a while.' },
   ];
   const got = new Set(read(KEY, []).filter((id) => LIST.some((a) => a.id === id)));
 
