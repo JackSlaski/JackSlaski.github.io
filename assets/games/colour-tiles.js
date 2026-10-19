@@ -33,10 +33,11 @@
     <div class="arcade__help">
       <span><kbd>WASD</kbd> or arrows to move, or drag on the board</span>
       <button class="arcade__dash" type="button" data-dash><span>Dash</span><kbd>Space</kbd></button>
-    </div>`;
+    </div>
+    <canvas class="arcade__fx" aria-hidden="true"></canvas>`;
 
   const $ = (s) => root.querySelector(s);
-  const cv = $('canvas'), cx = cv.getContext('2d'), screen = $('.arcade__screen');
+  const cv = $('.arcade__screen canvas'), cx = cv.getContext('2d'), screen = $('.arcade__screen');
   const overlay = $('[data-overlay]'), headline = $('[data-headline]'), msg = $('[data-msg]'), startBtn = $('[data-start]'), dashBtn = $('[data-dash]');
 
   let COLS = 25, ROWS = 11;
@@ -167,10 +168,50 @@
     if (state === 'play' || state === 'countdown') raf = requestAnimationFrame(loop);
   }
 
+  // a win fires two party poppers from the bottom corners
+  const fx = $('.arcade__fx'), fg = fx.getContext('2d');
+  let fxRaf = 0;
+  function confetti() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const dpr = Math.min(devicePixelRatio || 1, 2), W = root.clientWidth, H = root.clientHeight, G = 0.9 * H, DRAG = 3;   // heavy drag so the bits float down instead of dropping
+    fx.width = Math.round(W * dpr); fx.height = Math.round(H * dpr);
+    fg.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const colours = ['#ff5a36', '#ffc83d', '#ffffff', '#ff8a6b', '#ffe08a'];
+    const bits = Array.from({ length: 180 }, (_, i) => {
+      const side = i % 2 ? -1 : 1, a = rand(0.15, 0.75), v = rand(2.5, 4.2) * H;
+      return { x: side > 0 ? 0 : W, y: H, vx: side * Math.sin(a) * v, vy: -Math.cos(a) * v, w: rand(7, 12), h: rand(4, 7), r: rand(0, 6.3), vr: rand(-12, 12), flip: rand(0, 6.3), c: colours[i % colours.length] };
+    });
+    let last = performance.now();
+    const t0 = last;
+    cancelAnimationFrame(fxRaf);
+    const tick = (now) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      fg.clearRect(0, 0, W, H);
+      let alive = 0;
+      for (const b of bits) {
+        b.vy += G * dt; b.vx *= 1 - DRAG * dt; b.vy *= 1 - DRAG * dt;
+        b.x += (b.vx + Math.sin(b.flip) * 30) * dt; b.y += b.vy * dt; b.r += b.vr * dt; b.flip += 8 * dt;
+        if (b.y > H + 20) continue;
+        alive++;
+        fg.save(); fg.translate(b.x, b.y); fg.rotate(b.r); fg.scale(1, Math.cos(b.flip));
+        fg.fillStyle = b.c; fg.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+        fg.restore();
+      }
+      if (alive && now - t0 < 6000) fxRaf = requestAnimationFrame(tick);
+      else fg.clearRect(0, 0, W, H);
+    };
+    fxRaf = requestAnimationFrame(tick);
+  }
+
   function start() {
     reset();
     state = 'countdown';
     fit();
+    cancelAnimationFrame(fxRaf); fg.clearRect(0, 0, fx.width, fx.height);
+    root.classList.remove('is-win');
+    root.querySelectorAll('.score__tag').forEach((t) => { t.textContent = 'Leading'; });
     startBtn.hidden = true;
     msg.textContent = '';
     cv.focus({ preventScroll: true });
@@ -193,9 +234,12 @@
     const a = count(YOU), b = count(BOT);
     overlay.hidden = false;
     startBtn.hidden = false; startBtn.textContent = 'Play again';
+    root.querySelectorAll('.score__tag').forEach((t) => { t.textContent = 'Winner'; });
     if (a > b) {
       headline.textContent = 'You win';
       msg.textContent = `${a} tiles to ${b}. The Gerberts would be proud.`;
+      root.classList.add('is-win');
+      confetti();
       window.secrets?.unlock('tiles');
     } else if (a < b) {
       headline.textContent = 'Bot wins';
