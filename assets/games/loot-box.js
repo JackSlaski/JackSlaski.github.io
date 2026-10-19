@@ -103,7 +103,7 @@
   const qty = $('[data-qty]'), buyBtn = $('[data-purchase]'), age = $('[data-age]'), guilt = $('[data-guilt]'), pop = $('[data-pop]'), reportEl = $('[data-report]');
 
   let ethical, gems, free, owned, bought, spent, topups, opened, nearGold, nearLegend, goldSeen, legendSeen, goldWon, dupes, commons, peeked, spinning;
-  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins, popups;
+  let haul, sinceEpic, best, fakeWins, guilted, offer, feedIn, eventWins, popups, forceGold = false;
   let ageOk = false, ageNo = false, bag = [];
 
   const weighted = (w) => {
@@ -114,6 +114,7 @@
   const eventOn = () => !ethical && offer.phase === 'live';
   // the case result. The 2x event really does double gold; Ethical mode guarantees Epic or better within PITY cases
   function rollWin() {
+    if (forceGold) { forceGold = false; return GOLD; }   // the forcedrop cheat
     const w = RARITY.map((r) => (r === GOLD && eventOn() ? r.odds * 2 : r.odds));
     if (ethical && sinceEpic >= PITY - 1) { w[0] = 0; w[1] = 0; }
     return weighted(w);
@@ -265,6 +266,7 @@
     if (tier === 0) commons++;
     if (win.rar === GOLD) { goldWon++; if (during) eventWins++; }
     if (bait) bait.rar === GOLD ? nearGold++ : nearLegend++;
+    devlog('LogLoot', `Opened ${win.name} (${win.rar.name})${bait ? `, rigged near miss on ${bait.name}` : ''}`);
     sinceEpic = tier >= 2 ? 0 : sinceEpic + 1;
     if (!best || tier > RARITY.indexOf(best.rar)) best = win;
     if (!ethical || tier >= 3) {
@@ -477,6 +479,23 @@
     renderOffer();
     if (--feedIn <= 0) { feed(); feedIn = 4 + Math.floor(Math.random() * 4); }
   }, 1000);
+
+  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  window.cheats = Object.assign(window.cheats || {}, {
+    givegems: { help: 'givegems <n>: add free gems', run: (n) => {
+      if (ethical) return 'Ethical mode has no gems. Go back to the original.';
+      const add = Math.max(1, Math.min(1000000, parseInt(n, 10) || 1000));
+      gems += add; hud();
+      return `Added ${num(add)} gems.`;
+    } },
+    forcedrop: { help: 'forcedrop golden: the next case lands a Golden Gerbert', run: (what = '') => {
+      if (what.toLowerCase() !== 'golden') return 'Usage: forcedrop golden';
+      forceGold = true;
+      return 'The next case will be a Golden Gerbert.';
+    } },
+    showodds: { help: 'showodds: reveal the drop rates', run: () => { odds.hidden = false; infoBtn.setAttribute('aria-expanded', 'true'); return 'Drop rates revealed.'; } },
+  });
+  const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
 
   start(false);
 })();

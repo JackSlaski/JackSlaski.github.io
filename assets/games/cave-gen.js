@@ -229,6 +229,7 @@
       grid = frames[frames.length - 1][1]; roomMask = mask; loot = chests;
       passEl.textContent = '';
       draw(); stats(); placeCrystal(gem);
+      devlog('LogPCG', `Generated a cave from seed ${seed}`);
     };
     if (!animate || reduced) return finish();
     let k = 0;
@@ -297,10 +298,29 @@
   }));
   addEventListener('resize', () => grid && fit());
 
+  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  window.cheats = Object.assign(window.cheats || {}, {
+    seed: { help: 'seed <n>: generate a cave from a seed', run: (n) => {
+      const v = parseInt(n, 10);
+      if (!(v > 0 && v <= 999999)) return 'Usage: seed <1 to 999999>';
+      $('[data-key="seed"]').value = v; $('[data-key="lock"]').checked = true;
+      generate(true);
+      return `Generating seed ${v}.`;
+    } },
+    findcrystal: { help: 'findcrystal: point out the crystal, if this cave has one', run: () => {
+      const c = screen.querySelector('.cave__crystal');
+      if (!c) return 'No crystal in this cave. Try another seed.';
+      c.classList.add('is-hint');
+      screen.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return 'There it is.';
+    } },
+  });
+  const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
+
   showValues();
   generate(false);
   // the first time it scrolls into view, play the generation so you can watch it form
   new IntersectionObserver((entries, io) => {
-    if (entries.some((e) => e.isIntersecting)) { io.disconnect(); generate(true); }
+    if (entries.some((e) => e.isIntersecting)) { io.disconnect(); if (!made) generate(true); }   // unless you've already made one
   }, { threshold: 0.4 }).observe(screen);
 })();

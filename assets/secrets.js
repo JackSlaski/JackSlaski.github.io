@@ -16,6 +16,7 @@
     { id: 'house', name: 'The house always wins', done: 'You opened the cases and saw how they played you.', hint: 'My loot box research comes with a case you can open. See it through to the end.' },
     { id: 'crystal', name: 'Struck gold', done: 'You found a crystal hidden in a generated cave.', hint: 'One of my tools carves caves. Keep an eye out for something shiny.' },
     { id: 'autopilot', name: 'Autopilot', done: 'You went idle and let the AI show you around.', hint: 'Like one of my games, this site has a mind of its own if you leave it alone for a while.' },
+    { id: 'hood', name: 'Under the hood', done: 'You opened the development build.', hint: 'An old cheat code still works here. On a phone, try tapping the logo.' },
   ];
   const got = new Set(read(KEY, []).filter((id) => LIST.some((a) => a.id === id)));
 
@@ -38,9 +39,14 @@
     setTimeout(() => { toast.classList.remove('is-on'); setTimeout(next, 400); }, 4200);
   };
 
+  // the debug build's cheats switch achievements off until the page is reloaded, like a real game
+  let cheated = false;
+  const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
   function unlock(id) {
     const a = LIST.find((x) => x.id === id);
     if (!a || got.has(id)) return;
+    if (cheated) return devlog('LogSecrets', `"${a.name}" not awarded: cheats are on`, 'w');
+    devlog('LogSecrets', `Achievement unlocked: "${a.name}"`, 'ok');
     got.add(id);
     write(KEY, [...got]);
     render();
@@ -106,5 +112,10 @@
   if (document.body.dataset.page === '404') setTimeout(() => unlock('oob'), 900);
 
   render();
-  window.secrets = { unlock, has: (id) => got.has(id) };
+  window.secrets = {
+    unlock,
+    has: (id) => got.has(id),
+    cheat: () => { cheated = true; },
+    list: () => LIST.map((a) => ({ name: a.name, done: a.done, hint: a.hint, found: got.has(a.id) })),
+  };
 })();

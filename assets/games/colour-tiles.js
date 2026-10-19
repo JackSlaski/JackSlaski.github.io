@@ -41,6 +41,7 @@
   const overlay = $('[data-overlay]'), headline = $('[data-headline]'), msg = $('[data-msg]'), startBtn = $('[data-start]'), dashBtn = $('[data-dash]');
 
   let COLS = 25, ROWS = 11;
+  let botFrozen = false, stepYou = STEP_YOU;   // changed by the freezebot and speed cheats
   let grid, claimedAt, you, bot, dir, facing, target, state = 'idle', endAt = 0, lastYou = 0, lastBot = 0, lastDash = -1e9, raf = 0, w = 0, h = 0;
 
   // a wide board on desktop, a taller one on phones so the tiles stay big enough to tap
@@ -82,6 +83,7 @@
 
   // the bot: walk to the nearest tile it doesn't own, a bit clumsily so it can be beaten
   function botMove(now) {
+    if (botFrozen) return;
     if (Math.random() < 0.25) {   // tuned by simulation: a decent player wins ~95%, a sloppy one ~70%
       const [dx, dy] = [[1, 0], [-1, 0], [0, 1], [0, -1]][Math.floor(Math.random() * 4)];
       return step(bot, dx, dy, BOT, now);
@@ -160,7 +162,7 @@
 
   function loop(now) {
     if (state === 'play') {
-      if (now - lastYou >= STEP_YOU) { lastYou = now; youMove(now); }
+      if (now - lastYou >= stepYou) { lastYou = now; youMove(now); }
       if (now - lastBot >= STEP_BOT) { lastBot = now; botMove(now); }
       if (now >= endAt) finish();
     }
@@ -232,6 +234,7 @@
     state = 'over';
     dir = null; target = null;
     const a = count(YOU), b = count(BOT);
+    devlog('LogGame', `Round over: you ${a}, bot ${b}`);
     overlay.hidden = false;
     startBtn.hidden = false; startBtn.textContent = 'Play again';
     root.querySelectorAll('.score__tag').forEach((t) => { t.textContent = 'Winner'; });
@@ -269,6 +272,22 @@
   startBtn.addEventListener('click', start);
   dashBtn.addEventListener('click', dash);
   addEventListener('resize', fit);
+
+  // debug build cheats (see assets/debug.js). Using any of them switches achievements off until you reload.
+  window.cheats = Object.assign(window.cheats || {}, {
+    freezebot: { help: 'freezebot: the bot stops moving (run again to unfreeze)', run: () => { botFrozen = !botFrozen; return botFrozen ? 'The bot is frozen.' : 'The bot can move again.'; } },
+    speed: { help: 'speed <n>: move n times faster, from 0.25 to 4', run: (n) => {
+      const v = Math.max(0.25, Math.min(4, parseFloat(n) || 1));
+      stepYou = STEP_YOU / v;
+      return `You now move at ${v}x speed.`;
+    } },
+    paintall: { help: 'paintall: claim every tile (during a round)', run: () => {
+      if (state !== 'play') return 'Start a round first.';
+      grid.fill(YOU); claimedAt.fill(performance.now());
+      return 'Every tile is yours.';
+    } },
+  });
+  const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
 
   fit();
   hud(performance.now());

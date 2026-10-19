@@ -226,8 +226,10 @@
     }
   }
 
+  const devlog = (...d) => document.dispatchEvent(new CustomEvent('devlog', { detail: d }));
   function takeover() {
     running = true;
+    devlog('LogAI', 'Player went idle. AI takeover started.');
     const my = ++gen;
     ui = document.createElement('div');
     ui.innerHTML = `
@@ -261,6 +263,7 @@
     banner.querySelector('b').textContent = 'Welcome back';
     banner.querySelector('span:last-child').textContent = 'You’re in control again.';
     cursor.remove();
+    devlog('LogAI', 'Control returned to the player.');
     window.secrets?.unlock('autopilot');
     const old = ui;
     setTimeout(() => old.remove(), 2200);
