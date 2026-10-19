@@ -126,21 +126,33 @@
     const r = el.getBoundingClientRect();
     return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top - dy + Math.min(r.height * rand(0.2, 0.55), 240))];
   };
-  // go to the next thing. If it's fully on screen, just move the mouse. If it's cut off, scroll: frame its section
-  // with the title at the top when that shows the whole thing, otherwise centre it. The cursor moves while it scrolls.
+  // Where each section sits when the tour arrives: the hero from the top, the stats band centred, contact right
+  // at the bottom, and everything else with its title just under the nav. Within a section it only scrolls
+  // further if the thing it's pointing at is still cut off, and it never scrolls back up mid-lap.
   const NAV = 84;
-  function scrollFor(el, up) {
-    const r = el.getBoundingClientRect(), max = document.documentElement.scrollHeight - innerHeight;
-    if (r.top >= NAV && r.bottom <= innerHeight - 12) return 0;
-    const clamp = (y) => Math.max(0, Math.min(max, y));
-    const fits = (y) => r.top - (y - scrollY) >= NAV && r.bottom - (y - scrollY) <= innerHeight - 12;
-    const section = el.closest('section');
-    if (section) {
-      const y = clamp(scrollY + section.getBoundingClientRect().top - NAV);
-      if (y >= scrollY && fits(y)) return y - scrollY;
+  const maxY = () => document.documentElement.scrollHeight - innerHeight;
+  const clampY = (y) => Math.max(0, Math.min(maxY(), y));
+  function anchor(section) {
+    const r = section.getBoundingClientRect();
+    if (section.classList.contains('hero')) return 0;
+    if (section.id === 'contact') {   // right to the bottom, unless that would cut off the top of the contact panel
+      const top = (section.querySelector('.contact') || section).getBoundingClientRect().top;
+      return top - (maxY() - scrollY) >= NAV + 8 ? maxY() : clampY(scrollY + top - NAV - 28);
     }
-    const y = r.height > innerHeight - NAV - 24 ? scrollY + r.top - NAV - 16 : scrollY + r.top + r.height / 2 - (innerHeight + NAV) / 2;
-    return up ? clamp(y) - scrollY : Math.max(0, clamp(y) - scrollY);   // only the first stop of a lap may scroll up
+    if (section.classList.contains('stats')) return clampY(scrollY + r.top + r.height / 2 - (innerHeight + NAV) / 2);
+    const head = section.querySelector('.section__head') || section;
+    return clampY(scrollY + head.getBoundingClientRect().top - NAV - 28);
+  }
+  let lastSection = null;
+  function scrollFor(el, up) {
+    const section = el.closest('section');
+    let y = scrollY;
+    if (section && section !== lastSection) { y = anchor(section); lastSection = section; }
+    const r = el.getBoundingClientRect(), top = r.top - (y - scrollY), bottom = r.bottom - (y - scrollY);
+    if (bottom > innerHeight - 24) y = r.height > innerHeight - NAV - 40 ? scrollY + r.top - NAV - 16 : y + bottom - (innerHeight - 24);
+    else if (top < NAV) y = scrollY + r.top - NAV - 16;
+    y = clampY(y);
+    return up ? y - scrollY : Math.max(0, y - scrollY);
   }
   async function visit(el, my, up = false) {
     const dy = reduced ? 0 : scrollFor(el, up), [x, y] = spot(el, dy);
@@ -184,6 +196,7 @@
   async function tour(my) {
     place(innerWidth * rand(0.55, 0.7), innerHeight * rand(0.45, 0.6));
     for (;;) {
+      lastSection = null;
       for (const [i, [target, lines]] of beats().entries()) {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
         if (!el) continue;
