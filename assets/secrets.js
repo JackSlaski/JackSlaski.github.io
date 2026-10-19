@@ -13,6 +13,7 @@
     { id: 'explorer', name: 'Explorer', done: 'You visited every project page.', hint: 'Every project has its own page. Seen them all?', progress: () => `${PROJECTS.filter((p) => seen().has(p)).length} / ${PROJECTS.length} pages` },
     { id: 'oob', name: 'Out of bounds', done: 'You fell out of the map and found the 404 page.', hint: 'Not every page exists. Try one that doesn’t.' },
     { id: 'tiles', name: 'Party starter', done: 'You beat the bot at Colour Tiles.', hint: 'One of my party games is playable on its own page. Win a round.' },
+    { id: 'house', name: 'The house always wins', done: 'You opened the cases and saw how they played you.', hint: 'My loot box research comes with a case you can open. See it through to the end.' },
   ];
   const got = new Set(read(KEY, []).filter((id) => LIST.some((a) => a.id === id)));
 
