@@ -5,13 +5,13 @@
   const root = document.querySelector('[data-game="cave-gen"]');
   if (!root) return;
 
-  const ROCK = 1, FLOOR = 0, CRYSTAL_CHANCE = 1 / 15;
+  const ROCK = 1, FLOOR = 0, CRYSTAL_CHANCE = 1 / 10;
   const COL = { floor: '#06080d', room: '#0b1528', rock: '#222a38', wall: '#3d4a63', loot: '#e4ae39' };
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // the settings from the tool's Details panel (the Unreal-only ones, like meshes and materials, are left out)
   const FIELDS = [
     { cat: 'Generation', key: 'seed', label: 'Grid Seed', type: 'number', min: 0, max: 999999, value: 20261 },
-    { cat: 'Generation', key: 'lock', label: 'Seed Lock', type: 'check', value: true },
+    { cat: 'Generation', key: 'lock', label: 'Seed Lock', type: 'check', value: false },
     { cat: 'Generation', key: 'fill', label: 'Fill Probability', type: 'range', min: 30, max: 60, value: 46, unit: '%' },
     { cat: 'Generation', key: 'iter', label: 'Number of Iterations', type: 'range', min: 0, max: 10, value: 5 },
     { cat: 'Corridors', key: 'corridors', label: 'Number of Corridors', type: 'range', min: 0, max: 12, value: 3 },
@@ -66,13 +66,13 @@
           ${cats.map((c) => `<p class="ue__cat">${c}</p>${FIELDS.filter((f) => f.cat === c).map(row).join('')}`).join('')}
           <details class="ue__adv"><summary>Advanced</summary>${FIELDS.filter((f) => f.adv).map(row).join('')}</details>
         </div>
-        <div class="ue__actions"><button class="btn" type="button" data-generate>Generate</button></div>
+        <div class="ue__actions"><button class="btn" type="button" data-generate>Generate</button><p class="ue__count">Caves generated: <b data-made>0</b></p></div>
       </aside>
     </div>`;
 
   const $ = (s) => root.querySelector(s);
   const cv = $('canvas'), cx = cv.getContext('2d'), screen = $('[data-screen]'), passEl = $('[data-pass]'), info = $('[data-info]');
-  let W, H, grid, roomMask, loot = [], rooms = 0, seed = 0, run = 0, tool = 'rock';
+  let W, H, grid, roomMask, loot = [], rooms = 0, seed = 0, run = 0, tool = 'rock', made = 0;
 
   // mulberry32: a tiny seeded random number generator, so a seed always rebuilds the same cave
   function rng(a) {
@@ -150,7 +150,7 @@
     // the crystal: its own random stream, so whether a seed has one doesn't depend on the settings
     const cr = rng(seed ^ 0x5eed), walls = [];
     let gem = null;
-    if (cr() < CRYSTAL_CHANCE) {
+    if (!window.secrets?.has('crystal') && cr() < CRYSTAL_CHANCE) {   // once you've found one, they stop appearing
       for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) {
         const i = y * W + x;
         if (g[i] && (!g[i - 1] || !g[i + 1] || !g[i - W] || !g[i + W])) walls.push([x, y]);
@@ -224,6 +224,7 @@
     rooms = count;
     placeCrystal(null);
     fit();
+    if (animate) $('[data-made]').textContent = ++made;   // full generations count, quick setting tweaks don't
     const finish = () => {
       grid = frames[frames.length - 1][1]; roomMask = mask; loot = chests;
       passEl.textContent = '';

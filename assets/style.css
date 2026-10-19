@@ -822,5 +822,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ue output { min-width: 2.4rem; text-align: right; font-family: var(--mono); font-size: 0.78rem; color: var(--text); }
 .ue__actions { padding: 0.9rem; border-top: 1px solid var(--line); }
 .ue__actions .btn { width: 100%; justify-content: center; }
+.ue__count { margin-top: 0.6rem; text-align: center; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.ue__count b { font-weight: 500; color: var(--text); }
 @media (max-width: 900px) { .cave { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .cave__crystal, .cave__crystal.is-found { animation: none; } }
