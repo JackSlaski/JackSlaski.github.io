@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026102015" />
+	<link rel="stylesheet" href="assets/style.css?v=2026102018" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -98,9 +98,9 @@ FOOT = """
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026102015" defer></script>
-	<script src="assets/secrets.js?v=2026102015" defer></script>
-	<script src="assets/debug.js?v=2026102015" defer></script>
+	<script src="assets/main.js?v=2026102018" defer></script>
+	<script src="assets/secrets.js?v=2026102018" defer></script>
+	<script src="assets/debug.js?v=2026102018" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -242,7 +242,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026102015" defer></script>', f'<script src="assets/secrets.js?v=2026102015" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102015" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026102018" defer></script>', f'<script src="assets/secrets.js?v=2026102018" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102018" defer></script>')
     out.append(foot)
     return "".join(out)
 

@@ -566,12 +566,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transform: perspective(600px) rotateX(55deg) translateY(25%) scale(2);
   transform-origin: 50% 100%;
 }
-.oob__player { width: 22px; height: 22px; margin: 0 auto 2.5rem; background: var(--accent); transform: rotate(45deg); animation: fall 2.4s cubic-bezier(0.55, 0, 1, 0.45) infinite; }
+.oob__player { width: 22px; height: 22px; margin: 0 auto 4rem; background: var(--accent); transform: rotate(45deg); animation: fall 2.4s cubic-bezier(0.55, 0, 1, 0.45) infinite; }
 @keyframes fall {   /* drops and shrinks away into the void, gone before it reaches the text */
-  0% { transform: translateY(-50px) rotate(45deg); opacity: 0; }
-  15%, 55% { opacity: 1; }
-  85%, 100% { opacity: 0; }
-  100% { transform: translateY(18px) rotate(405deg) scale(0.15); }
+  0% { transform: translateY(-100px) rotate(45deg); opacity: 0; }
+  12%, 62% { opacity: 1; }
+  88%, 100% { opacity: 0; }
+  100% { transform: translateY(155px) rotate(405deg) scale(0.3); }
 }
 .oob__title { font-size: clamp(4rem, 2rem + 9vw, 10rem); }
 .oob__title span { color: var(--accent); }
