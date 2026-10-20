@@ -6,6 +6,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache")   # always check for edits, so local testing never shows an old page
+        super().end_headers()
+
     def send_error(self, code, message=None, explain=None):
         page = ROOT / "404.html"
         if code != 404 or not page.exists():

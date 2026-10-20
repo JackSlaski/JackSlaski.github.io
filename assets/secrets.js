@@ -118,8 +118,8 @@
     ['Design', 'Game Director', 'Lead Gameplay Designer', 'Systems Designer', 'Level Designer', 'UI/UX Designer'],
     ['Engineering', 'Lead Programmer', 'Tools Programmer', 'Lead Bug Creator', 'Lead Bug Fixer|Some of them.'],
     ['Art and audio', 'Art Director', 'Sound Designer|You probably had it muted.'],
-    ['Production', 'Producer', 'Scrum Master', 'Every Stand-up Meeting', 'Coffee Runs'],
-    ['Live ops', 'Loot Box Odds|Totally fair. Probably.', 'Crystal Placement', 'Gerbert Wrangler', `AI Takeover|Supervised by ${ME}.|The AI`, 'QA Lead|Found most of the bugs. Wrote the rest.'],
+    ['Production', 'Producer', 'Design Document Writer', 'QA Lead|Found most of the bugs. Wrote the rest.', 'Deadline Survivor|Somehow.'],
+    ['Side quests', 'Gunsmith|Every part of every gun in Recoil Works.', 'Pirate Captain|Tech lead on Leviathan’s Gauntlet.', 'Gerbert Wrangler', 'Quiz Master|Do You Know Ball?', 'Potion Brewer|Formula and Flask.', 'Loot Box Odds|Totally fair. Probably.', `AI Takeover|Supervised by ${ME}.|The AI`],
   ];
   const credits = document.createElement('dialog');
   credits.className = 'credits';
@@ -146,7 +146,7 @@
       <div class="credits__end">
         <p class="title credits__big">Thanks for playing</p>
         <div class="credits__actions">
-          <a class="btn" href="mailto:jackslaski04@gmail.com">Hire Jack?</a>
+          <a class="btn" href="/#contact" data-close>Hire Jack?</a>
           <button class="btn btn--ghost" type="button" data-close>Back to the site</button>
         </div>
       </div>
