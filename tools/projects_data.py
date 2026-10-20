@@ -143,7 +143,7 @@ PROJECTS = {
     hero="images/portfolio/DYKBGame.png",
     facts=[("Role", "Solo developer"), ("Platform", "Mobile"), ("Time", "8 weeks"), ("Engine", "UE5"), ("Grade", "87%", 87)],
     media=[("yt", "bypzMwhg-Ro", "Gameplay video"), ("img", "images/portfolio/DYKBGame.png", "Title art")],
-    why=['Most football quiz games are just multiple choice on a screen.', 'I wanted the answer itself to be the skill: you shoot a penalty at the right answer, so knowing football and timing your shot both matter.'],
+    why=['Most football quiz games are just multiple choice on a screen.', 'I wanted the answer itself to be the skill: you shoot a penalty at the right answer, so knowing football and timing your shot both matter.', 'It was also my first game built for mobile, so the focus was everything a free-to-play phone game needs: touch controls, a UI that fits any screen, and the systems that keep players coming back, like a coin shop, daily login rewards, and adverts. The visuals came second.'],
     how={'tools': ['UE5', 'Mobile', 'UMG', 'Analytics', 'Design documents'], 'ps': ['I planned it in a game design document and a technical design document, then built it in UE5 for phones.', "The UI builds itself from the content, so adding questions or teams doesn't mean building new screens.", 'I added the systems a live mobile game needs: a coin shop, daily rewards, analytics to drive updates, a leaderboard, and placeholder ad and social hooks.']},
     sections=[
         dict(kind="systems", label="Modes", title="Three ways to play", items=[
@@ -171,7 +171,7 @@ PROJECTS = {
     hero="images/portfolio/FaFGame.png",
     facts=[("Role", "Solo developer"), ("Time", "8 weeks"), ("Engine", "UE5"), ("Grade", "80%", 80)],
     media=[("yt", "wXoo731O6DI", "Gameplay video"), ("img", "images/fafp1.png", "Factory floor"), ("img", "images/fafp2.png", "Build mode"), ("img", "images/portfolio/FaFGame.png", "Title art")],
-    why=['I wanted a factory game where the fun starts with experimenting and turns into optimising.', 'You work out a good potion by hand, then build a production line that makes it for you.'],
+    why=['Most crafting systems use up ingredients to make a fixed item. I wanted to challenge that and test a different method: every ingredient has a hidden ideal value, and fuzzy logic grades how close your mix gets.', "It's a systems prototype, so the art is placeholder on purpose. The interesting part is the logic underneath: the appraisal, the Clarity score, and how that one number sets both a potion's price and how well it works.", 'Once you work out a good potion by hand, you build a production line that makes it for you.'],
     how={'tools': ['UE5', 'Blueprints', 'Fuzzy logic', 'Procedural generation'], 'ps': ['Ingredient combinations are generated fresh each session, so recipes have to be discovered rather than looked up.', 'Potion quality is judged with fuzzy logic, so you get graded results rather than a simple right or wrong.', 'Cauldrons and machines are placeable entities with their own settings, which is what turns brewing into automation.']},
     sections=[dict(kind="list", label="Features", title="What's in it", items=[
         "Potion combinations generated fresh each session", "Fuzzy logic for judging potion quality",
@@ -236,13 +236,13 @@ PROJECTS = {
     hero="images/portfolio/SurvivorsLikeGame.png",
     facts=[("Role", "Solo developer"), ("Time", "8 weeks"), ("Engine", "UE5"), ("Grade", "68%", 68)],
     media=[("yt", "iesFC3GrAnI", "Gameplay video"), ("img", "images/slg1.png", "Round start"), ("img", "images/slg2.png", "Enemies closing in"), ("img", "images/slg3.png", "Area attack"), ("img", "images/portfolio/SurvivorsLikeGame.png", "Title art")],
-    why=['It was built for a module on game feel, so the point was to take simple combat and make it feel great to play.'],
+    why=['It was built for a module on game feel, so the art is deliberately simple. The focus was the research, the planning, and taking basic combat and making it feel great to play.', 'Everything is about feedback: characters lean into their movement, every action and UI element has a sound, and animation, VFX, and screen shake sell each hit.'],
     how={'tools': ['UE5', 'Blueprints', 'Niagara', 'Physics', 'Audio'], 'ps': ['I layered feedback on every action: Niagara effects, sound, damage numbers, knockback, death effects, and animated cooldowns.', 'Movement got the same treatment. The character leans into its momentum, and projectiles bounce with physics.', 'Four area attacks, Shockwave, Raise Hell, Enemy Freeze, and Explosive Mine, give you ways out as the waves get harder.']},
     sections=[dict(kind="list", label="Features", title="What's in it", items=[
         "360° mouse-aimed projectile combat", "Bouncing, physics-based projectiles",
         "Four area attacks: Shockwave, Raise Hell, Enemy Freeze, and Explosive Mine", "Wave-based survival",
         "Momentum-based character leaning", "Segmented health that wobbles and glows red below 25%", "Animated cooldown UI", "Damage numbers and hit feedback",
-        "Enemy knockback and death effects", "Layered audio and visual effects",
+        "Enemy knockback and death effects", "Screen shake", "Sound on every action and UI element", "Layered visual effects",
     ])],
     docs=[("Pitch and planning document", "documents/sldoc.pdf")],
 ),
@@ -254,7 +254,7 @@ PROJECTS = {
     hero="images/portfolio/UIShowcase.png",
     facts=[("Role", "UI design & build"), ("Time", "9 weeks"), ("Engine", "UE5 UMG"), ("Grade", "64%", 64)],
     media=[("yt", "1nKqosPS9FY", "UI walkthrough"), ("img", "images/portfolio/UIShowcase.png", "Crafting and inventory screens")],
-    why=["This was my first UE5 UI project, and it's where I realised how much I enjoy UI in games.", 'I wanted to build a complete RPG interface, not just a few screens.'],
+    why=["This was my first time building UI in Unreal, or anywhere really, and it's where I realised how much I enjoy it.", 'It was a learning project: I wanted to build a complete RPG interface, not just a few screens, and learn UMG properly along the way.'],
     how={'tools': ['UE5', 'UMG'], 'ps': ['I built every screen in UMG on top of an RPG framework, from the HUD to the shop, inventory, and settings.', 'I tried to keep every widget modular and technically sound so it could be reused and got the most out of the engine.']},
     sections=[dict(kind="list", label="Features", title="What's in it", items=[
         "Main HUD", "Player stats", "Player abilities", "Shop", "World object UI", "Enemy and player health in the world",
