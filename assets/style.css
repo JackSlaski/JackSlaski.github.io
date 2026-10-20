@@ -893,3 +893,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .is-australia body { transform: rotate(180deg); }
 .is-comic body, .is-comic body * { font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive !important; }
 .cave__crystal.is-hint { outline: 2px solid #3fd8e6; outline-offset: 6px; border-radius: 50%; }
+
+/* End credits: the reward for finding every secret */
+.trophies__credits { width: 100%; justify-content: center; margin-top: 1.25rem; }
+.credits { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; color: var(--text); background: var(--bg); }
+.credits::backdrop { background: transparent; }
+.credits[open] { animation: credits-in 700ms ease; }
+@keyframes credits-in { from { opacity: 0; } }
+.credits__view { position: absolute; inset: 0; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); }
+.credits__roll { position: absolute; top: 0; left: 0; right: 0; display: grid; gap: 5rem; padding: 0 var(--pad); text-align: center; transform: translateY(100vh); outline: none; }
+.credits__open { display: grid; gap: 2.25rem; }
+.credits__big { font-size: clamp(3rem, 1.6rem + 6vw, 6.5rem); }
+.credits__solo { display: grid; gap: 0.25rem; }
+.credits__solo span, .credits__row span { color: var(--muted); }
+.credits__solo b { font-family: var(--display); font-weight: 700; font-size: 2.1rem; line-height: 1.1; text-transform: uppercase; }
+.credits section { display: grid; gap: 1rem; }
+.credits section .label { margin-bottom: 0.5rem; font-size: 0.85rem; }
+.credits__row { display: grid; grid-template-columns: 1fr 1fr; align-items: baseline; gap: 1.75rem; width: 100%; max-width: 46rem; margin: 0 auto; }
+.credits__row span { text-align: right; }
+.credits__row b { text-align: left; font-family: var(--display); font-weight: 700; font-size: 1.55rem; line-height: 1.1; text-transform: uppercase; }
+.credits__row small { display: block; margin-top: 0.25rem; font-family: var(--body); font-weight: 400; font-size: 0.9rem; text-transform: none; color: var(--muted); }
+.credits__thanks p { font-size: 1.3rem; }
+.credits__small { font-style: italic; color: var(--muted); }
+.credits__end { display: grid; justify-items: center; align-content: center; gap: 2.25rem; min-height: 80vh; }   /* tall, so it ends on its own */
+.credits__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+.credits__skip { position: absolute; right: 1.25rem; bottom: 1.25rem; z-index: 1; padding: 0.55rem 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); transition: color 200ms, border-color 200ms; }
+.credits__skip:hover, .credits__skip:focus-visible { color: var(--text); border-color: var(--text); }
+.credits.is-still { overflow-y: auto; }
+.credits.is-still .credits__view { position: static; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.credits.is-still .credits__roll { position: static; transform: none; padding-block: 6rem; }
+@media (max-width: 640px) {
+  .credits__roll { gap: 4rem; }
+  .credits__row { grid-template-columns: 1fr; gap: 0.2rem; }
+  .credits__row span, .credits__row b { text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .credits[open] { animation: none; } }
+.credits.is-still .credits__end { min-height: 0; }

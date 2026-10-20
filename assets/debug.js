@@ -148,6 +148,7 @@
       else location.href = '/#contact';
       return ['Good choice.', 'ok'];
     }],
+    credits: ['Roll the end credits, once you’ve earned them', () => (window.secrets?.credits?.() ? ['Roll credits.', 'ok'] : ['Nice try. Find every secret first.', 'w'])],
     quit: ['Leave the development build', () => { disable(); return null; }],
   };
   COMMANDS.exit = ['Same as quit', COMMANDS.quit[1]];
