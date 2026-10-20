@@ -162,7 +162,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__lede { max-width: 34rem; margin-top: 1.75rem; font-size: clamp(1.1rem, 1rem + 0.45vw, 1.3rem); color: #cfd5df; }
 .hero__lede strong { color: var(--text); font-weight: 600; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
-.hero__secrets { position: absolute; right: calc(var(--pad) + 2.25rem); bottom: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms; }
+.hero__secrets { padding: 0; position: absolute; right: calc(var(--pad) + 2.25rem); bottom: 3rem; display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 200ms; }
 .hero__secrets b { font-weight: 500; color: var(--text); }
 .hero__secrets:hover { color: var(--text); }
 .hero__pips { display: inline-flex; gap: 0.4rem; }
@@ -363,6 +363,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero__secrets { left: var(--pad); right: auto; bottom: 5.85rem; }
   .hero::before { background: linear-gradient(0deg, var(--bg) 0%, rgba(10, 12, 17, 0.85) 45%, rgba(10, 12, 17, 0.7) 100%); }
   .contact__actions .btn { width: 100%; justify-content: center; }
+  .hero__sep { display: none; }
+  .hero__engine { display: block; }
   .footer__inner { flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
 }
 
@@ -829,7 +831,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ue__row:hover { background: rgba(255, 255, 255, 0.03); }
 .ue__ctl { display: flex; justify-content: flex-end; align-items: center; gap: 0.45rem; }
 .ue input[type="number"] { width: 100%; padding: 0.3rem 0.45rem; border: 1px solid var(--line-strong); background: #070a10; color: var(--text); font-family: var(--mono); font-size: 0.8rem; }
-.ue input[type="range"] { width: 100%; min-width: 0; accent-color: var(--accent); }
+.ue input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; min-width: 0; height: 1.25rem; background: transparent; cursor: pointer; }
+.ue input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--line-strong); }
+.ue input[type="range"]::-moz-range-track { height: 2px; background: var(--line-strong); }
+.ue input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 16px; margin-top: -7px; background: var(--accent); border: 0; border-radius: 0; transition: transform 150ms var(--ease); }
+.ue input[type="range"]::-moz-range-thumb { width: 10px; height: 16px; background: var(--accent); border: 0; border-radius: 0; transition: transform 150ms var(--ease); }
+.ue input[type="range"]:hover::-webkit-slider-thumb, .ue input[type="range"]:active::-webkit-slider-thumb { transform: scaleY(1.2); }
+.ue input[type="range"]:hover::-moz-range-thumb, .ue input[type="range"]:active::-moz-range-thumb { transform: scaleY(1.2); }
+.ue input[type="range"]:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
 .ue input[type="checkbox"] { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
 .ue output { min-width: 2.4rem; text-align: right; font-family: var(--mono); font-size: 0.78rem; color: var(--text); }
 .ue__actions { padding: 0.9rem; border-top: 1px solid var(--line); }
@@ -853,6 +862,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .afk-cursor.is-still .afk-thought { position: static; max-width: min(30rem, calc(100vw - 2rem)); }
 .is-afk-hover { outline: 2px solid var(--accent); outline-offset: 4px; }
 .btn.is-afk-hover { outline: none; filter: brightness(1.15); }
+.stats { position: relative; z-index: 1; }   /* so the AI takeover highlight isn't hidden under the hero */
 @keyframes afk-in { from { opacity: 0; transform: translate(-50%, -10px); } }
 @keyframes afk-blink { 50% { opacity: 0.25; } }
 @media (prefers-reduced-motion: reduce) { .afk, .afk__dot { animation: none; } .afk-thought { transition: none; } }
@@ -918,7 +928,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .credits__small { font-style: italic; color: var(--muted); }
 .credits__end { display: grid; justify-items: center; align-content: center; gap: 2.25rem; min-height: 100vh; }   /* a full screen tall, so nothing else shows when it stops */
 .credits__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-.credits__skip { position: absolute; right: 1.25rem; bottom: 1.25rem; z-index: 1; padding: 0.55rem 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); transition: color 200ms, border-color 200ms; }
+.credits__skip { position: absolute; right: 1.25rem; bottom: 1.25rem; z-index: 2; padding: 0.55rem 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); transition: color 200ms, border-color 200ms; }
 .credits__skip:hover, .credits__skip:focus-visible { color: var(--text); border-color: var(--text); }
 .credits.is-still { overflow-y: auto; }
 .credits.is-still .credits__view { position: static; overflow: visible; -webkit-mask-image: none; mask-image: none; }
@@ -952,4 +962,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .afk { flex-wrap: wrap; row-gap: 0.25rem; }
   .afk > span:last-child { flex-basis: 100%; }
   .loot__feed { min-height: 2.9em; }   /* room for a long name on two lines, so the button below doesn't jump */
+}
+
+/* All secrets found: the celebration before the credits */
+.credits__fanfare { position: absolute; inset: 0; z-index: 1; display: none; place-content: center; justify-items: center; gap: 1.5rem; padding: var(--pad); text-align: center; transition: opacity 400ms ease; }
+.credits.is-fanfare .credits__fanfare { display: grid; animation: fanfare-shake 380ms ease 1.5s; }
+.credits.is-fanfare .credits__view { visibility: hidden; }
+.credits.is-leaving .credits__fanfare { opacity: 0; }
+.credits__fanfare::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: #fff; opacity: 0; animation: fanfare-flash 600ms ease-out 1.35s; }
+.credits__fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.credits__fanfare .label { animation: fanfare-fade 500ms ease 100ms both; }
+.credits__pips { display: flex; gap: 1.1rem; }
+.credits__pips i { width: 16px; height: 16px; background: var(--accent); box-shadow: 0 0 16px var(--accent); transform: rotate(45deg); animation: fanfare-pip 420ms cubic-bezier(0.2, 1.8, 0.4, 1) calc(300ms + var(--i) * 130ms) both; }
+.credits__fanfare .credits__big { animation: fanfare-slam 520ms cubic-bezier(0.2, 1.4, 0.4, 1) 1.35s both; }
+.credits__fanfare .credits__big span { color: var(--accent); }
+.credits__sub { color: var(--muted); animation: fanfare-fade 500ms ease 2.1s both; }
+@keyframes fanfare-pip { from { transform: rotate(45deg) scale(0); background: transparent; box-shadow: none; } }
+@keyframes fanfare-slam { from { opacity: 0; transform: scale(2.6); filter: blur(8px); } 60% { opacity: 1; transform: scale(0.95); filter: none; } }
+@keyframes fanfare-flash { 0% { opacity: 0.35; } 100% { opacity: 0; } }
+@keyframes fanfare-fade { from { opacity: 0; transform: translateY(8px); } }
+@keyframes fanfare-shake { 20% { transform: translate(-9px, 5px); } 40% { transform: translate(8px, -6px); } 60% { transform: translate(-6px, 3px); } 80% { transform: translate(3px, -2px); } }
+@media (prefers-reduced-motion: reduce) {
+  .credits.is-fanfare .credits__fanfare, .credits__fanfare::after, .credits__fanfare .label, .credits__pips i, .credits__fanfare .credits__big, .credits__sub { animation: none; }
 }

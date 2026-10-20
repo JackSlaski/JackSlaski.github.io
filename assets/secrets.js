@@ -35,7 +35,7 @@
     const a = queue.shift();
     if (!a) {
       showing = false;
-      if (rollPending) { rollPending = false; setTimeout(rollCredits, 600); }   // the last toast has gone: roll credits
+      if (rollPending) { rollPending = false; setTimeout(() => rollCredits(true), 300); }   // the last toast has gone: celebrate, then roll credits
       return;
     }
     showing = true;
@@ -75,7 +75,7 @@
   document.body.append(sheet);
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet || e.target.closest('.trophies__close')) sheet.close();
-    else if (e.target.closest('[data-credits]')) rollCredits();
+    else if (e.target.closest('[data-credits]')) rollCredits(false);
   });
   sheet.querySelector('[data-reset]').addEventListener('click', () => {
     got.clear(); write(KEY, []); write(SEEN_KEY, []); render();
@@ -126,6 +126,13 @@
   credits.setAttribute('aria-label', 'End credits');
   credits.innerHTML = `
     <button class="credits__skip" type="button" autofocus>Skip</button>
+    <div class="credits__fanfare">
+      <canvas class="credits__fx" aria-hidden="true"></canvas>
+      <p class="label">100% complete</p>
+      <p class="credits__pips" aria-hidden="true">${LIST.map((_, i) => `<i style="--i:${i}"></i>`).join('')}</p>
+      <p class="title credits__big">All secrets <span>found</span></p>
+      <p class="credits__sub">You found all ${LIST.length}. Roll credits.</p>
+    </div>
     <div class="credits__view"><div class="credits__roll" tabindex="-1">
       <div class="credits__open">
         <p class="label">A ${ME} production</p>
@@ -153,33 +160,74 @@
     </div></div>`;
   document.body.append(credits);
   const still = matchMedia('(prefers-reduced-motion: reduce)');
-  let anim = null;
-  function rollCredits() {
+  const $c = (s) => credits.querySelector(s);
+  let anim = null, timers = [];
+  function rollCredits(fanfare = false) {
     if (credits.open) return;
     sheet.close();
     credits.classList.toggle('is-still', still.matches);
-    const skip = credits.querySelector('.credits__skip'), view = credits.querySelector('.credits__view');
-    const roll = credits.querySelector('.credits__roll'), end = credits.querySelector('.credits__end');
-    skip.hidden = still.matches;
+    $c('.credits__skip').hidden = still.matches && !fanfare;
     credits.showModal();
-    devlog('LogSecrets', 'All secrets found. Rolling credits.', 'ok');
-    if (still.matches) { view.scrollTop = 0; roll.focus({ preventScroll: true }); return; }   // reduced motion: a still list you scroll yourself
+    if (fanfare) celebrate(); else roll();
+  }
+  // the big moment: every diamond lights up, "All secrets found" slams in with a shake and confetti, then the credits
+  function celebrate() {
+    devlog('LogSecrets', 'All secrets found!', 'ok');
+    credits.classList.add('is-fanfare');
+    const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+    if (!still.matches) later(1350, () => burst($c('.credits__fx')));
+    later(still.matches ? 3500 : 4800, () => credits.classList.add('is-leaving'));
+    later(still.matches ? 3900 : 5200, roll);
+  }
+  function burst(canvas) {
+    const dpr = devicePixelRatio || 1, w = canvas.offsetWidth, h = canvas.offsetHeight, ctx = canvas.getContext('2d');
+    canvas.width = w * dpr; canvas.height = h * dpr; ctx.scale(dpr, dpr);
+    const cols = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff5a36', '#e4ae39', '#ffffff'];
+    const bits = Array.from({ length: 160 }, () => {
+      const a = Math.random() * Math.PI * 2, s = 3 + Math.random() * 10;
+      return { x: w / 2, y: h / 2, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 5, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3, s: 5 + Math.random() * 7, c: cols[Math.floor(Math.random() * cols.length)] };
+    });
+    const t0 = performance.now();
+    (function frame(t) {
+      ctx.clearRect(0, 0, w, h);
+      if (!credits.classList.contains('is-fanfare') || t - t0 > 4500) return;
+      for (const b of bits) {
+        b.vy += 0.2; b.vx *= 0.985; b.x += b.vx; b.y += b.vy; b.r += b.vr;
+        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 4, b.s, b.s / 2); ctx.restore();
+      }
+      requestAnimationFrame(frame);
+    })(t0);
+  }
+  function roll() {
+    timers.forEach(clearTimeout); timers = [];
+    credits.classList.remove('is-fanfare', 'is-leaving');
+    const skip = $c('.credits__skip'), rollEl = $c('.credits__roll'), end = $c('.credits__end'), view = $c('.credits__view');
+    skip.hidden = still.matches;
+    devlog('LogSecrets', 'Rolling credits.', 'ok');
+    if (still.matches) { credits.scrollTop = 0; rollEl.focus({ preventScroll: true }); return; }   // reduced motion: a still list you scroll yourself
     // roll up at a steady 70px a second, then ease the last bit so "Thanks for playing" settles in the middle
     const h = view.clientHeight, to = h / 2 - (end.offsetTop + end.offsetHeight / 2), tail = 160;
     const steady = (h - to - tail) / 0.07, duration = steady + 2500;
-    anim = roll.animate([
+    anim = rollEl.animate([
       { transform: `translateY(${h}px)` },
       { transform: `translateY(${to + tail}px)`, offset: steady / duration, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
       { transform: `translateY(${to}px)` },
     ], { duration, fill: 'forwards' });
     anim.onfinish = () => { skip.hidden = true; end.querySelector('.btn').focus({ preventScroll: true }); };
   }
-  credits.addEventListener('close', () => { anim?.cancel(); anim = null; });
+  credits.addEventListener('close', () => {
+    timers.forEach(clearTimeout); timers = [];
+    credits.classList.remove('is-fanfare', 'is-leaving');
+    anim?.cancel(); anim = null;
+  });
   credits.addEventListener('click', (e) => {
     if (e.target.closest('[data-close]')) credits.close();
-    else if (e.target.closest('.credits__skip')) anim?.finish();
+    else if (e.target.closest('.credits__skip')) {
+      if (credits.classList.contains('is-fanfare')) roll();
+      anim?.finish();
+    }
   });
-  if (new URLSearchParams(location.search).has('credits')) setTimeout(rollCredits, 600);   // ?credits plays them for testing, like ?takeover
+  if (new URLSearchParams(location.search).has('credits')) setTimeout(() => rollCredits(true), 600);   // ?credits plays the whole ending for testing, like ?takeover
 
   // Explorer: every project page you open is remembered
   const slug = document.body.dataset.project;

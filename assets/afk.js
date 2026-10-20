@@ -128,47 +128,64 @@
       place(u * u * x0 + 2 * u * e * cx + e * e * x, u * u * y0 + 2 * u * e * cy + e * e * y);
     });
   }
+  // where an element will sit once it's finished sliding up into view (sections reveal with a 24px slide as you scroll)
+  const rect = (el) => {
+    const r = el.getBoundingClientRect();
+    let s = 0;
+    for (let a = el.closest('.reveal'); a; a = a.parentElement?.closest('.reveal')) s += new DOMMatrixReadOnly(getComputedStyle(a).transform).m42;
+    return { left: r.left, right: r.right, width: r.width, height: r.height, top: r.top - s, bottom: r.bottom - s };
+  };
   // a point inside the element, shifted by how far the page is about to scroll
   const spot = (el, dy = 0) => {
-    const r = el.getBoundingClientRect();
+    const r = rect(el);
     return [Math.min(innerWidth - 40, r.left + r.width * rand(0.25, 0.7)), Math.min(innerHeight - 60, r.top - dy + Math.min(r.height * rand(0.2, 0.55), 240))];
   };
   // Where each section sits when the tour arrives: the hero from the top, the stats band centred, contact right
   // at the bottom, and everything else with its title just under the nav. Within a section it only scrolls
   // further if the thing it's pointing at is still cut off, and it never scrolls back up mid-lap.
-  const NAV = 84;
+  // the clear space starts under the nav, or under the AI takeover banner where that's taller (it stacks on phones)
+  const NAV = () => Math.max(84, (ui?.querySelector('.afk')?.getBoundingClientRect().bottom || 0) + 8);
   const maxY = () => document.documentElement.scrollHeight - innerHeight;
   const clampY = (y) => Math.max(0, Math.min(maxY(), y));
   function anchor(section) {
-    const r = section.getBoundingClientRect();
+    const r = rect(section), nav = NAV();
     if (section.classList.contains('hero')) return 0;
-    if (section.id === 'contact') {   // right to the bottom, unless that would cut off the top of the contact panel
-      const top = (section.querySelector('.contact') || section).getBoundingClientRect().top;
-      return top - (maxY() - scrollY) >= NAV + 8 ? maxY() : clampY(scrollY + top - NAV - 28);
+    if (section.id === 'contact') {   // right to the bottom, unless that cuts off the top of the panel: then centre the panel
+      const p = rect(section.querySelector('.contact') || section);
+      return p.top - (maxY() - scrollY) >= nav + 8 ? maxY() : clampY(scrollY + p.top - nav - Math.max(8, (innerHeight - nav - p.height) / 2));
     }
-    if (section.classList.contains('stats')) return clampY(scrollY + r.top + r.height / 2 - (innerHeight + NAV) / 2);
+    if (section.classList.contains('stats')) return clampY(scrollY + r.top + r.height / 2 - (innerHeight + nav) / 2);
     const head = section.querySelector('.section__head') || section;
-    return clampY(scrollY + head.getBoundingClientRect().top - NAV - 28);
+    return clampY(scrollY + rect(head).top - nav - 28);
   }
   let lastSection = null;
   function scrollFor(el, up) {
     const section = el.closest('section');
     let y = scrollY;
     if (section && section !== lastSection) { y = anchor(section); lastSection = section; }
-    const r = el.getBoundingClientRect(), top = r.top - (y - scrollY), bottom = r.bottom - (y - scrollY);
-    if (bottom > innerHeight - 24) y = r.height > innerHeight - NAV - 40 ? scrollY + r.top - NAV - 16 : y + bottom - (innerHeight - 24);
-    else if (top < NAV) y = scrollY + r.top - NAV - 16;
+    const r = rect(el), top = r.top - (y - scrollY), bottom = r.bottom - (y - scrollY), nav = NAV();
+    if (bottom > innerHeight - 24) y = r.height > innerHeight - nav - 40 ? scrollY + r.top - nav - 16 : y + bottom - (innerHeight - 24);
+    else if (top < nav) y = scrollY + r.top - nav - 16;
     y = clampY(y);
     return up ? y - scrollY : Math.max(0, y - scrollY);
   }
   async function visit(el, my, up = false) {
     const dy = reduced ? 0 : scrollFor(el, up), [x, y] = spot(el, dy);
-    if (Math.abs(dy) < 4) return moveTo(x, y, my);
-    const dur = Math.min(3200, 1100 + Math.abs(dy) * 0.9);
-    await Promise.all([
-      scrollToY(scrollY + dy, my, dur),
-      wait(rand(0, dur * 0.45), my).then(() => moveTo(x, y, my, rand(dur * 0.6, dur * 0.95))),
-    ]);
+    if (Math.abs(dy) < 4) await moveTo(x, y, my);
+    else {
+      const dur = Math.min(3200, 1100 + Math.abs(dy) * 0.9);
+      await Promise.all([
+        scrollToY(scrollY + dy, my, dur),
+        wait(rand(0, dur * 0.45), my).then(() => moveTo(x, y, my, rand(dur * 0.6, dur * 0.95))),
+      ]);
+    }
+    // things slide up as they reveal on scroll, so the aim can be off by the end: correct it like a person would
+    const r = el.getBoundingClientRect();
+    if (!reduced && (pos[0] < r.left + 4 || pos[0] > r.right - 4 || pos[1] < r.top + 4 || pos[1] > r.bottom - 6)) {
+      await wait(250, my);
+      const [cx, cy] = spot(el);
+      await moveTo(cx, cy, my, 450);
+    }
   }
   function say(text) {
     thought.textContent = text;
