@@ -110,7 +110,13 @@
   function place(x, y) {
     pos = [x, y];
     cursor.style.transform = `translate(${x}px, ${y}px)`;
-    cursor.classList.toggle('is-left', x > innerWidth - 320);
+    fit();
+  }
+  // keep the thought bubble on screen: slide it left near the right edge, and flip it above the cursor near the bottom
+  function fit() {
+    const w = thought.offsetWidth, h = thought.offsetHeight, [x, y] = pos;
+    thought.style.left = `${Math.max(8, Math.min(x + 18, innerWidth - 8 - w)) - x}px`;
+    thought.style.top = `${y + 42 + h > innerHeight - 8 ? -h - 8 : 42}px`;
   }
   // a gentle curve at a human pace, landing somewhere inside the element, not dead centre
   function moveTo(x, y, my, dur) {
@@ -167,6 +173,7 @@
   function say(text) {
     thought.textContent = text;
     thought.classList.toggle('is-on', !!text);
+    fit();
   }
   const slug = (el) => (el.querySelector('a[href$=".html"]')?.getAttribute('href') || '').replace('.html', '');
 

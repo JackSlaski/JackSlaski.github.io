@@ -7,7 +7,17 @@
   // nav: solid once you leave the hero, menu toggle on small screens
   const nav = $('#nav'), toggle = $('.nav__toggle', nav);
   const solid = () => nav.classList.toggle('is-solid', scrollY > 40);
-  solid(); addEventListener('scroll', solid, { passive: true });
+
+  // back to top: a little arrow once you're a screen down
+  const up = document.createElement('button');
+  up.className = 'to-top';
+  up.type = 'button';
+  up.setAttribute('aria-label', 'Back to top');
+  up.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
+  up.addEventListener('click', () => { scrollTo({ top: 0 }); $('.brand')?.focus({ preventScroll: true }); });
+  document.body.append(up);
+  const onScroll = () => { solid(); up.classList.toggle('is-on', scrollY > innerHeight); };
+  onScroll(); addEventListener('scroll', onScroll, { passive: true });
   const setMenu = (open) => { nav.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); };
   toggle.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
   $$('#nav-links a').forEach((a) => a.addEventListener('click', () => setMenu(false)));

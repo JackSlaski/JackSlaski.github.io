@@ -305,8 +305,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .contact__links svg { width: 1.1rem; height: 1.1rem; }
 
 /* ---------- footer ---------- */
-.footer { padding-block: 2.5rem 3rem; }
-.footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.footer { padding-block: 2.5rem 5rem; }   /* clear of the back-to-top arrow */
+.footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .footer a:hover { color: var(--text); }
 
 /* ---------- reveal ---------- */
@@ -357,12 +357,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .stats__grid { grid-template-columns: 1fr 1fr; }
   .stat { padding: 1.5rem 1rem; }
   .stat:nth-child(odd) { padding-left: 0; }
-  .hero__content { padding-block: 7rem 7.5rem; }
+  .hero__content { padding-block: 7rem 9.25rem; }
   .hero__frame { inset: 5rem 0.75rem 1rem; }
-  .hero__now { left: var(--pad); bottom: 2rem; flex-wrap: wrap; }
-  .hero__secrets { left: var(--pad); right: auto; bottom: 3.6rem; }
+  .hero__now { left: var(--pad); bottom: 2.75rem; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .hero__secrets { left: var(--pad); right: auto; bottom: 5.85rem; }
   .hero::before { background: linear-gradient(0deg, var(--bg) 0%, rgba(10, 12, 17, 0.85) 45%, rgba(10, 12, 17, 0.7) 100%); }
   .contact__actions .btn { width: 100%; justify-content: center; }
+  .footer__inner { flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
 }
 
 /* =========================================================
@@ -702,6 +703,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @keyframes loot-flash { from { box-shadow: inset 0 0 0 100vmax color-mix(in srgb, var(--rc) 30%, transparent); } }
 
 .loot__feed { display: flex; justify-content: center; align-items: center; gap: 0.6rem; min-height: 1.5em; font-size: 0.88rem; color: var(--muted); }
+.loot__feed i, .loot__feed span { flex: none; }
 .loot__feed i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #eb4b4b; animation: loot-live 1.2s ease-in-out infinite; }
 .loot__feed span { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: #eb4b4b; }
 .loot__feed b { font-weight: 600; color: var(--text); }
@@ -838,15 +840,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (prefers-reduced-motion: reduce) { .cave__crystal, .cave__crystal.is-found { animation: none; } }
 
 /* AFK takeover (home page) */
-.afk { position: fixed; top: 5.25rem; left: 50%; z-index: 70; display: flex; align-items: center; gap: 0.75rem; max-width: calc(100% - 2rem); padding: 0.6rem 1rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.92); border: 1px solid var(--accent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 0.88rem; color: #c9d0db; animation: afk-in 400ms var(--ease); }
+.afk { position: fixed; top: 5.25rem; left: 50%; z-index: 70; display: flex; align-items: center; gap: 0.75rem; width: max-content; max-width: calc(100% - 2rem); padding: 0.6rem 1rem; transform: translateX(-50%); background: rgba(10, 12, 17, 0.92); border: 1px solid var(--accent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 0.88rem; color: #c9d0db; animation: afk-in 400ms var(--ease); }
 .afk b { flex: none; font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 .afk__dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: afk-blink 1s ease-in-out infinite; }
 .afk-cursor { position: fixed; top: 0; left: 0; z-index: 71; pointer-events: none; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6)); }
 .afk-cursor svg { display: block; width: 26px; height: 26px; }
 .afk-cursor__tag { position: absolute; top: 20px; left: 18px; padding: 0.1rem 0.35rem; background: var(--accent); font-family: var(--mono); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; color: #fff; }
-.afk-thought { position: absolute; top: 42px; left: 18px; width: max-content; max-width: 17rem; padding: 0.6rem 0.85rem; background: rgba(10, 12, 17, 0.95); border: 1px solid var(--line-strong); border-left: 3px solid var(--accent); font-size: 0.92rem; font-style: italic; line-height: 1.4; color: var(--text); opacity: 0; transform: translateY(4px); transition: opacity 250ms, transform 250ms var(--ease); }
+.afk-thought { position: absolute; top: 42px; left: 18px; width: max-content; max-width: min(17rem, calc(100vw - 16px)); padding: 0.6rem 0.85rem; background: rgba(10, 12, 17, 0.95); border: 1px solid var(--line-strong); border-left: 3px solid var(--accent); font-size: 0.92rem; font-style: italic; line-height: 1.4; color: var(--text); opacity: 0; transform: translateY(4px); transition: opacity 250ms, transform 250ms var(--ease); }
 .afk-thought.is-on { opacity: 1; transform: none; }
-.afk-cursor.is-left .afk-thought { left: auto; right: -6px; }
 .afk-cursor.is-still { top: auto; bottom: 2rem; left: 50%; transform: translateX(-50%) !important; }
 .afk-cursor.is-still svg, .afk-cursor.is-still .afk-cursor__tag { display: none; }
 .afk-cursor.is-still .afk-thought { position: static; max-width: min(30rem, calc(100vw - 2rem)); }
@@ -929,3 +930,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 @media (prefers-reduced-motion: reduce) { .credits[open] { animation: none; } }
 .credits.is-still .credits__end { min-height: 0; }
+
+/* back to top */
+.to-top {
+  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 60;
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  background: var(--accent); color: #fff;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity 250ms ease, transform 250ms var(--ease), visibility 0s linear 250ms, filter 200ms;
+}
+.to-top.is-on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.to-top:hover { filter: brightness(1.1); }
+.to-top:active { transform: translateY(1px) scale(0.96); }
+.to-top svg { width: 1.2rem; height: 1.2rem; }
+.is-console .to-top { display: none; }
+
+/* phones: achievements pop up centred, and the AFK banner stacks its text under the label */
+@media (max-width: 640px) {
+  .trophy { left: 0; right: 0; margin-inline: auto; width: calc(100vw - 2rem); bottom: 1rem; }
+  .afk { flex-wrap: wrap; row-gap: 0.25rem; }
+  .afk > span:last-child { flex-basis: 100%; }
+  .loot__feed { min-height: 2.9em; }   /* room for a long name on two lines, so the button below doesn't jump */
+}

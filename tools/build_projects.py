@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026102006" />
+	<link rel="stylesheet" href="assets/style.css?v=2026102011" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -95,13 +95,12 @@ FOOT = """
 			<span>© 2026 Jack Slaski</span>
 			<a href="index.html#projects">All projects</a>
 			<button class="footer__secrets" type="button" data-secrets hidden>Secrets</button>
-			<a href="#top">Back to top ↑</a>
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026102006" defer></script>
-	<script src="assets/secrets.js?v=2026102006" defer></script>
-	<script src="assets/debug.js?v=2026102006" defer></script>
+	<script src="assets/main.js?v=2026102011" defer></script>
+	<script src="assets/secrets.js?v=2026102011" defer></script>
+	<script src="assets/debug.js?v=2026102011" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -243,7 +242,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026102006" defer></script>', f'<script src="assets/secrets.js?v=2026102006" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102006" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026102011" defer></script>', f'<script src="assets/secrets.js?v=2026102011" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102011" defer></script>')
     out.append(foot)
     return "".join(out)
 
