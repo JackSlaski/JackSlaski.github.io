@@ -275,6 +275,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .about__text > p + p { margin-top: 1.1rem; }
 .about__text > p:first-child { color: var(--text); font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.7rem); line-height: 1.4; }
 
+/* Where it started: the Garry's Mod origin story */
+.origin { margin-top: 2.5rem; padding: clamp(1.25rem, 3vw, 2rem); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent); }
+.origin > p:not(.label) { margin-top: 0.9rem; color: #c9d0db; }
+.origin > .origin__lede { color: var(--text); font-size: 1.2rem; line-height: 1.45; }
+.origin__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0 0.4rem; padding: 1.25rem 0; border-block: 1px solid var(--line); }
+.origin__stats div { display: flex; flex-direction: column-reverse; justify-content: flex-end; }
+.origin__stats dd { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 1.8rem + 1.5vw, 3rem); line-height: 1; color: var(--text); }
+.origin__stats dd em { font-style: normal; color: var(--accent); }
+.origin__stats dt { margin-top: 0.45rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; line-height: 1.4; text-transform: uppercase; color: var(--muted); }
 .log { margin-top: 3rem; position: relative; }
 .log::before { content: ""; position: absolute; left: 7px; top: 0.5rem; bottom: 0.5rem; width: 2px; background: var(--line-strong); }
 .log li { position: relative; padding-left: 2.25rem; }
