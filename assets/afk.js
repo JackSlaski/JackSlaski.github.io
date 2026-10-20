@@ -28,7 +28,7 @@
     ['.stats__grid > :nth-child(1)', 'He’s been using Unreal Engine for over four years, so he knows his way around it.'],
     ['.stats__grid > :nth-child(2)', 'An MSc with a Distinction means he clearly knows his stuff.'],
     ['.stats__grid > :nth-child(3)', 'A First Class degree as well, he must have worked hard for that.'],
-    ['.stats__grid > :nth-child(4)', 'Thirteen games and tools is a lot of work.'],
+    ['.stats__grid > :nth-child(4)', 'Fourteen games and tools is a lot of work.'],
   ];
   const PROFILE = [
     ['.profile__photo', 'He looks pretty professional in that graduation photo.'],
@@ -42,6 +42,7 @@
   ];
   const TOOLS = new Set(['cavegenerationtool', 'uishowcase', 'minimalistui', 'lootboxethics']);   // not games, so no "I'd play this"
   const PROJECT = {
+    newlifedarkrp: ['A DarkRP game on Roblox? He’s come full circle from those Garry’s Mod servers.', 'Crates that show their real odds. That loot box research clearly paid off.'],
     recoilworks: ['Building your own gun from parts sounds really fun.', 'Having every part change how the gun fires is really clever.'],
     feudalliving: ['An AI that takes over when you go AFK? Hang on a minute…', 'Making this alone in eight weeks and coming second at GradEx is impressive.'],
     gerbertgames: ['What on earth is a Gerbert?', 'Four players fighting over tiles above a black hole sounds chaotic.'],

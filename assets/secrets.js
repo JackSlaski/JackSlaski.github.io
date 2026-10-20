@@ -3,7 +3,7 @@
 (() => {
   const KEY = 'jackslaski-secrets';
   const SEEN_KEY = 'jackslaski-seen';
-  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
+  const PROJECTS = ['newlifedarkrp', 'recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
 
   const read = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
   const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode: progress just won't stick */ } };

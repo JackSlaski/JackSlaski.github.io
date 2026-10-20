@@ -1,5 +1,39 @@
 # Content for every project page, in "next project" order.
 PROJECTS = {
+"newlifedarkrp": dict(
+    title="New Life: DarkRP",
+    desc="A modern Roblox take on Garry's Mod DarkRP, with city jobs, money printers, and a looter-shooter chase for rare gear.",
+    kicker="Personal project · Solo · Roblox Studio",
+    chips=[("live", "In development")],
+    lede="A first-person city roleplay game with a looter-shooter at its heart. Pick a job, earn your money, and chase rare gear where every item is rolled.",
+    hero="images/newlife/newlife-city-night.jpg",
+    facts=[("Role", "Designer & developer"), ("Team", "Solo"), ("Engine", "Roblox Studio, Luau"), ("Started", "September 2026"), ("Status", "In development")],
+    media=[("yt", "uCCXXUdAL4I", "Gameplay video"), ("img", "images/newlife/newlife-city-night.jpg", "The city at night"), ("img", "images/newlife/newlife-city-day.jpg", "The city by day"), ("img", "images/newlife/newlife-city-sunset.jpg", "The city at sunset"), ("img", "images/newlife/newlife-inventory.jpg", "Inventory and rolled stats"), ("img", "images/newlife/newlife-gems.jpg", "Gems"), ("img", "images/newlife/newlife-unbox.jpg", "The Unbox menu")],
+    why=["I started making games by running Garry's Mod DarkRP servers. New Life rebuilds that game for modern Roblox.", "Roblox servers are matchmade with no staff online, and most players are on phones. So the server rules that staff used to enforce had to become mechanics the game enforces itself, and everything had to work on a touch screen as well as a keyboard and mouse.", "It's also where my loot box research meets a real game. Crates show their odds, the upgrade wheel's slices are the true odds, and a crate's glow tells you its rarity honestly before the reveal."],
+    how={'tools': ['Roblox Studio', 'Luau', 'Rojo', 'Git', 'ProfileStore', 'Python'], 'ps': ["Shooting feels instant but can't be cheated. The shooter sees hits straight away, then the server checks fire rate, ammo, range, and line of sight before any damage lands. Every message from a client goes through one rate-limited networking module, trap remotes catch exploit tools, and a movement check pulls back speed hacks and teleports.", "Every item saves how lucky each of its rolls was rather than its final numbers, so its stats are worked out from that luck and the current balance. When I rebalance, every existing item moves with it and keeps its place. Saves are session locked, so items can't be duplicated across servers.", "The 85 guns are balanced by time to kill rather than by hand. Each gun has a target time to kill for its rarity, and its damage is solved from its own fire rate, clip, pellets, and reload, so every gun keeps its real-life feel without one clearly beating the rest.", "The code lives in Git and syncs into Studio with Rojo, and Python tools build the city from a written plan."]},
+    sections=[
+        dict(kind="systems", label="Items", title="Rarity, tier, and grade", items=[
+            ("Rarity", "What the item is, fixed for life and shown by its colour, from Common up to Legendary. Rarer guns hit harder, and Legendary guns only come from crates."),
+            ("Tier", "How far it's been upgraded, from T1 to T6. Each upgrade adds a gem socket and better stats, so a maxed gun can compete with the next rarity up."),
+            ("Grade", "How lucky its rolls were, from F to SS, shown as a metal badge. SS is the top 0.1%, about 1 in 1,000."),
+        ]),
+        dict(kind="systems", label="Systems", title="What I built", items=[
+            ("Jobs and economy", "Eight jobs paid on the in-game clock, money printers that thieves empty and police seize, and items you can put on the ground for sale at your own price."),
+            ("Gun Dealers", "Player-run gun shops. Dealers buy shipments at a discount, set their own prices, and sell to other players. Most guns can only be bought through them."),
+            ("Weapons", "85 guns based on real firearms across five rarities, each rolling its own damage, recoil, accuracy, fire rate, and clip size."),
+            ("Upgrading", "A prize wheel whose slices are the true odds. Every upgrade rolls its own stat boost, and a fail only costs money."),
+            ("Gems", "14 gems that burn, freeze, blind, or disarm a target, fire a second bullet, boost stats, or save a weapon on death. Each one has a defensive side in shields too."),
+            ("Crates", "Six crates with their odds shown, a free daily crate, a live feed of everyone's unboxes, and a tap-to-crack opening that shows the rarity honestly before the reveal."),
+            ("Progression", "Levels 1 to 100, 36 perks in six categories, and 11 keystones that trade a big strength for a real drawback, like Glass Cannon and Vampire."),
+            ("Risk and combat rules", "Safe zones, kill-on-sight zones, and arenas. A fight follows two players until a minute passes without a hit, and dying costs your hotbar and shield but never your inventory."),
+            ("Movement", "First person with Garry's Mod style air strafing and bunny hopping, capped so it can't run away."),
+        ]),
+        dict(kind="list", label="So far", title="What's in it", items=[
+            "8 jobs", "85 guns", "14 gems", "5 shields", "6 crates", "36 perks and 11 keystones", "Levels 1 to 100",
+            "Two-player tests run on two local clients", "The city is a greybox for now, and guns have no 3D models yet",
+        ]),
+    ],
+),
 "recoilworks": dict(
     title="Recoil Works",
     desc="A modular weapon crafting FPS built solo in Unreal Engine 5 as my MSc master project.",
@@ -8,7 +42,7 @@ PROJECTS = {
     lede="A weapon crafting FPS. You build a gun from a chassis and swappable parts, then test how each part changes the way it fires.",
     hero="images/site/recoil-works.jpg",
     facts=[("Role", "Designer & developer"), ("Team", "Solo"), ("Engine", "UE5 Blueprints"), ("Inspired by", "Loadout (2014)"), ("Grade", "85%", 85)],
-    media=[("yt", "xVHr1Et2IBs", "The weapon builder"), ("yt", "i-jRvDOe8k8", "Saved weapons"), ("img", "images/portfolio/RWGame.png", "Saved weapons menu")],
+    media=[("yt", "i-jRvDOe8k8", "The final build"), ("yt", "xVHr1Et2IBs", "An early version of the weapon builder"), ("img", "images/portfolio/RWGame.png", "Title screen")],
     why=['Recoil Works started from Loadout, where you build a gun out of parts instead of bolting attachments onto a fixed one.', 'For my MSc master project I wanted to design that kind of system myself: give players real freedom to build strange weapons, while keeping the numbers readable and balanced so a weird build is fun without automatically beating a sensible one.'],
     how={'tools': ['UE5', 'Blueprints', 'Data tables', 'Structs', 'UMG', 'Playtesting'], 'ps': ['Everything runs on data. Parts live in data tables and structs, so adding a new barrel or payload means adding a row, not writing new code.', "Every part's modifiers go through one stat calculation pipeline. That let me balance combinations rather than individual guns, and made edge cases, like several parts changing the same stat, easy to find.", 'I built a test range into the core loop so I could build, fire, and tweak in seconds, then balanced through playtests, surveys, debugging, and formula changes.']},
     sections=[dict(kind="systems", label="Systems", title="What I built", items=[

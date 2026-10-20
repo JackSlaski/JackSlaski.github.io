@@ -3,7 +3,7 @@
 // Games add their own cheats to window.cheats.
 (() => {
   const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
-  const PROJECTS = ['recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
+  const PROJECTS = ['newlifedarkrp', 'recoilworks', 'armsandassets', 'gerbertgames', 'leviathansgauntlet', 'wildmagic', 'feudalliving', 'doyouknowball', 'formulaandflask', 'cavegenerationtool', 'survivorslike', 'uishowcase', 'minimalistui', 'lootboxethics'];
   const KEY = 'jackslaski-debug';
   const store = (v) => { try { return v === undefined ? sessionStorage.getItem(KEY) : v ? sessionStorage.setItem(KEY, '1') : sessionStorage.removeItem(KEY); } catch { return null; } };
 
