@@ -332,5 +332,32 @@
     tapTimer = setTimeout(() => { if (taps === 1 && href) location.href = href; taps = 0; }, 700);
   }));
 
+  // DevTools: a hello for anyone who opens the browser's own console, and a few commands for them
+  const EMAIL = 'jackslaski04@gmail.com';
+  window.jack = {
+    help() {
+      console.log([
+        'jack.cv()        Open my CV',
+        'jack.contact()   Copy my email address',
+        'jack.secrets()   See which secrets you’ve found, with hints for the rest',
+        'jack.debug()     Switch on the development build',
+        '',
+        'There’s a cheat code for that last one too. You might already know it.',
+      ].join('\n'));
+    },
+    cv() { window.open('/documents/cvjackslaski.pdf', '_blank'); },
+    contact() {   // the clipboard refuses while DevTools has focus, so fall back to printing it
+      Promise.resolve().then(() => navigator.clipboard.writeText(EMAIL))
+        .then(() => console.log(`Copied ${EMAIL} to your clipboard.`), () => console.log(`Email me at ${EMAIL}`));
+    },
+    secrets() {
+      console.table((window.secrets?.list?.() || []).map((a) => ({ Secret: a.found ? a.name : 'Locked', Status: a.found ? 'Found' : a.hint })));
+    },
+    debug() { if (on) toggleConsole(true); else enable(true); },
+  };
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff5a36';
+  console.log('%cJack Slaski%c\nPoking around under the hood? Type jack.help() to see what you can do from here.',
+    `font: 700 22px/1.6 system-ui, sans-serif; color: ${accent}`, 'font: 13px/1.5 system-ui, sans-serif');
+
   if (store()) enable(false);   // stays on as you move between pages, until you quit
 })();
