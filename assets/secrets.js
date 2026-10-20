@@ -179,6 +179,7 @@
     if (e.target.closest('[data-close]')) credits.close();
     else if (e.target.closest('.credits__skip')) anim?.finish();
   });
+  if (new URLSearchParams(location.search).has('credits')) setTimeout(rollCredits, 600);   // ?credits plays them for testing, like ?takeover
 
   // Explorer: every project page you open is remembered
   const slug = document.body.dataset.project;
