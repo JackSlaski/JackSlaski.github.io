@@ -58,30 +58,41 @@
   const viewer = $('[data-viewer]');
   if (viewer) {
     const stage = $('.viewer__stage', viewer), thumbs = $$('.viewer__thumb', viewer);
-    const render = (t, autoplay) => {
+    const strip = $('.viewer__thumbs', viewer), count = $('[data-count]', viewer), title = viewer.dataset.title || '';
+    let cur = 0;
+    const render = (i, autoplay) => {
+      cur = (i + thumbs.length) % thumbs.length;
+      const t = thumbs[cur];
       thumbs.forEach((x) => x.setAttribute('aria-current', String(x === t)));
       stage.replaceChildren();
       if (t.dataset.yt && autoplay) {
         const f = document.createElement('iframe');
         f.src = `https://www.youtube-nocookie.com/embed/${t.dataset.yt}?autoplay=1&rel=0`;
-        f.title = t.dataset.label; f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
+        f.title = `${title} video`; f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
         stage.append(f);
       } else {
         const img = new Image();
-        img.src = t.dataset.full; img.alt = t.dataset.label;
+        img.src = t.dataset.full; img.alt = `${title}, ${cur + 1} of ${thumbs.length}`;
         if (t.dataset.yt) img.onerror = () => { img.src = `https://i.ytimg.com/vi/${t.dataset.yt}/hqdefault.jpg`; };
         stage.append(img);
         if (t.dataset.yt) {
           const play = document.createElement('button');
           play.type = 'button'; play.className = 'viewer__play'; play.innerHTML = '<span>Play video</span>';
-          play.addEventListener('click', () => render(t, true));
+          play.addEventListener('click', () => render(cur, true));
           stage.append(play);
         }
       }
-      const cap = $('.viewer__caption', viewer); if (cap) cap.textContent = t.dataset.label;
+      if (count) count.textContent = `${cur + 1} / ${thumbs.length}`;
+      if (strip) strip.scrollTo({ left: t.offsetLeft - (strip.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
     };
-    thumbs.forEach((t) => t.addEventListener('click', (e) => { e.preventDefault(); render(t, false); }));
-    if (thumbs[0]) render(thumbs[0], false);
+    thumbs.forEach((t, i) => t.addEventListener('click', (e) => { e.preventDefault(); render(i, false); }));
+    $$('[data-step]', viewer).forEach((b) => b.addEventListener('click', () => render(cur + Number(b.dataset.step), false)));
+    viewer.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      render(cur + (e.key === 'ArrowRight' ? 1 : -1), false);
+    });
+    if (thumbs.length) render(0, false);
   }
 
   // project filters

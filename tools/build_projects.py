@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026102020" />
+	<link rel="stylesheet" href="assets/style.css?v=2026102601" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -98,9 +98,9 @@ FOOT = """
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026102020" defer></script>
-	<script src="assets/secrets.js?v=2026102020" defer></script>
-	<script src="assets/debug.js?v=2026102020" defer></script>
+	<script src="assets/main.js?v=2026102601" defer></script>
+	<script src="assets/secrets.js?v=2026102601" defer></script>
+	<script src="assets/debug.js?v=2026102601" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -192,18 +192,20 @@ def render(slug, p, nxt):
     if p.get("media"):
         n += 1
         thumbs = []
+        total = len(p["media"])
         for k, m in enumerate(p["media"]):
             if m[0] == "yt":
-                thumbs.append(f'<a class="viewer__thumb is-video" href="https://www.youtube.com/watch?v={m[1]}" data-yt="{m[1]}" data-full="{yt_full(m[1])}" data-label="{E(m[2])}" aria-label="Show video: {E(m[2])}"><img src="{yt_thumb(m[1])}" alt="" loading="lazy" /></a>')
+                thumbs.append(f'<a class="viewer__thumb is-video" href="https://www.youtube.com/watch?v={m[1]}" data-yt="{m[1]}" data-full="{yt_full(m[1])}" aria-label="Show video {k + 1} of {total}"><img src="{yt_thumb(m[1])}" alt="" loading="lazy" /></a>')
             else:
                 full = web(m[1], 1600); th = web(m[1], 480, "-t")
-                thumbs.append(f'<a class="viewer__thumb" href="{E(full)}" data-full="{E(full)}" data-label="{E(m[2])}" aria-label="Show image: {E(m[2])}"><img src="{E(th)}" alt="" loading="lazy" /></a>')
+                thumbs.append(f'<a class="viewer__thumb" href="{E(full)}" data-full="{E(full)}" aria-label="Show image {k + 1} of {total}"><img src="{E(th)}" alt="" loading="lazy" /></a>')
         first = p["media"][0]
         first_img = yt_full(first[1]) if first[0] == "yt" else web(first[1], 1600)
-        body = f"""				<div class="viewer reveal" data-viewer>
-					<div class="viewer__stage"><img src="{E(first_img)}" alt="{E(first[2])}" /></div>
-					<div class="viewer__bar"><span class="viewer__caption">{E(first[2])}</span><span>{len(p['media'])} item{'s' if len(p['media']) != 1 else ''}</span></div>
-					{f'<div class="viewer__thumbs">{"".join(thumbs)}</div>' if len(thumbs) > 1 else ''}
+        arrows = [f'<button class="viewer__arrow" type="button" data-step="{s}" aria-label="{label}">{icon}</button>' for s, label, icon in ((-1, "Previous", BACK), (1, "Next", ARROW))]
+        strip = f'<div class="viewer__strip">{arrows[0]}<div class="viewer__thumbs">{"".join(thumbs)}</div>{arrows[1]}</div><p class="viewer__count" data-count>1 / {total}</p>' if total > 1 else ''
+        body = f"""				<div class="viewer reveal" data-viewer data-title="{E(p['title'])}">
+					<div class="viewer__stage"><img src="{E(first_img)}" alt="{E(p['title'])}" /></div>
+					{strip}
 				</div>"""
         out.append(section(n, "Media", "Gallery", body, "media"))
     # extra sections, in order
@@ -242,7 +244,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026102020" defer></script>', f'<script src="assets/secrets.js?v=2026102020" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102020" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026102601" defer></script>', f'<script src="assets/secrets.js?v=2026102601" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102601" defer></script>')
     out.append(foot)
     return "".join(out)
 

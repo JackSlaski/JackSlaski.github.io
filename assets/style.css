@@ -409,7 +409,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* media viewer */
 .viewer__stage { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--line); overflow: hidden; }
-.viewer__stage img, .viewer__stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
+.viewer__stage img, .viewer__stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border: 0; }
 .viewer__play { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(circle, rgba(10, 12, 17, 0.15), rgba(10, 12, 17, 0.55)); }
 .viewer__play span {
   display: inline-flex; align-items: center; gap: 0.7rem; min-height: 3.4rem; padding: 0 1.8rem;
@@ -420,14 +420,21 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .viewer__play span::before { content: ""; width: 0; height: 0; border-left: 12px solid #fff; border-block: 8px solid transparent; }
 .viewer__play:hover span { transform: scale(1.04); filter: brightness(1.1); }
-.viewer__bar { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.75rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.viewer__caption { color: var(--text); }
-.viewer__thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
-.viewer__thumb { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--panel-2); outline: 1px solid var(--line); outline-offset: -1px; opacity: 0.6; transition: opacity 200ms, outline-color 200ms; }
+.viewer__strip { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.75rem; }
+.viewer__thumbs { position: relative; flex: 1; min-width: 0; display: flex; gap: 0.75rem; padding: 2px 0 0.7rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--accent) rgba(255, 255, 255, 0.08); }
+.viewer__thumbs::-webkit-scrollbar { height: 6px; }
+.viewer__thumbs::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.08); }
+.viewer__thumbs::-webkit-scrollbar-thumb { background: var(--accent); }
+.viewer__thumb { position: relative; flex: none; display: block; width: clamp(8rem, 13vw, 10.5rem); aspect-ratio: 16 / 9; overflow: hidden; scroll-snap-align: start; background: var(--panel-2); outline: 1px solid var(--line); outline-offset: -1px; opacity: 0.6; transition: opacity 200ms, outline-color 200ms; }
 .viewer__thumb:hover { opacity: 1; }
 .viewer__thumb[aria-current="true"] { opacity: 1; outline: 2px solid var(--accent); outline-offset: -2px; }
 .viewer__thumb img { width: 100%; height: 100%; object-fit: cover; }
 .viewer__thumb.is-video::after { content: ""; position: absolute; right: 0.5rem; bottom: 0.5rem; border-left: 10px solid #fff; border-block: 6px solid transparent; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)); }
+.viewer__arrow { flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-bottom: 0.7rem; border: 1px solid var(--line-strong); color: var(--text); transition: border-color 200ms, color 200ms, transform 160ms var(--ease); }
+.viewer__arrow:hover { border-color: var(--accent); color: var(--accent); }
+.viewer__arrow:active { transform: scale(0.94); }
+.viewer__arrow svg { width: 1.1rem; height: 1.1rem; }
+.viewer__count { margin-top: 0.2rem; text-align: right; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted); }
 
 /* overview */
 .overview { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
@@ -495,7 +502,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .features__list, .systems { grid-template-columns: 1fr; }
   .details dl { grid-template-columns: 1fr; }
   .details dt { border-bottom: 0; padding-bottom: 0.2rem; }
-  .viewer__thumbs { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .viewer__thumb { width: 7.5rem; }
+  .viewer__arrow { width: 2.2rem; height: 2.2rem; }
   .phero__actions .btn { flex: 1 1 auto; justify-content: center; }
 }
 
