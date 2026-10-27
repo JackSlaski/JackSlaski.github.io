@@ -59,7 +59,7 @@
   if (viewer) {
     const stage = $('.viewer__stage', viewer), thumbs = $$('.viewer__thumb', viewer);
     const strip = $('.viewer__thumbs', viewer), count = $('[data-count]', viewer), title = viewer.dataset.title || '';
-    const dashes = $$('.viewer__track span', viewer), pad = (n) => String(n).padStart(2, '0');
+    const pad = (n) => String(n).padStart(2, '0');
     let cur = 0;
     const render = (i, autoplay) => {
       cur = (i + thumbs.length) % thumbs.length;
@@ -84,7 +84,6 @@
         }
       }
       if (count) count.innerHTML = `<b>${pad(cur + 1)}</b> / ${pad(thumbs.length)}`;
-      dashes.forEach((d, k) => d.classList.toggle('is-on', k <= cur));
       if (strip) strip.scrollTo({ left: t.offsetLeft - (strip.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
     };
     thumbs.forEach((t, i) => t.addEventListener('click', (e) => { e.preventDefault(); render(i, false); }));
@@ -94,15 +93,6 @@
       e.preventDefault();
       render(cur + (e.key === 'ArrowRight' ? 1 : -1), false);
     });
-    if (strip) {
-      const edges = () => {
-        strip.classList.toggle('can-left', strip.scrollLeft > 4);
-        strip.classList.toggle('can-right', strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 4);
-      };
-      strip.addEventListener('scroll', edges, { passive: true });
-      addEventListener('resize', edges);
-      edges();
-    }
     if (thumbs.length) render(0, false);
   }
 
