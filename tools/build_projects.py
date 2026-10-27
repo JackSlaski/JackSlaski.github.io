@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026102702" />
+	<link rel="stylesheet" href="assets/style.css?v=2026102703" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -98,9 +98,9 @@ FOOT = """
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026102702" defer></script>
-	<script src="assets/secrets.js?v=2026102702" defer></script>
-	<script src="assets/debug.js?v=2026102702" defer></script>
+	<script src="assets/main.js?v=2026102703" defer></script>
+	<script src="assets/secrets.js?v=2026102703" defer></script>
+	<script src="assets/debug.js?v=2026102703" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -204,9 +204,9 @@ def render(slug, p, nxt):
         chevrons = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>')
         controls = (f'<button class="viewer__arrow" type="button" data-step="-1" aria-label="Previous">{chevrons[0]}</button>'
-                    f'<button class="viewer__arrow" type="button" data-step="1" aria-label="Next">{chevrons[1]}</button>'
-                    f'<p class="viewer__count" data-count aria-live="polite"><b>01</b> / {total:02d}</p>') if total > 1 else ''
-        strip = f'<div class="viewer__thumbs">{"".join(thumbs)}</div>' if total > 1 else ''
+                    f'<button class="viewer__arrow" type="button" data-step="1" aria-label="Next">{chevrons[1]}</button>') if total > 1 else ''
+        strip = (f'<div class="viewer__thumbs">{"".join(thumbs)}</div>'
+                 f'<p class="viewer__count" data-count aria-live="polite"><b>01</b> / {total:02d}</p>') if total > 1 else ''
         body = f"""				<div class="viewer reveal" data-viewer data-title="{E(p['title'])}">
 					<div class="viewer__frame"><div class="viewer__stage"><img src="{E(first_img)}" alt="{E(p['title'])}" /></div>{controls}</div>
 					{strip}
@@ -248,7 +248,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026102702" defer></script>', f'<script src="assets/secrets.js?v=2026102702" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102702" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026102703" defer></script>', f'<script src="assets/secrets.js?v=2026102703" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102703" defer></script>')
     out.append(foot)
     return "".join(out)
 
