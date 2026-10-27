@@ -51,7 +51,7 @@ def head(title, desc, image, slug):
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-	<link rel="stylesheet" href="assets/style.css?v=2026102601" />
+	<link rel="stylesheet" href="assets/style.css?v=2026102701" />
 	<script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-project="SLUG">
@@ -98,9 +98,9 @@ FOOT = """
 		</div>
 	</footer>
 
-	<script src="assets/main.js?v=2026102601" defer></script>
-	<script src="assets/secrets.js?v=2026102601" defer></script>
-	<script src="assets/debug.js?v=2026102601" defer></script>
+	<script src="assets/main.js?v=2026102701" defer></script>
+	<script src="assets/secrets.js?v=2026102701" defer></script>
+	<script src="assets/debug.js?v=2026102701" defer></script>
 </body>
 </html>
 """.replace("ARROW", ARROW)
@@ -202,7 +202,9 @@ def render(slug, p, nxt):
         first = p["media"][0]
         first_img = yt_full(first[1]) if first[0] == "yt" else web(first[1], 1600)
         arrows = [f'<button class="viewer__arrow" type="button" data-step="{s}" aria-label="{label}">{icon}</button>' for s, label, icon in ((-1, "Previous", BACK), (1, "Next", ARROW))]
-        strip = f'<div class="viewer__strip">{arrows[0]}<div class="viewer__thumbs">{"".join(thumbs)}</div>{arrows[1]}</div><p class="viewer__count" data-count>1 / {total}</p>' if total > 1 else ''
+        strip = (f'<div class="viewer__thumbs">{"".join(thumbs)}</div>'
+                 f'<div class="viewer__bar"><div class="viewer__track" aria-hidden="true">{"<span></span>" * total}</div>'
+                 f'<div class="viewer__pager">{arrows[0]}<p class="viewer__count" data-count aria-live="polite"><b>01</b> / {total:02d}</p>{arrows[1]}</div></div>') if total > 1 else ''
         body = f"""				<div class="viewer reveal" data-viewer data-title="{E(p['title'])}">
 					<div class="viewer__stage"><img src="{E(first_img)}" alt="{E(p['title'])}" /></div>
 					{strip}
@@ -244,7 +246,7 @@ def render(slug, p, nxt):
 """)
     foot = FOOT
     if p.get("play"):
-        foot = foot.replace('<script src="assets/secrets.js?v=2026102601" defer></script>', f'<script src="assets/secrets.js?v=2026102601" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102601" defer></script>')
+        foot = foot.replace('<script src="assets/secrets.js?v=2026102701" defer></script>', f'<script src="assets/secrets.js?v=2026102701" defer></script>\n\t<script src="assets/games/{p["play"]["game"]}.js?v=2026102701" defer></script>')
     out.append(foot)
     return "".join(out)
 
