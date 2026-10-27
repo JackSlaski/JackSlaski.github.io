@@ -84,7 +84,10 @@
         }
       }
       if (count) count.innerHTML = `<b>${pad(cur + 1)}</b> / ${pad(thumbs.length)}`;
-      if (strip) strip.scrollTo({ left: t.offsetLeft - (strip.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+      if (strip) {
+        const l = t.offsetLeft, r = l + t.offsetWidth, view = strip.scrollLeft;
+        if (l < view || r > view + strip.clientWidth) strip.scrollTo({ left: l < view ? l : r - strip.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
+      }
     };
     thumbs.forEach((t, i) => t.addEventListener('click', (e) => { e.preventDefault(); render(i, false); }));
     $$('[data-step]', viewer).forEach((b) => b.addEventListener('click', () => render(cur + Number(b.dataset.step), false)));
